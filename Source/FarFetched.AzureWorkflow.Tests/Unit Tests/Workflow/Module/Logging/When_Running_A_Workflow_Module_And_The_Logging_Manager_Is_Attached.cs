@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 
-namespace FarFetched.AzureWorkflow.Tests.Unit_Tests.Reporting
+namespace FarFetched.AzureWorkflow.Tests.WhenRunningWorkflowModule
 {
 
     [TestClass]
-    public class And_The_Logging_Manager_Is_Attached
+    public class When_Running_A_Workflow_Module_And_The_Logging_Manager_Is_Attached
     {
         [Test]
         public async Task Modules_That_Log_Messages_Result_In_The_Logging_Manager_Being_Called()

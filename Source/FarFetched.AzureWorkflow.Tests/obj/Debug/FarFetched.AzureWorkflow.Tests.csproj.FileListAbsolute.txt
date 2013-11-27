@@ -16,3 +16,21 @@ c:\users\patrick.mccurley\documents\visual studio 2013\Projects\FarFetched.Azure
 c:\users\patrick.mccurley\documents\visual studio 2013\Projects\FarFetched.AzureWorkflow\FarFetched.AzureWorkflow.Tests\bin\Debug\Microsoft.ServiceBus.xml
 c:\users\patrick.mccurley\documents\visual studio 2013\Projects\FarFetched.AzureWorkflow\FarFetched.AzureWorkflow.Tests\bin\Debug\FarFetched.AzureWorkflow.Tests.dll.config
 c:\users\patrick.mccurley\documents\visual studio 2013\Projects\FarFetched.AzureWorkflow\FarFetched.AzureWorkflow.Tests\bin\Debug\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\FarFetched.AzureWorkflow.Tests.dll.config
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\FarFetched.AzureWorkflow.Tests.dll
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\FarFetched.AzureWorkflow.Tests.pdb
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\FarFetched.AzureWorkflow.Core.dll
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\Microsoft.ServiceBus.dll
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\Moq.dll
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\Ninject.dll
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\nunit.framework.dll
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\FarFetched.AzureWorkflow.Core.pdb
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\Microsoft.ServiceBus.xml
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\Moq.xml
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\Ninject.pdb
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\Ninject.xml
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\nunit.framework.xml
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\obj\Debug\FarFetched.AzureWorkflow.Tests.csprojResolveAssemblyReference.cache
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\obj\Debug\FarFetched.AzureWorkflow.Tests.dll
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\obj\Debug\FarFetched.AzureWorkflow.Tests.pdb
