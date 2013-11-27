@@ -26,14 +26,4 @@ namespace FarFetched.AzureWorkflow.Core.Architecture
         event Action<Exception> OnError;
         event Action OnFinished;
     }
-
-    public interface IProcessingWorkflowModule : IWorkflowModule
-    {
-        event Action<object> OnProcessed;
-    }
-
-    public interface IProcessingWorkflowModule<T> : IProcessingWorkflowModule
-    {
-        Task ProcessAsync(IEnumerable<T> queueCollection);
-    }
 }

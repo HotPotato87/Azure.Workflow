@@ -71,9 +71,11 @@
   <ItemGroup>
     <Compile Include="IntegrationTests\WhenSessionIsInvoked.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Unit Tests\Workflow\Module\Logging\And_The_Logging_Manager_Is_Attached.cs" />
     <Compile Include="Unit Tests\Workflow\Module\Reporting\And_Reporting_Plugin_Is_Attached.cs" />
     <Compile Include="Unit Tests\Workflow\Module\Alerts\And_The_Alert_Plugin_Is_Loaded.cs" />
     <Compile Include="Unit Tests\Workflow\Module\When_Running_A_Workflow_Module.cs" />
+    <Compile Include="Unit Tests\Workflow\When_In_Memory_Queue_Collection_Is_Used.cs" />
     <Compile Include="Unit Tests\Workflow\When_Workflow_Session_Is_Run.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -86,10 +88,7 @@
       <Name>FarFetched.AzureWorkflow.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Unit Tests\Alerts\" />
-    <Folder Include="Unit Tests\Reporting\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

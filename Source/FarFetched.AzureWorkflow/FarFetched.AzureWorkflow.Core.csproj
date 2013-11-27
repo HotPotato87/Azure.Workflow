@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builder\WorkflowBuilderExtentions.cs" />
+    <Compile Include="Entities\QueueProcessingWorkflowModule.cs" />
     <Compile Include="Enums\ModuleState.cs" />
     <Compile Include="Implementation\Alerts\SendGridAlertManager.cs" />
     <Compile Include="Implementation\Logging\ConsoleLogger.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Interfaces\ICloudQueue.cs" />
     <Compile Include="Entities\WorkflowModuleSettings.cs" />
     <Compile Include="Entities\WorkflowSession.cs" />
+    <Compile Include="Interfaces\IProcessingWorkflowModule.cs" />
     <Compile Include="Interfaces\IWorkflowModule.cs" />
     <Compile Include="Entities\WorkflowModuleBase.cs" />
     <Compile Include="Plugins\Alerts\Alert.cs" />
