@@ -14,13 +14,6 @@ namespace FarFetched.Workflow.Demo
 {
     public class Start
     {
-        public static async Task Main()
-        {
-            var movieImporter = new WorkflowSession();
-
-            await movieImporter.Start();
-        }
-
         public static async Task Main2()
         {
             await WorkflowSession.StartBuild()

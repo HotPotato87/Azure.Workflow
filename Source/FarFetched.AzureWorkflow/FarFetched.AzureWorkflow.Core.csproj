@@ -67,6 +67,7 @@
     <Compile Include="Builder\WorkflowBuilderExtentions.cs" />
     <Compile Include="Entities\QueueProcessingWorkflowModule.cs" />
     <Compile Include="Enums\ModuleState.cs" />
+    <Compile Include="Exception\AzureWorkflowConfigurationException.cs" />
     <Compile Include="Implementation\Alerts\SendGridAlertManager.cs" />
     <Compile Include="Implementation\Logging\ConsoleLogger.cs" />
     <Compile Include="Implementation\Alerts\ProwlAlertManager.cs" />

@@ -15,20 +15,24 @@ namespace FarFetched.AzureWorkflow.Core.Implementation
     {
         public event Action<WorkflowSession> OnSessionFinished;
 
-        internal ObservableCollection<IWorkflowModule> RunningModules { get; set; }
-        internal List<IWorkflowModule> Modules { get; set; } 
+        public ObservableCollection<IWorkflowModule> RunningModules { get; set; }
+        public List<IWorkflowModule> Modules { get; set; } 
         internal List<WorkflowSessionPluginBase> Plugins { get; set; }
         internal ICloudQueueFactory CloudQueueFactory { get; set; }
 
-        public WorkflowSession()
+        internal WorkflowSession()
         {
             RunningModules = new ObservableCollection<IWorkflowModule>();
+            Modules = new List<IWorkflowModule>();
+            Plugins = new List<WorkflowSessionPluginBase>();
 
             HookRunningModules();
         }
 
         public async Task Start()
         {
+            ValidateStart();
+
             //inform plugins we have started so they can hook to events
             Plugins.ForEach(x=>x.OnSessionStarted(this));
 
@@ -44,6 +48,14 @@ namespace FarFetched.AzureWorkflow.Core.Implementation
         }
 
         #region Helpers
+
+        private void ValidateStart()
+        {
+            if (this.CloudQueueFactory == null)
+            {
+                throw new AzureWorkflowConfigurationException("There must be a CloudQueueFactory attached in order to start the session", null);
+            }
+        }
 
         private void HookRunningModules()
         {
@@ -67,7 +79,6 @@ namespace FarFetched.AzureWorkflow.Core.Implementation
 
         #endregion
 
-
         #region Builder
 
         public static WorkflowSessionBuilder StartBuild()
@@ -77,11 +88,15 @@ namespace FarFetched.AzureWorkflow.Core.Implementation
 
         #endregion
 
+        #region Mediator
+
         internal void AddToQueue(Type workflowModuleType, IEnumerable<object> batch)
         {
             var type = workflowModuleType;
             var module = this.RunningModules.SingleOrDefault(x => x.GetType() == type);
             module.Queue.AddToAsync(batch);
         }
+
+        #endregion
     }
 }

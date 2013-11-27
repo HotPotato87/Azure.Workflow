@@ -37,26 +37,44 @@ namespace FarFetched.AzureWorkflow.Tests
             _module1.Setup(x => x.StartAsync()).Returns(async() => { await Task.Delay(10); });
             _module2.Setup(x => x.StartAsync()).Returns(async () => { await Task.Delay(10); });
 
-            WorkflowSession session = new WorkflowSession();
-
             return WorkflowSession.StartBuild()
                 .AddModule(_module1.Object)
                 .AddModule(_module2.Object).WorkflowSession;
         }
 
+        public WorkflowSession GetStandardSessionWithQueue()
+        {
+            _module1 = new Mock<IWorkflowModule>();
+            _module2 = new Mock<IWorkflowModule>();
+
+            _module1.Setup(x => x.StartAsync()).Returns(async () => { await Task.Delay(10); });
+            _module2.Setup(x => x.StartAsync()).Returns(async () => { await Task.Delay(10); });
+
+            return WorkflowSession.StartBuild()
+                .AddModule(_module1.Object)
+                .AddModule(_module2.Object)
+                .WithQueueMechanism(new InMemoryQueueFactory())
+                .WorkflowSession;
+        }
+
         #endregion
 
         [Test]
+        [NUnit.Framework.ExpectedException(typeof(AzureWorkflowConfigurationException))]
         public async Task Session_Throws_If_No_Queue_Mechanism()
         {
-            throw new NotImplementedException();
+            //arrange
+            var session = GetStandardSession();
+
+            //act 
+            await session.Start();
         }
 
         [Test]
         public async Task WorkflowSessionStartCallsStartOnModules()
         {
             //arrange
-            var session = GetStandardSession();
+            var session = GetStandardSessionWithQueue();
 
             //act
             await session.Start();
@@ -69,13 +87,34 @@ namespace FarFetched.AzureWorkflow.Tests
         [Test]
         public async Task Modules_Are_Added_To_Running_Sessions()
         {
-            
+            //arrange
+            var session = GetStandardSessionWithQueue();
+
+            //act
+            await session.Start();
+
+            //assert
+            Assert.IsTrue(session.RunningModules.Any(x=>x == _module1.Object));
+            Assert.IsTrue(session.RunningModules.Any(x => x == _module2.Object));
         }
 
         [Test]
         public async Task Session_Calls_Register_Finished()
         {
-            
+            //arrange
+            var session = GetStandardSessionWithQueue();
+            bool called = false;
+
+            session.OnSessionFinished += workflowSession =>
+            {
+                called = true;
+            };
+
+            //act
+            await session.Start();
+
+            //assert
+            Assert.IsTrue(called);
         }
         
     }
