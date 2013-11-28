@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using FarFetched.AzureWorkflow.Core.Architecture;
 using FarFetched.AzureWorkflow.Core.Enums;
@@ -11,7 +13,8 @@ namespace FarFetched.AzureWorkflow.Core
 {
     public abstract class QueueProcessingWorkflowModule<T> : WorkflowModuleBase<T>, IProcessingWorkflowModule where T : class
     {
-        public event Action<object> OnProcessed;
+        public event Action<string, string> OnRaiseProcessed;
+        public event Action OnProcessIteration;
 
         private int _waitIterations;
 
@@ -64,12 +67,19 @@ namespace FarFetched.AzureWorkflow.Core
             }
         }
 
-        protected void RaiseSuccessfullyProcessed(T item)
+        protected void IncreaseProcessIteration()
         {
-            if (this.OnProcessed != null)
+            if (this.OnProcessIteration != null) this.OnProcessIteration();
+        }
+
+        protected void RaiseProcessed(object key, string description = null, bool countAsProcessed = true)
+        {
+            if (this.OnRaiseProcessed != null)
             {
-                this.OnProcessed(item);
+                this.OnRaiseProcessed(key.ToString(), description);
             }
+
+            if (countAsProcessed) IncreaseProcessIteration();
         }
 
         public abstract Task ProcessAsync(IEnumerable<T> queueCollection);

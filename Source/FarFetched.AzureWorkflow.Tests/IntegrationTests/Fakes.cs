@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FarFetched.AzureWorkflow.Core;
+using FarFetched.AzureWorkflow.Core.Enums;
 using FarFetched.AzureWorkflow.Core.Interfaces;
 using FarFetched.AzureWorkflow.Core.Plugins;
 using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
@@ -40,7 +41,7 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
             {
                 this.Recieved = queueCollection;
 
-                this.Recieved.ToList().ForEach(this.RaiseSuccessfullyProcessed);
+                this.Recieved.ToList().ForEach(x=>this.RaiseProcessed(ProcessingResult.Success));
             }
 
             public IEnumerable<object> Recieved { get; set; }
@@ -60,6 +61,32 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
                 this.Recieved = queueCollection;
 
                 this.Recieved.ToList().ForEach(x => this.RaiseError(_exceptionFactory.Invoke()));
+            }
+
+            public IEnumerable<object> Recieved { get; set; }
+        }
+
+        internal class CategorisesProcessingResultFake : QueueProcessingWorkflowModule<object>
+        {
+            private readonly Func<Exception> _exceptionFactory;
+
+            public CategorisesProcessingResultFake(Func<Exception> exceptionFactory)
+            {
+                _exceptionFactory = exceptionFactory;
+            }
+
+            public override async Task ProcessAsync(IEnumerable<object> queueCollection)
+            {
+                this.Recieved = queueCollection;
+
+                this.RaiseProcessed(ProcessingResult.Success);
+                this.RaiseProcessed(ProcessingResult.Success);
+                this.RaiseProcessed(ProcessingResult.Success);
+
+                this.RaiseProcessed(ProcessingResult.Fail, "Not enough chocolate");
+                this.RaiseProcessed(ProcessingResult.Fail, "Not enough cheese");
+
+                this.RaiseProcessed("Other", "Delivery API couldn't be contacted");
             }
 
             public IEnumerable<object> Recieved { get; set; }
