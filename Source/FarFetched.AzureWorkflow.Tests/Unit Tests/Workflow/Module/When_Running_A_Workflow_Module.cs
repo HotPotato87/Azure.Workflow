@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -8,6 +9,7 @@ using FarFetched.AzureWorkflow.Core;
 using FarFetched.AzureWorkflow.Core.Enums;
 using FarFetched.AzureWorkflow.Core.Implementation;
 using FarFetched.AzureWorkflow.Core.Interfaces;
+using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
 using FarFetched.AzureWorkflow.Core.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,111 +22,170 @@ namespace FarFetched.AzureWorkflow.Tests.WhenRunningWorkflowModule
     [TestFixture]
     partial class When_Running_A_Workflow_Module
     {
-        
+        #region Helpers
+
+        ICloudQueue DefaultEmptyQueue
+        {
+            get
+            {
+                var service = new Mock<ICloudQueue>();
+                service.Setup(x => x.ReceieveAsync<object>(It.IsAny<int>())).Returns(async () => new List<object>());
+                return service.Object;
+            }
+        }
+
+        #endregion
+
         [Test]
         public async Task Modules_Call_Started_Event_On_Start()
         {
-            throw new NotImplementedException();
-        }
-
-
-        [Test]
-        public async Task The_Service_Bus_Is_Called_When_Processing()
-        {
             //arrange
-            var service = new Mock<ICloudQueue>();
-            var module = new StubModuleBase();
-            module.Queue = service.Object;
-            service.Setup(x => x.ReceieveAsync<object>(It.IsAny<int>())).Returns(async() => new List<object>());
+            var mock = new Mock<QueueProcessingWorkflowModule<object>>(MockBehavior.Loose);
+            mock.Setup(x => x.OnStart()).Returns(async () => { });
+            var module = mock.Object;
+            module.Queue = DefaultEmptyQueue;
+            bool calledStart = false;
+            module.OnStarted += () =>
+            {
+                calledStart = true;
+            };
 
             //act
             await module.StartAsync();
 
             //assert
-            service.Verify(x => x.ReceieveAsync<object>(It.IsAny<int>()), Times.AtLeastOnce);
+            Debug.Assert(calledStart);
+        }
+
+
+        [Test]
+        public async Task Module_Calls_Event_Finished_When_Done()
+        {
+            //arrange
+            var mock = new Mock<QueueProcessingWorkflowModule<object>>(MockBehavior.Loose);
+            mock.Setup(x => x.OnStart()).Returns(async () => { });
+            var module = mock.Object;
+            module.Queue = DefaultEmptyQueue;
+            bool calledFinish = false;
+            module.OnFinished += () =>
+            {
+                calledFinish = true;
+            };
+
+            //act
+            await module.StartAsync();
+
+            //assert
+            Assert.IsTrue(calledFinish);
         }
 
         [Test]
-        public async Task Queue_Returning_Zero_Delays_Module()
+        public async Task Module_Calls_Event_Error_On_Error()
         {
             //arrange
-            var service = new Mock<ICloudQueue>();
-            var module = new StubModuleBase();
-            module.Queue = service.Object;
-            service.Setup(x => x.ReceieveAsync<object>(It.IsAny<int>())).Returns(async () => new List<object>());
+            var mock = new Mock<QueueProcessingWorkflowModule<object>>(MockBehavior.Loose);
+            var module = mock.Object;
+            mock.Setup(x => x.OnStart()).Throws<Exception>();
+            module.Queue = DefaultEmptyQueue;
+            bool calledStart = false;
+            module.OnError += error =>
+            {
+                calledStart = true;
+            };
 
             //act
-            module.StartAsync();
+            await module.StartAsync();
+
+            //assert
+            Assert.IsTrue(calledStart);
+        }
+        [Test]
+        public async Task Module_State_Waiting_On_Construction()
+        {
+            //arrange
+            var mock = new Mock<QueueProcessingWorkflowModule<object>>(MockBehavior.Loose);
+            var module = mock.Object;
+            module.Queue = DefaultEmptyQueue;
 
             //assert
             Assert.IsTrue(module.State == ModuleState.Waiting);
         }
 
         [Test]
-        public async Task When_The_Queue_Retrurns_Empty_Over_Threshold_Signifies_Queue_Finished()
-        {//possibly finished
+        public async Task Module_State_Error_On_Error()
+        {
             //arrange
-            var service = new Mock<ICloudQueue>();
-            var module = new StubModuleBase(new WorkflowModuleSettings() { QueueWaitTime = TimeSpan.FromMilliseconds(50), MaximumWaitTimesBeforeQueueFinished = 3 });
-            module.Queue = service.Object;
-            service.Setup(x => x.ReceieveAsync<object>(It.IsAny<int>())).Returns(async () => new List<object>());
+            var mock = new Mock<QueueProcessingWorkflowModule<object>>(MockBehavior.Loose);
+            mock.Setup(x => x.OnStart()).Throws<Exception>();
+            var module = mock.Object;
+            module.Queue = DefaultEmptyQueue;
+            bool calledStart = false;
+            module.OnError += error =>
+            {
+                calledStart = true;
+            };
 
             //act
             await module.StartAsync();
 
             //assert
-            await Task.Delay(1000);
-
-            Assert.IsTrue(module.State == ModuleState.Finished);
+            Assert.IsTrue(module.State == ModuleState.Error);
         }
 
         [Test]
-        public async Task Module_Calls_Event_Finished_When_Done()
+        public async Task Module_Calls_Alert_Event_When_Alert_Is_Raised()
         {
-            throw new NotImplementedException();
-        }
+            //arrange
+            var alert = new Alert() {AlertLevel = AlertLevel.Low, Message = "Hello"};
+            var alertModue = new AlertStub(alert);
+            alertModue.Queue= DefaultEmptyQueue;
+            bool calledAlert = false;
+            alertModue.OnAlert += sentAlert =>
+            {
+                calledAlert = true;
+            };
 
-        [Test]
-        public async Task Module_Calls_Event_Error_On_Error()
-        {
-            throw new NotImplementedException();
+            //act
+            await alertModue.StartAsync();
+
+            //assert
+            Assert.IsTrue(calledAlert);
         }
 
         [Test]
         public async Task Module_Calls_Log_When_Starting_Processing()
         {
-            throw new NotImplementedException();
+            //arrange
+            var mock = new Mock<QueueProcessingWorkflowModule<object>>(MockBehavior.Loose);
+            mock.Setup(x => x.OnStart()).Returns(async() => { });
+            var module = mock.Object;
+            module.Queue = DefaultEmptyQueue;
+            bool calledLog = false;
+            module.OnLogMessage += error =>
+            {
+                calledLog = true;
+            };
+
+            //act
+            await module.StartAsync();
+
+            //assert
+            Assert.IsTrue(calledLog);
         }
     }
 
-    public class StubModuleBase : QueueProcessingWorkflowModule<object>
+    public class AlertStub : WorkflowModuleBase<object>
     {
-        public StubModuleBase(WorkflowModuleSettings settings = null) {}
-        
+        private readonly Alert _alert;
 
-        public void SendToModule(Type t, object o)
+        public AlertStub(Alert alert)
         {
-            base.SendTo(t, o);
+            _alert = alert;
         }
 
-        public override Task ProcessAsync(IEnumerable<object> queueCollection)
+        public override async Task OnStart()
         {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class ErrorStubModuleBase : QueueProcessingWorkflowModule<object>
-    {
-        public ErrorStubModuleBase(WorkflowModuleSettings settings = null) { }
-
-        public void SendToModule(Type t, object o)
-        {
-            base.SendTo(t, o);
-        }
-
-        public override Task ProcessAsync(IEnumerable<object> queueCollection)
-        {
-            throw new NotImplementedException();
+            base.RaiseAlert(_alert.AlertLevel, _alert.Message);
         }
     }
 }

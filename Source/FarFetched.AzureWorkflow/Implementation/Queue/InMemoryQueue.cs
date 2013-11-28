@@ -11,6 +11,7 @@ namespace FarFetched.AzureWorkflow.Core.ServiceBus
 {
     public class InMemoryQueue : ICloudQueue
     {
+        internal  Queue<object> _inMemoryCollection = new Queue<object>();
         private readonly ServiceBusQueueSettings _settings;
 
         public InMemoryQueue(ServiceBusQueueSettings settings = null)
@@ -20,21 +21,26 @@ namespace FarFetched.AzureWorkflow.Core.ServiceBus
             if (_settings == null) _settings = new ServiceBusQueueSettings();
         }
 
-        public Queue<object> _inMemoryCollection = new Queue<object>();
-
-        public InMemoryQueue()
+        public async Task<IEnumerable<T>> ReceieveAsync<T>(int batchCount)
         {
-            
+            List<T> result = new List<T>();
+            for (int i = 0; i < batchCount; i++)
+            {
+                if (_inMemoryCollection.Any())
+                {
+                    result.Add((T)_inMemoryCollection.Dequeue());    
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            return result;
         }
 
-        public Task<IEnumerable<T>> ReceieveAsync<T>(int batchCount)
+        public async Task AddToAsync<T>(IEnumerable<T> items)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task AddToAsync<T>(IEnumerable<T> items)
-        {
-            throw new NotImplementedException();
+            items.ToList().ForEach(x=>_inMemoryCollection.Enqueue(x));
         }
     }
 }

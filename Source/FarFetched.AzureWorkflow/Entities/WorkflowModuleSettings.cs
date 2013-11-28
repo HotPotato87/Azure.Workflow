@@ -19,6 +19,7 @@ namespace FarFetched.AzureWorkflow.Core.Implementation
             this.ReceiveTimeout = new TimeSpan(0, 0, 1, 0);
             MaximumWaitTimesBeforeQueueFinished = 3;
             QueueWaitTime = new TimeSpan(0, 0, 2);
+            QueueSettings = new ServiceBusQueueSettings();
         }
     }
 

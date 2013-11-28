@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FarFetched.AzureWorkflow.Core.Architecture;
+using FarFetched.AzureWorkflow.Core.Enums;
 using FarFetched.AzureWorkflow.Core.Implementation;
+using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
 
 namespace FarFetched.AzureWorkflow.Core
 {
@@ -13,16 +15,19 @@ namespace FarFetched.AzureWorkflow.Core
 
         private int _waitIterations;
 
+        public QueueProcessingWorkflowModule()
+        {
+            
+        }
+
         protected QueueProcessingWorkflowModule(WorkflowModuleSettings settings = default(WorkflowModuleSettings))
             :base(settings)
         {
             
         }
 
-        public override async Task StartAsync()
+        public override async Task OnStart()
         {
-            base.Started = DateTime.Now;
-
             try
             {
                 IEnumerable<T> messages;
@@ -45,6 +50,7 @@ namespace FarFetched.AzureWorkflow.Core
             }
 
             //finished processing, invoke wait count to see if queue is clear
+            this.State = ModuleState.Waiting;
             await Task.Delay(Settings.QueueWaitTime);
             this._waitIterations++;
             if (_waitIterations >= Settings.MaximumWaitTimesBeforeQueueFinished)
@@ -53,18 +59,19 @@ namespace FarFetched.AzureWorkflow.Core
             }
             else
             {
+                this.State = ModuleState.Waiting;
                 await StartAsync();
             }
         }
 
-        public abstract Task ProcessAsync(IEnumerable<T> queueCollection);
-
-        protected void RaiseProcessed(T item)
+        protected void RaiseSuccessfullyProcessed(T item)
         {
             if (this.OnProcessed != null)
             {
                 this.OnProcessed(item);
             }
         }
+
+        public abstract Task ProcessAsync(IEnumerable<T> queueCollection);
     }
 }

@@ -22,3 +22,15 @@ C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo
 C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\obj\Debug\FarFetched.Workflow.Demo.csprojResolveAssemblyReference.cache
 C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\obj\Debug\FarFetched.Workflow.Demo.dll
 C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\obj\Debug\FarFetched.Workflow.Demo.pdb
+C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\FarFetched.Workflow.Demo.dll
+C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\FarFetched.Workflow.Demo.pdb
+C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\FarFetched.AzureWorkflow.Core.dll
+C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\Ninject.dll
+C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\Microsoft.ServiceBus.dll
+C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\FarFetched.AzureWorkflow.Core.pdb
+C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\Ninject.pdb
+C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\Ninject.xml
+C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\Microsoft.ServiceBus.xml
+C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\obj\Debug\FarFetched.Workflow.Demo.csprojResolveAssemblyReference.cache
+C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\obj\Debug\FarFetched.Workflow.Demo.dll
+C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\obj\Debug\FarFetched.Workflow.Demo.pdb

@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builder\WorkflowBuilderExtentions.cs" />
+    <Compile Include="Entities\InitialWorkflowModule.cs" />
     <Compile Include="Entities\QueueProcessingWorkflowModule.cs" />
     <Compile Include="Enums\ModuleState.cs" />
     <Compile Include="Exception\AzureWorkflowConfigurationException.cs" />

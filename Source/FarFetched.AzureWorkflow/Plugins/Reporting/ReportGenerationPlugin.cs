@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,13 @@ namespace FarFetched.AzureWorkflow.Core.Plugins
 {
     public abstract class ReportGenerationPlugin : WorkflowSessionPluginBase
     {
-        public List<ModuleProcessingSummary> ModuleProcessingSummaries { get; set; }
+        public ReadOnlyCollection<ModuleProcessingSummary> ModuleProcessingSummaries { get; set; }
+        private readonly List<ModuleProcessingSummary> _moduleProcessingSummaries = new List<ModuleProcessingSummary>(); 
+
+        public ReportGenerationPlugin()
+        {
+            ModuleProcessingSummaries = new ReadOnlyCollection<ModuleProcessingSummary>(_moduleProcessingSummaries);
+        }
 
         internal override void OnSessionStarted(WorkflowSession session)
         {
@@ -26,6 +33,8 @@ namespace FarFetched.AzureWorkflow.Core.Plugins
 
         internal override void OnModuleStarted(IWorkflowModule module)
         {
+            _moduleProcessingSummaries.Add(new ModuleProcessingSummary(module));
+
             if (module is IProcessingWorkflowModule)
             {
                 (module as IProcessingWorkflowModule).OnProcessed += o =>

@@ -17,7 +17,7 @@ namespace FarFetched.AzureWorkflow.Core.Architecture
         ModuleState State { get; }
         DateTime Started { get; }
         DateTime Ended { get; }
-
+        WorkflowSession Session { get; set; }
         ICloudQueue Queue { get; set; }
         string QueueName { get; }
 

@@ -36,10 +36,11 @@ namespace FarFetched.AzureWorkflow.Core.Implementation
             //inform plugins we have started so they can hook to events
             Plugins.ForEach(x=>x.OnSessionStarted(this));
 
+            this.Modules.ForEach(x=>RunningModules.Add(x));
+
             //run the modules
             foreach (var module in Modules)
             {
-                RunningModules.Add(module);
                 await module.StartAsync();
             }
 
@@ -65,6 +66,7 @@ namespace FarFetched.AzureWorkflow.Core.Implementation
                 {
                     var newItem = args.NewItems[0] as IWorkflowModule;
                     newItem.Queue = CloudQueueFactory.CreateQueue(newItem);
+                    newItem.Session = this;
                 }
             };
         }
