@@ -14,7 +14,7 @@ using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 using CollectionAssert = Microsoft.VisualStudio.TestTools.UnitTesting.CollectionAssert;
 
-namespace FarFetched.AzureWorkflow.Tests.WhenRunningWorkflowModule
+namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
 {
 
     [TestClass]

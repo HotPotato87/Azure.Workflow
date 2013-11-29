@@ -18,10 +18,10 @@ using Ninject;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
-namespace FarFetched.AzureWorkflow.Tests
+namespace FarFetched.AzureWorkflow.Tests.UnitTests
 {
     [TestFixture]
-    public class When_Workflow_Session_Is_Run
+    public class When_Running_A_Workflow_Session
     {
         private Mock<ReportGenerationPlugin> _summaryReportGenerator;
         private Mock<IWorkflowModule> _module1;

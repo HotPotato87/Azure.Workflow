@@ -82,6 +82,11 @@ namespace FarFetched.AzureWorkflow.Core
             if (countAsProcessed) IncreaseProcessIteration();
         }
 
+        protected void RaiseProcessed(ProcessingResult result, string description = null, bool countAsProcessed = true)
+        {
+            this.RaiseProcessed((object)result, description, countAsProcessed);
+        }
+
         public abstract Task ProcessAsync(IEnumerable<T> queueCollection);
     }
 }

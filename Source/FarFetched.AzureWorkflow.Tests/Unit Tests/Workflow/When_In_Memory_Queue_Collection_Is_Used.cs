@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using FarFetched.AzureWorkflow.Core.ServiceBus;
 using NUnit.Framework;
 
-namespace FarFetched.AzureWorkflow.Tests
+namespace FarFetched.AzureWorkflow.Tests.UnitTests
 {
     [TestFixture]
     public class When_In_Memory_Queue_Collection_Is_Used

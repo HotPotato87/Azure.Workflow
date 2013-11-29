@@ -7,12 +7,11 @@ using FarFetched.AzureWorkflow.Core;
 using FarFetched.AzureWorkflow.Core.Enums;
 using FarFetched.AzureWorkflow.Core.Implementation;
 using FarFetched.AzureWorkflow.Core.Interfaces;
-using FarFetched.AzureWorkflow.Tests.WhenRunningWorkflowModule;
 using Moq;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace FarFetched.AzureWorkflow.Tests.Unit_Tests.Workflow.Module
+namespace FarFetched.AzureWorkflow.Tests.UnitTests
 {
     [TestFixture]
     public class When_Running_A_Queue_Processing_Module
@@ -82,7 +81,16 @@ namespace FarFetched.AzureWorkflow.Tests.Unit_Tests.Workflow.Module
         [Test]
         public async Task Can_Raise_Process_Status_Via_Enum()
         {
-            throw new NotImplementedException();
+            var module = new StubProcessingModule(new WorkflowModuleSettings() { QueueWaitTime = TimeSpan.FromMilliseconds(50), MaximumWaitTimesBeforeQueueFinished = 3 });
+            module.Queue = DefaultEmptyQueue;
+
+            //act
+            await module.StartAsync();
+
+            //assert
+            await Task.Delay(1000);
+
+            Assert.IsTrue(module.State == ModuleState.Finished);
         }
 
         [Test]
@@ -101,6 +109,22 @@ namespace FarFetched.AzureWorkflow.Tests.Unit_Tests.Workflow.Module
         public override async Task ProcessAsync(IEnumerable<object> queueCollection)
         {
             
+        }
+    }
+
+    public class StubAddsProcessedInfoProcessingModule : QueueProcessingWorkflowModule<object>
+    {
+        public StubAddsProcessedInfoProcessingModule(WorkflowModuleSettings settings = null)
+            : base(settings)
+        {
+
+        }
+        public override async Task ProcessAsync(IEnumerable<object> queueCollection)
+        {
+            foreach (var o in queueCollection)
+            {
+                this.RaiseProcessed(ProcessingResult.Success);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FarFetched.AzureWorkflow.Core.Enums;
 
 namespace FarFetched.AzureWorkflow.Core.Architecture
 {
@@ -11,6 +12,6 @@ namespace FarFetched.AzureWorkflow.Core.Architecture
 
     public interface IProcessingWorkflowModule : IWorkflowModule
     {
-        event Action<object> OnProcessed;
+        event Action<string, string> OnRaiseProcessed;
     }
 }

@@ -17,7 +17,7 @@ using Moq;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace FarFetched.AzureWorkflow.Tests.WhenRunningWorkflowModule
+namespace FarFetched.AzureWorkflow.Tests.UnitTests
 {
     [TestFixture]
     partial class When_Running_A_Workflow_Module

@@ -14,7 +14,7 @@ using Moq;
 namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
 {
     [TestClass]
-    public class When_Session_Is_Built_And_Ran
+    public class When_Running_A_Workflow_Session
     {
         [TestMethod]
         public async Task Modules_Can_Send_Messages_Between_Queues()
@@ -35,11 +35,5 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
             CollectionAssert.AreEqual(reciever.Recieved.ToList(), payload);
         }
     }
-
-    #region Fakes
-
-   
-
-    #endregion
 
 }

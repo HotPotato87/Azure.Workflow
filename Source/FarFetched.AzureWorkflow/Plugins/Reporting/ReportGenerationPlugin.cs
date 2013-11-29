@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FarFetched.AzureWorkflow.Core.Architecture;
 using FarFetched.AzureWorkflow.Core.Implementation;
+using FarFetched.AzureWorkflow.Core.Implementation.Reports;
 using FarFetched.AzureWorkflow.Core.Interfaces;
 
 namespace FarFetched.AzureWorkflow.Core.Plugins
@@ -25,10 +26,7 @@ namespace FarFetched.AzureWorkflow.Core.Plugins
         {
             base.OnSessionStarted(session);
 
-            session.OnSessionFinished += workflowSession =>
-            {
-                this.SendSessionReport(ModuleProcessingSummaries);
-            };
+            session.OnSessionFinished += workflowSession => this.SendSessionReport(ModuleProcessingSummaries);
         }
 
         internal override void OnModuleStarted(IWorkflowModule module)
@@ -37,9 +35,16 @@ namespace FarFetched.AzureWorkflow.Core.Plugins
 
             if (module is IProcessingWorkflowModule)
             {
-                (module as IProcessingWorkflowModule).OnProcessed += o =>
+                (module as IProcessingWorkflowModule).OnRaiseProcessed += (key, detail) =>
                 {
-                    this.ModuleProcessingSummaries.Single(x => x.Module == module).SuccessfullyProcessed++;
+                    var summary = this.ModuleProcessingSummaries.Single(x => x.Module == module);
+                    if (!summary.ProcessedList.ContainsKey(key)) summary.ProcessedList[key] = 0;
+                    summary.ProcessedList[key]++;
+                    if (detail != null)
+                    {
+                        if (!summary.ProcessedListExtraDetail.ContainsKey(key)) summary.ProcessedListExtraDetail[key] = new List<ProcessedItemDetail>();
+                        summary.ProcessedListExtraDetail[key].Add(new ProcessedItemDetail(detail));
+                    }
                 };    
             }
             

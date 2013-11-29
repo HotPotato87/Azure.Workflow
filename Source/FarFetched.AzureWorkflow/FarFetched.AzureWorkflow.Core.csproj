@@ -68,12 +68,14 @@
     <Compile Include="Entities\InitialWorkflowModule.cs" />
     <Compile Include="Entities\QueueProcessingWorkflowModule.cs" />
     <Compile Include="Enums\ModuleState.cs" />
+    <Compile Include="Enums\ProcessingResult.cs" />
     <Compile Include="Exception\AzureWorkflowConfigurationException.cs" />
     <Compile Include="Implementation\Alerts\SendGridAlertManager.cs" />
     <Compile Include="Implementation\Logging\ConsoleLogger.cs" />
     <Compile Include="Implementation\Alerts\ProwlAlertManager.cs" />
     <Compile Include="Implementation\Queue\AzureServiceBusQueueFactory.cs" />
     <Compile Include="Implementation\Queue\InMemoryQueueFactory.cs" />
+    <Compile Include="Implementation\Reports\ProcessedItemDetail.cs" />
     <Compile Include="Implementation\Reports\SendGridReportGenerator.cs" />
     <Compile Include="Entities\WorkflowSessionBuilder.cs" />
     <Compile Include="Interfaces\ICloudQueue.cs" />

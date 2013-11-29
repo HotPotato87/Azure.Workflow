@@ -8,6 +8,7 @@ using FarFetched.AzureWorkflow.Core.Enums;
 using FarFetched.AzureWorkflow.Core.Interfaces;
 using FarFetched.AzureWorkflow.Core.Plugins;
 using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
 {
@@ -68,25 +69,18 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
 
         internal class CategorisesProcessingResultFake : QueueProcessingWorkflowModule<object>
         {
-            private readonly Func<Exception> _exceptionFactory;
+            private readonly List<Tuple<object, string>> _processMessages;
 
-            public CategorisesProcessingResultFake(Func<Exception> exceptionFactory)
+            public CategorisesProcessingResultFake(List<Tuple<object, string>> processMessages)
             {
-                _exceptionFactory = exceptionFactory;
+                _processMessages = processMessages;
             }
 
             public override async Task ProcessAsync(IEnumerable<object> queueCollection)
             {
                 this.Recieved = queueCollection;
 
-                this.RaiseProcessed(ProcessingResult.Success);
-                this.RaiseProcessed(ProcessingResult.Success);
-                this.RaiseProcessed(ProcessingResult.Success);
-
-                this.RaiseProcessed(ProcessingResult.Fail, "Not enough chocolate");
-                this.RaiseProcessed(ProcessingResult.Fail, "Not enough cheese");
-
-                this.RaiseProcessed("Other", "Delivery API couldn't be contacted");
+                _processMessages.ForEach(x=>base.RaiseProcessed(x.Item1, x.Item2));
             }
 
             public IEnumerable<object> Recieved { get; set; }

@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NUnit.Framework;
 
-namespace FarFetched.AzureWorkflow.Tests.WhenRunningWorkflowModule
+namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
 {
     [TestClass]
     public class When_Running_A_Workflow_Session_And_The_Alert_Plugin_Is_Loaded
