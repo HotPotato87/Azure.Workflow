@@ -26,9 +26,7 @@ namespace FarFetched.Workflow.Demo
 
             HttpClient client = new HttpClient();
             var response = await client.GetAsync(urlWithKey);
-            var result = response.Content.
             
-            Json RottenTomatoesJsonObjects.RootObject
 
         }
     }

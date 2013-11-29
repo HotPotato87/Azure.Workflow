@@ -34,3 +34,11 @@ C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Work
 C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\obj\Debug\FarFetched.Workflow.Demo.csprojResolveAssemblyReference.cache
 C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\obj\Debug\FarFetched.Workflow.Demo.dll
 C:\Users\Patrick.McCurley\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\obj\Debug\FarFetched.Workflow.Demo.pdb
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\obj\Debug\FarFetched.Workflow.Demo.csproj.App.config
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\FarFetched.Workflow.Demo.dll.config
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\System.Net.Http.Extensions.dll
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\System.Net.Http.Primitives.dll
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\System.Net.Http.Extensions.xml
+C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.Workflow.Demo\bin\Debug\System.Net.Http.Primitives.xml
