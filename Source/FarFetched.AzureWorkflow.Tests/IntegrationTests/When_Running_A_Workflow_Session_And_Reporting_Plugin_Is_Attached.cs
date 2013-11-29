@@ -18,6 +18,22 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
     [TestClass]
     public class When_Running_A_Workflow_Session_And_Reporting_Plugin_Is_Attached
     {
+        #region Helpers
+
+        public List<Tuple<object, string>> GetSampleMessages()
+        {
+            var messages = new List<Tuple<object, string>>();
+            messages.Add(new Tuple<object, string>(ProcessingResult.Success, null));
+            messages.Add(new Tuple<object, string>(ProcessingResult.Success, null));
+            messages.Add(new Tuple<object, string>(ProcessingResult.Success, null));
+            messages.Add(new Tuple<object, string>(ProcessingResult.Fail, "Not enough chocolate"));
+            messages.Add(new Tuple<object, string>(ProcessingResult.Fail, "Not enough cheese"));
+            messages.Add(new Tuple<object, string>("Other", "Delivery API couldn't be contacted"));
+            return messages;
+        }
+
+            #endregion
+
         [Test]
         public async Task Successfully_Processed_Items_Are_Added_To_Report()
         {
@@ -66,18 +82,11 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
             var reportGenerator = new Fakes.ReportGenerationFake();
             var payLoad = new List<object>() { new object(), new object() };
 
-            var messages = new List<Tuple<object, string>>();
-            messages.Add(new Tuple<object, string>(ProcessingResult.Success, null));
-            messages.Add(new Tuple<object, string>(ProcessingResult.Success, null));
-            messages.Add(new Tuple<object, string>(ProcessingResult.Success, null));
-            messages.Add(new Tuple<object, string>(ProcessingResult.Fail, "Not enough chocolate"));
-            messages.Add(new Tuple<object, string>(ProcessingResult.Fail, "Not enough cheese"));
-            messages.Add(new Tuple<object, string>("Other", "Delivery API couldn't be contacted"));
-
+           
             //act
             await WorkflowSession.StartBuild()
                 .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
-                .AddModule(new Fakes.CategorisesProcessingResultFake(messages))
+                .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
                 .WithQueueMechanism(new InMemoryQueueFactory())
                 .AttachReportGenerator(reportGenerator)
                 .RunAsync();
@@ -95,7 +104,20 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
         [Test]
         public async Task Duration_Of_Module_Runs_Are_Added_To_Summary()
         {
-            throw new NotImplementedException();
+            //arrange
+            var reportGenerator = new Fakes.ReportGenerationFake();
+            var payLoad = new List<object>() { new object(), new object() };
+
+            //act
+            await WorkflowSession.StartBuild()
+                .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
+                .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
+                .WithQueueMechanism(new InMemoryQueueFactory())
+                .AttachReportGenerator(reportGenerator)
+                .RunAsync();
+
+            //assert
+            Assert.IsTrue(reportGenerator.ModuleProcessingSummaries.All(x => x.Duration.TotalMilliseconds > 0));
         }
 
         [Test]

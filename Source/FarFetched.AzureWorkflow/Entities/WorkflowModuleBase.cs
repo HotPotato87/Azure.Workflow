@@ -71,13 +71,13 @@ namespace FarFetched.AzureWorkflow.Core
             }
 
             //register finish
-            if (OnFinished != null) OnFinished();
             if (this.State != ModuleState.Error)
             {
                 this.State = ModuleState.Finished;
             }
             this.LogMessage("Finished");
             Ended = DateTime.Now;
+            if (OnFinished != null) OnFinished();
         }
 
         #region Abstract
