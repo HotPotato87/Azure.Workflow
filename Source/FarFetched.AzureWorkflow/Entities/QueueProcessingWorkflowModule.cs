@@ -11,11 +11,8 @@ using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
 
 namespace FarFetched.AzureWorkflow.Core
 {
-    public abstract class QueueProcessingWorkflowModule<T> : WorkflowModuleBase<T>, IProcessingWorkflowModule where T : class
+    public abstract class QueueProcessingWorkflowModule<T> : WorkflowModuleBase<T>, IProcessingWorkflowModule<T> where T : class
     {
-        public event Action<string, string> OnRaiseProcessed;
-        public event Action OnProcessIteration;
-
         private int _waitIterations;
 
         public QueueProcessingWorkflowModule()
@@ -36,9 +33,11 @@ namespace FarFetched.AzureWorkflow.Core
                 IEnumerable<T> messages;
                 while ((messages = await this.Queue.ReceieveAsync<T>(this.Settings.QueueSettings.BatchCount)).Any())
                 {
+                    this.LogMessage("Dequeued {0} messages", messages.Count());
                     try
                     {
                         await this.ProcessAsync(messages);
+                        this.LogMessage("Processed {0} messages", messages.Count());
                     }
                     catch (Exception processingError)
                     {
@@ -46,6 +45,8 @@ namespace FarFetched.AzureWorkflow.Core
                         continue;
                     }
                 }
+
+                this.LogMessage("{0} : Finished Processing", this.QueueName);
             }
             catch (Exception eX)
             {
@@ -65,26 +66,6 @@ namespace FarFetched.AzureWorkflow.Core
                 this.State = ModuleState.Waiting;
                 await StartAsync();
             }
-        }
-
-        protected void IncreaseProcessIteration()
-        {
-            if (this.OnProcessIteration != null) this.OnProcessIteration();
-        }
-
-        protected void RaiseProcessed(object key, string description = null, bool countAsProcessed = true)
-        {
-            if (this.OnRaiseProcessed != null)
-            {
-                this.OnRaiseProcessed(key.ToString(), description);
-            }
-
-            if (countAsProcessed) IncreaseProcessIteration();
-        }
-
-        protected void RaiseProcessed(ProcessingResult result, string description = null, bool countAsProcessed = true)
-        {
-            this.RaiseProcessed((object)result, description, countAsProcessed);
         }
 
         public abstract Task ProcessAsync(IEnumerable<T> queueCollection);

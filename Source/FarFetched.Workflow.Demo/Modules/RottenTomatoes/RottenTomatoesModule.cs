@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using FarFetched.AzureWorkflow.Core;
 using FarFetched.AzureWorkflow.Core.Enums;
 using FarFetched.Workflow.Demo.Modules.RottenTomatoes;
+using Newtonsoft.Json;
 
 namespace FarFetched.Workflow.Demo
 {
-    public class RottenTomatoesModule : InitialWorkflowModule<MovieJsonObject>
+    public class RottenTomatoesModule : InitialWorkflowModule<Movie>
     {
         public RottenTomatoesModule() : base()
         {
@@ -26,8 +27,20 @@ namespace FarFetched.Workflow.Demo
 
             HttpClient client = new HttpClient();
             var response = await client.GetAsync(urlWithKey);
-            
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var rottenTomatoesObject = await JsonConvert.DeserializeObjectAsync<RottenTomatoesJsonObjects.RootObject>(jsonString);
 
+            foreach (var movieJson in rottenTomatoesObject.movies)
+            {
+                Movie movie = new Movie()
+                {
+                    MovieName = movieJson.title,
+                    RottenTomatoesScore = movieJson.ratings.critics_score
+                };
+
+                base.SendTo(typeof (MetacriticModule), movie);
+                base.RaiseProcessed(ProcessingResult.Success);
+            }
         }
     }
 }

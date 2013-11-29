@@ -32,21 +32,17 @@ namespace FarFetched.AzureWorkflow.Core.Plugins
         internal override void OnModuleStarted(IWorkflowModule module)
         {
             _moduleProcessingSummaries.Add(new ModuleProcessingSummary(module));
-
-            if (module is IProcessingWorkflowModule)
+            module.OnRaiseProcessed += (key, detail) =>
             {
-                (module as IProcessingWorkflowModule).OnRaiseProcessed += (key, detail) =>
+                var summary = this.ModuleProcessingSummaries.Single(x => x.Module == module);
+                if (!summary.ProcessedList.ContainsKey(key)) summary.ProcessedList[key] = 0;
+                summary.ProcessedList[key]++;
+                if (detail != null)
                 {
-                    var summary = this.ModuleProcessingSummaries.Single(x => x.Module == module);
-                    if (!summary.ProcessedList.ContainsKey(key)) summary.ProcessedList[key] = 0;
-                    summary.ProcessedList[key]++;
-                    if (detail != null)
-                    {
-                        if (!summary.ProcessedListExtraDetail.ContainsKey(key)) summary.ProcessedListExtraDetail[key] = new List<ProcessedItemDetail>();
-                        summary.ProcessedListExtraDetail[key].Add(new ProcessedItemDetail(detail));
-                    }
-                };    
-            }
+                    if (!summary.ProcessedListExtraDetail.ContainsKey(key)) summary.ProcessedListExtraDetail[key] = new List<ProcessedItemDetail>();
+                    summary.ProcessedListExtraDetail[key].Add(new ProcessedItemDetail(detail));
+                }
+            };
             
             module.OnError += exception =>
             {

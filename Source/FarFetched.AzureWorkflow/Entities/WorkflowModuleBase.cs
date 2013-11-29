@@ -41,6 +41,7 @@ namespace FarFetched.AzureWorkflow.Core
         public event Action<string> OnLogMessage;
         public event Action<Alert> OnAlert;
         public event Action OnStarted;
+        public event Action<string, string> OnRaiseProcessed;
 
         #endregion
 
@@ -88,11 +89,11 @@ namespace FarFetched.AzureWorkflow.Core
 
         #region Protected Methods
 
-        protected void LogMessage(string message)
+        protected void LogMessage(string message, params object[] parameters)
         {
             if (this.OnLogMessage != null)
             {
-                OnLogMessage(message);
+                OnLogMessage(string.Format(this.QueueName + " : " + message, parameters));
             }
         }
 
@@ -104,6 +105,18 @@ namespace FarFetched.AzureWorkflow.Core
             }
         }
 
+        protected void RaiseProcessed(object key, string description = null, bool countAsProcessed = true)
+        {
+            if (this.OnRaiseProcessed != null)
+            {
+                this.OnRaiseProcessed(key.ToString(), description);
+            }
+        }
+
+        protected void RaiseProcessed(ProcessingResult result, string description = null, bool countAsProcessed = true)
+        {
+            this.RaiseProcessed((object)result, description, countAsProcessed);
+        }
 
         protected void SendTo(Type workflowModuleType, T obj)
         {
@@ -117,6 +130,7 @@ namespace FarFetched.AzureWorkflow.Core
 
         protected void RaiseError(Exception e)
         {
+            this.LogMessage("{0} : Error Occured {1}", this.QueueName, e.ToString());
             if (this.OnError != null)
             {
                 OnError(e);

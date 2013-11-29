@@ -5,13 +5,8 @@ using FarFetched.AzureWorkflow.Core.Enums;
 
 namespace FarFetched.AzureWorkflow.Core.Architecture
 {
-    public interface IProcessingWorkflowModule<T> : IProcessingWorkflowModule
+    public interface IProcessingWorkflowModule<T>
     {
         Task ProcessAsync(IEnumerable<T> queueCollection);
-    }
-
-    public interface IProcessingWorkflowModule : IWorkflowModule
-    {
-        event Action<string, string> OnRaiseProcessed;
     }
 }
