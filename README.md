@@ -12,7 +12,7 @@ Use it for :
 Features
 ---------
 1. Fluent API. Build it how you love it.
-2. 
+```
 await WorkflowSession.StartBuild()
                         .AddModule(new RottenTomatoesModule())
                         .AddModule(new MetacriticModule())
@@ -21,6 +21,7 @@ await WorkflowSession.StartBuild()
                     .AttachAlertManager(new ProwlAlertManager())
                     .AttachReportGenerator(new SendGridReportGenerator())
                     .RunAsync();
+```
  
 2. Read and write with queues such as Azure servicebus or cloud-storage queues.
 
