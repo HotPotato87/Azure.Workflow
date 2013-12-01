@@ -1,12 +1,12 @@
 ﻿using System.Runtime.Serialization;
 
-namespace FarFetched.Workflow.Demo
+namespace Azure.Workflow.Demo
 {
     [DataContract]
     public class Movie
     {
         [DataMember]
-        public string MovieName { get; set; }
+        public string Title { get; set; }
         [DataMember]    
         public double RottenTomatoesScore { get; set; }
         [DataMember]    

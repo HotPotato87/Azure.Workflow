@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ninject;
 
-namespace FarFetched.AzureWorkflow.Core
+namespace Azure.Workflow.Core
 {
     public static class IOC
     {

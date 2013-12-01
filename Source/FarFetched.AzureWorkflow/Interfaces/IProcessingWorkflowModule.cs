@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Enums;
+using Azure.Workflow.Core.Enums;
 
-namespace FarFetched.AzureWorkflow.Core.Architecture
+namespace Azure.Workflow.Core.Architecture
 {
     public interface IProcessingWorkflowModule<T>
     {

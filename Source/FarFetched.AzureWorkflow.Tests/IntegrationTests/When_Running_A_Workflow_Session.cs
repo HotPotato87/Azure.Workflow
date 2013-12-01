@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core;
-using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Builder;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.Interfaces;
-using FarFetched.AzureWorkflow.Core.ServiceBus;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.ServiceBus;
+using Azure.Workflow.Core;
+using Azure.Workflow.Core.Architecture;
+using Azure.Workflow.Core.Builder;
+using Azure.Workflow.Core.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
+namespace Azure.Workflow.Tests.IntegrationTests
 {
     [TestClass]
     public class When_Running_A_Workflow_Session

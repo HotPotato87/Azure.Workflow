@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core;
-using FarFetched.AzureWorkflow.Core.Enums;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.Interfaces;
-using FarFetched.AzureWorkflow.Core.Plugins;
-using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
+using Azure.Workflow.Core;
+using Azure.Workflow.Core.Enums;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.Interfaces;
+using Azure.Workflow.Core.Plugins;
+using Azure.Workflow.Core.Plugins.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
+namespace Azure.Workflow.Tests.IntegrationTests
 {
     internal class Fakes
     {

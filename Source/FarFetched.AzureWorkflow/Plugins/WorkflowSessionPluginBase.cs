@@ -4,10 +4,10 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Implementation;
+using Azure.Workflow.Core.Architecture;
+using Azure.Workflow.Core.Implementation;
 
-namespace FarFetched.AzureWorkflow.Core.Plugins
+namespace Azure.Workflow.Core.Plugins
 {
     public abstract class WorkflowSessionPluginBase
     {

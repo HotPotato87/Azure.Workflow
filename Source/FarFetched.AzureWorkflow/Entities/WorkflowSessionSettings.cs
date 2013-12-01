@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FarFetched.AzureWorkflow.Core.Entities
+namespace Azure.Workflow.Core.Entities
 {
     public class WorkflowSessionSettings
     {
-        public int ProcessorCores { get; set; }
 
         public WorkflowSessionSettings()
         {
-            ProcessorCores = Environment.ProcessorCount;
         }
     }
 }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Interfaces;
-using FarFetched.AzureWorkflow.Core.Plugins;
+using Azure.Workflow.Core.Interfaces;
+using Azure.Workflow.Core.Plugins;
+using Azure.Workflow.Core.Architecture;
 
-namespace FarFetched.AzureWorkflow.Core.Implementation.Reporting
+namespace Azure.Workflow.Core.Implementation.Reporting
 {
     public class SendGridReportGenerator : ReportGenerationPlugin
     {

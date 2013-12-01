@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FarFetched.AzureWorkflow.Core.Plugins.Alerts
+namespace Azure.Workflow.Core.Plugins.Alerts
 {
     public class LogMessage
     {

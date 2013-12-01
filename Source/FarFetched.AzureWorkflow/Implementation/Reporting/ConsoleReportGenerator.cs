@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using FarFetched.AzureWorkflow.Core.Interfaces;
-using FarFetched.AzureWorkflow.Core.Plugins;
+using Azure.Workflow.Core.Interfaces;
+using Azure.Workflow.Core.Plugins;
 
-namespace FarFetched.AzureWorkflow.Core.Implementation.Reporting
+namespace Azure.Workflow.Core.Implementation.Reporting
 {
     public class ConsoleReportGenerator : ReportGenerationPlugin
     {

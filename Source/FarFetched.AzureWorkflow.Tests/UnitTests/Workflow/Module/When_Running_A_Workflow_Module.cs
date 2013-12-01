@@ -5,19 +5,19 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core;
-using FarFetched.AzureWorkflow.Core.Enums;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.Interfaces;
-using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
-using FarFetched.AzureWorkflow.Core.ServiceBus;
+using Azure.Workflow.Core;
+using Azure.Workflow.Core.Enums;
+using Azure.Workflow.Core.Interfaces;
+using Azure.Workflow.Core.Plugins.Alerts;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace FarFetched.AzureWorkflow.Tests.UnitTests
+namespace Azure.Workflow.Tests.UnitTests
 {
     [TestFixture]
     partial class When_Running_A_Workflow_Module

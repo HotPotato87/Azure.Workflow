@@ -4,12 +4,12 @@ using System.Linq;
 using System.ServiceModel.PeerResolvers;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Enums;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.Interfaces;
-using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
+using Azure.Workflow.Core.Enums;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.Interfaces;
+using Azure.Workflow.Core.Plugins.Alerts;
 
-namespace FarFetched.AzureWorkflow.Core.Architecture
+namespace Azure.Workflow.Core.Architecture
 {
     public interface IWorkflowModule
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FarFetched.AzureWorkflow.Core.Enums
+namespace Azure.Workflow.Core.Enums
 {
     public enum ProcessingResult
     {

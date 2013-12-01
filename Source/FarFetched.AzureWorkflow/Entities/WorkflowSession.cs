@@ -5,12 +5,12 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Entities;
-using FarFetched.AzureWorkflow.Core.Interfaces;
-using FarFetched.AzureWorkflow.Core.Plugins;
+using Azure.Workflow.Core.Architecture;
+using Azure.Workflow.Core.Entities;
+using Azure.Workflow.Core.Interfaces;
+using Azure.Workflow.Core.Plugins;
 
-namespace FarFetched.AzureWorkflow.Core.Implementation
+namespace Azure.Workflow.Core.Implementation
 {
     public class WorkflowSession
     {

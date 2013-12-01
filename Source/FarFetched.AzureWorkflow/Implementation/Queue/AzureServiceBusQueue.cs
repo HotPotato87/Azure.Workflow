@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.Interfaces;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.Interfaces;
 using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 
-namespace FarFetched.AzureWorkflow.Core.ServiceBus
+namespace Azure.Workflow.Core.ServiceBus
 {
     public class AzureServiceBusQueue : ICloudQueue
     {

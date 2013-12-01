@@ -5,12 +5,12 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.Implementation.Reporting;
-using FarFetched.AzureWorkflow.Core.Interfaces;
+using Azure.Workflow.Core.Architecture;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.Implementation.Reporting;
+using Azure.Workflow.Core.Interfaces;
 
-namespace FarFetched.AzureWorkflow.Core.Plugins
+namespace Azure.Workflow.Core.Plugins
 {
     public abstract class ReportGenerationPlugin : WorkflowSessionPluginBase
     {

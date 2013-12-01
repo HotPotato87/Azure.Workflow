@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Implementation;
+using Azure.Workflow.Core.Implementation;
 
-namespace FarFetched.AzureWorkflow.Core
+namespace Azure.Workflow.Core
 {
     public abstract class InitialWorkflowModule<T> : WorkflowModuleBase<T> where T : class
     {

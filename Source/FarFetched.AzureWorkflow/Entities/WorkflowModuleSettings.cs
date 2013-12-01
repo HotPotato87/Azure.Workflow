@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FarFetched.AzureWorkflow.Core.Implementation
+namespace Azure.Workflow.Core.Implementation
 {
     public class WorkflowModuleSettings
     {

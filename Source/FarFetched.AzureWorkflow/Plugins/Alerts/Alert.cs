@@ -1,4 +1,4 @@
-﻿namespace FarFetched.AzureWorkflow.Core.Plugins.Alerts
+﻿namespace Azure.Workflow.Core.Plugins.Alerts
 {
     public class Alert{
         public AlertLevel AlertLevel { get; set; }

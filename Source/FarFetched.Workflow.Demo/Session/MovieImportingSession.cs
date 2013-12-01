@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Builder;
-using FarFetched.AzureWorkflow.Core.Entities;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.Implementation.Logging;
-using FarFetched.AzureWorkflow.Core.Implementation.Reporting;
-using FarFetched.AzureWorkflow.Core.ServiceBus;
+using Azure.Workflow.Core.Entities;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.Implementation.Logging;
+using Azure.Workflow.Core.Implementation.Reporting;
+using Azure.Workflow.Core.ServiceBus;
+using Azure.Workflow.Core.Builder;
 
-namespace FarFetched.Workflow.Demo
+namespace Azure.Workflow.Demo.Session
 {
     public class Start
     {
@@ -24,7 +19,7 @@ namespace FarFetched.Workflow.Demo
                     .AddModule(new RottenTomatoesModule())
                     .AddModule(new MetacriticModule(new WorkflowModuleSettings() { QueueWaitTimeBeforeFinish = TimeSpan.FromSeconds(5) }))
                     .ConfigureSessionSettings(new WorkflowSessionSettings())
-                    .WithQueueMechanism(new AzureServiceBusQueueFactory(new ServiceBusQueueSettings() { BatchCount = 5, ConnectionString = DemoSettings.Default.ServiceBusConnectionString }))
+                    .WithQueueMechanism(new AzureServiceBusQueueFactory(new ServiceBusQueueSettings() { ConnectionString = DemoSettings.Default.ServiceBusConnectionString }))
                     .AttachLogger(new ConsoleLogger())
                     .AttachAlertManager(new SendGridAlertManager())
                     .AttachReportGenerator(new ConsoleReportGenerator())

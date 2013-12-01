@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Builder;
-using FarFetched.AzureWorkflow.Core.Enums;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.ServiceBus;
-using FarFetched.AzureWorkflow.Tests.IntegrationTests;
+using Azure.Workflow.Core.Enums;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.ServiceBus;
+using Azure.Workflow.Core.Builder;
+using Azure.Workflow.Tests.IntegrationTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
+namespace Azure.Workflow.Tests.IntegrationTests
 {
 
     [TestClass]

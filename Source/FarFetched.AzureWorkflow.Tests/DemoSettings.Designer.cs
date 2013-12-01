@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FarFetched.AzureWorkflow.Tests {
+namespace Azure.Workflow.Tests {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

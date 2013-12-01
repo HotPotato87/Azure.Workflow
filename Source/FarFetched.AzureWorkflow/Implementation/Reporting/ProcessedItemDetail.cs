@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FarFetched.AzureWorkflow.Core.Implementation.Reporting
+namespace Azure.Workflow.Core.Implementation.Reporting
 {
     public class ProcessedItemDetail
     {

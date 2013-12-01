@@ -1,7 +1,7 @@
-﻿using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Interfaces;
+﻿using Azure.Workflow.Core.Architecture;
+using Azure.Workflow.Core.Interfaces;
 
-namespace FarFetched.AzureWorkflow.Core.ServiceBus
+namespace Azure.Workflow.Core.ServiceBus
 {
     public class InMemoryQueueFactory : ICloudQueueFactory
     {

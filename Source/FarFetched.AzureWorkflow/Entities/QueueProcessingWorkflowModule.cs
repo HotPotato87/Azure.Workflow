@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Enums;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
+using Azure.Workflow.Core.Architecture;
+using Azure.Workflow.Core.Enums;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.Plugins.Alerts;
 
-namespace FarFetched.AzureWorkflow.Core
+namespace Azure.Workflow.Core
 {
     public abstract class QueueProcessingWorkflowModule<T> : WorkflowModuleBase<T>, IProcessingWorkflowModule<T> where T : class
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Architecture;
+using Azure.Workflow.Core.Architecture;
 
-namespace FarFetched.AzureWorkflow.Core.Interfaces
+namespace Azure.Workflow.Core.Interfaces
 {
     public interface ICloudQueueFactory
     {

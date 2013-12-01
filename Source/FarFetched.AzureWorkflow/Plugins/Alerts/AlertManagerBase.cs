@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Implementation;
+using Azure.Workflow.Core.Architecture;
+using Azure.Workflow.Core.Implementation;
 
-namespace FarFetched.AzureWorkflow.Core.Plugins.Alerts
+namespace Azure.Workflow.Core.Plugins.Alerts
 {
     public abstract class AlertManagerBase : WorkflowSessionPluginBase
     {

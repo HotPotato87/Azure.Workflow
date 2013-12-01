@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.ServiceBus;
+using Azure.Workflow.Core;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.ServiceBus;
 using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 using NUnit.Framework;
 
-namespace FarFetched.AzureWorkflow.Tests.UnitTests
+namespace Azure.Workflow.Tests.UnitTests
 {
     [TestFixture]
     public class When_Using_Azure_Service_Bus

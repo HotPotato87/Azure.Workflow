@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Entities;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.Interfaces;
-using FarFetched.AzureWorkflow.Core.Plugins;
-using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
+using Azure.Workflow.Core.Architecture;
+using Azure.Workflow.Core.Entities;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.Interfaces;
+using Azure.Workflow.Core.Plugins;
+using Azure.Workflow.Core.Plugins.Alerts;
 
-namespace FarFetched.AzureWorkflow.Core.Builder
+namespace Azure.Workflow.Core.Builder
 {
     public static class WorkflowBuilderExtentions
     {

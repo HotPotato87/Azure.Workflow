@@ -4,13 +4,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core;
-using FarFetched.AzureWorkflow.Core.Enums;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.Workflow.Demo.Modules.RottenTomatoes;
+using Azure.Workflow.Core;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Demo.Modules.RottenTomatoes;
+using Azure.Workflow.Core.Enums;
 using Newtonsoft.Json;
 
-namespace FarFetched.Workflow.Demo
+namespace Azure.Workflow.Demo
 {
     public class RottenTomatoesModule : InitialWorkflowModule<Movie>
     {
@@ -36,7 +36,7 @@ namespace FarFetched.Workflow.Demo
             {
                 Movie movie = new Movie()
                 {
-                    MovieName = movieJson.title,
+                    Title = movieJson.title,
                     RottenTomatoesScore = movieJson.ratings.critics_score
                 };
 

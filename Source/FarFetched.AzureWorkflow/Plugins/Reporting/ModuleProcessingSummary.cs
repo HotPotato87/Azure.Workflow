@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Implementation.Reporting;
+using Azure.Workflow.Core.Architecture;
+using Azure.Workflow.Core.Implementation.Reporting;
 
-namespace FarFetched.AzureWorkflow.Core.Interfaces
+namespace Azure.Workflow.Core.Interfaces
 {
     public class ModuleProcessingSummary
     {

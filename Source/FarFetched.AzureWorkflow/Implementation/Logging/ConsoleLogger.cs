@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
+using Azure.Workflow.Core.Plugins.Alerts;
 
-namespace FarFetched.AzureWorkflow.Core.Implementation.Logging
+namespace Azure.Workflow.Core.Implementation.Logging
 {
     public class ConsoleLogger : LogManagerBase
     {

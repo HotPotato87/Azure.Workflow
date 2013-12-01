@@ -1,7 +1,7 @@
 ﻿using System;
-using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
+using Azure.Workflow.Core.Plugins.Alerts;
 
-namespace FarFetched.AzureWorkflow.Core.Implementation
+namespace Azure.Workflow.Core.Implementation
 {
     public class SendGridAlertManager : AlertManagerBase
     {

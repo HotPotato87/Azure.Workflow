@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Enums;
-using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.Interfaces;
-using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
-using FarFetched.AzureWorkflow.Core.ServiceBus;
+using Azure.Workflow.Core.Architecture;
+using Azure.Workflow.Core.Enums;
+using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.Interfaces;
+using Azure.Workflow.Core.Plugins.Alerts;
+using Azure.Workflow.Core.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 
-namespace FarFetched.AzureWorkflow.Core
+namespace Azure.Workflow.Core
 {
     public abstract class WorkflowModuleBase<T> : IWorkflowModule where T : class
     {
