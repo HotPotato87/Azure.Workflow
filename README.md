@@ -25,6 +25,7 @@ await WorkflowSession.StartBuild()
  
 <b> Read and write with queues such as Azure servicebus or cloud-storage queues. </b>
 
+Send..
 ```
 public class RottenTomatoesModule : InitialWorkflowModule<Movie>
 {
@@ -35,7 +36,7 @@ public class RottenTomatoesModule : InitialWorkflowModule<Movie>
         movies.ForEach(x => base.SendTo(typeof (MetacriticModule), x));
     }
 ```
-
+Recieve..
 ```
 public class MetacriticModule : QueueProcessingWorkflowModule<Movie>
 {
