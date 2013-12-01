@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 using FarFetched.AzureWorkflow.Core;
 using FarFetched.AzureWorkflow.Core.Architecture;
 using FarFetched.AzureWorkflow.Core.Enums;
+using FarFetched.AzureWorkflow.Core.Implementation;
+using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
 
 namespace FarFetched.Workflow.Demo
 {
     public class MetacriticModule : QueueProcessingWorkflowModule<Movie>
     {
-        public override string QueueName
+        public MetacriticModule(WorkflowModuleSettings settings) : base(settings)
         {
-            get { return "metacritic"; }
+            
         }
 
         public override async Task ProcessAsync(IEnumerable<Movie> queueCollection)
@@ -21,7 +23,7 @@ namespace FarFetched.Workflow.Demo
             foreach (var movie in queueCollection)
             {
                 movie.MetaCriticScore = 5;
-                base.RaiseProcessed(ProcessingResult.Success);
+                base.CategorizeResult(ProcessingResult.Success);
             }
         }
     }

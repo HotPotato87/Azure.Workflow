@@ -57,10 +57,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="APISettings.Designer.cs">
+    <Compile Include="DemoSettings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>APISettings.settings</DependentUpon>
+      <DependentUpon>DemoSettings.settings</DependentUpon>
     </Compile>
     <Compile Include="Entities\Movie.cs" />
     <Compile Include="Modules\Metacritic\MetacriticModule.cs" />
@@ -76,9 +76,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="APISettings.settings">
+    <None Include="DemoSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>APISettings.Designer.cs</LastGenOutput>
+      <LastGenOutput>DemoSettings.Designer.cs</LastGenOutput>
     </None>
     <None Include="app.config" />
     <None Include="packages.config" />

@@ -1,9 +1,0 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FarFetched.Workflow.Demo" GeneratedClassName="APISettings">
-  <Profiles />
-  <Settings>
-    <Setting Name="RottenTomatoesKey" Type="System.String" Scope="User">
-      <Value Profile="(Default)">qnaz45gef9gne76fm8uqkb2n</Value>
-    </Setting>
-  </Settings>
-</SettingsFile>

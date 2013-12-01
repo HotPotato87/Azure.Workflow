@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FarFetched.AzureWorkflow.Core.Implementation.Reports
+namespace FarFetched.AzureWorkflow.Core.Implementation.Reporting
 {
     public class ProcessedItemDetail
     {
-        public DateTime Processed { get; set; }
+        public DateTime ProcessedTime { get; set; }
         public string Message { get; set; }
 
         public ProcessedItemDetail(string message)
         {
-            Processed = DateTime.Now;
+            ProcessedTime = DateTime.Now;
             this.Message = message;
         }
     }

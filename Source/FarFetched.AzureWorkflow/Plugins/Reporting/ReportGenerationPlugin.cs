@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FarFetched.AzureWorkflow.Core.Architecture;
 using FarFetched.AzureWorkflow.Core.Implementation;
-using FarFetched.AzureWorkflow.Core.Implementation.Reports;
+using FarFetched.AzureWorkflow.Core.Implementation.Reporting;
 using FarFetched.AzureWorkflow.Core.Interfaces;
 
 namespace FarFetched.AzureWorkflow.Core.Plugins
@@ -26,21 +26,23 @@ namespace FarFetched.AzureWorkflow.Core.Plugins
         {
             base.OnSessionStarted(session);
 
-            session.OnSessionFinished += workflowSession => this.SendSessionReport(ModuleProcessingSummaries);
+            session.OnSessionFinished += workflowSession => this.SendSessionReport(workflowSession, ModuleProcessingSummaries);
         }
 
         internal override void OnModuleStarted(IWorkflowModule module)
         {
+            //TODO : Unit test this logic around categorization properly
             _moduleProcessingSummaries.Add(new ModuleProcessingSummary(module));
-            module.OnRaiseProcessed += (key, detail) =>
+            module.OnRaiseProcessed += (key, detail, countsAsProcessed) =>
             {
                 var summary = this.ModuleProcessingSummaries.Single(x => x.Module == module);
-                if (!summary.ProcessedList.ContainsKey(key)) summary.ProcessedList[key] = 0;
-                summary.ProcessedList[key]++;
+                if (!summary.ResultCategories.ContainsKey(key)) summary.ResultCategories[key] = 0;
+                if (countsAsProcessed) summary.TotalProcessed++;
+                summary.ResultCategories[key]++;
                 if (detail != null)
                 {
-                    if (!summary.ProcessedListExtraDetail.ContainsKey(key)) summary.ProcessedListExtraDetail[key] = new List<ProcessedItemDetail>();
-                    summary.ProcessedListExtraDetail[key].Add(new ProcessedItemDetail(detail));
+                    if (!summary.ResultCategoryExtraDetail.ContainsKey(key)) summary.ResultCategoryExtraDetail[key] = new List<ProcessedItemDetail>();
+                    summary.ResultCategoryExtraDetail[key].Add(new ProcessedItemDetail(detail));
                 }
             };
             
@@ -57,6 +59,6 @@ namespace FarFetched.AzureWorkflow.Core.Plugins
             };
         }
 
-        public abstract void SendSessionReport(IEnumerable<ModuleProcessingSummary> moduleSummaries);
+        public abstract void SendSessionReport(WorkflowSession workflowSession, IEnumerable<ModuleProcessingSummary> moduleSummaries);
     }
 }

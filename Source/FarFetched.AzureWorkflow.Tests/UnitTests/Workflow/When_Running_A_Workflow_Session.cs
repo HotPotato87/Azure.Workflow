@@ -116,7 +116,45 @@ namespace FarFetched.AzureWorkflow.Tests.UnitTests
             //assert
             Assert.IsTrue(called);
         }
-        
+
+        [Test]
+        public async Task Session_Sets_Start_Time_When_Started()
+        {
+            //act
+            var session = GetStandardSessionWithQueue();
+
+            //arrange
+            await session.Start();
+
+            //assert
+            Assert.IsTrue(session.Started != default(DateTime));
+        }
+
+        [Test]
+        public async Task Session_sets_End_Time_When_Finished()
+        {
+            //act
+            var session = GetStandardSessionWithQueue();
+
+            //arrange
+            await session.Start();
+
+            //assert
+            Assert.IsTrue(session.Ended != default(DateTime));
+        }
+
+        [Test]
+        public async Task Session_Populates_Total_Duration_In_Real_Time()
+        {
+            //act
+            var session = GetStandardSessionWithQueue();
+
+            //arrange
+            await session.Start();
+
+            //assert
+            Assert.IsTrue(session.TotalDuration.Ticks > 0);
+        }
     }
 
 }

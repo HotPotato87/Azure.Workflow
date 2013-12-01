@@ -51,7 +51,7 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
 
             //assert
             Assert.IsTrue(reportGenerator.ModuleProcessingSummaries.Count == 2);
-            Assert.IsTrue(reportGenerator.ModuleProcessingSummaries.Any(x => x.ProcessedList.ContainsKey(ProcessingResult.Success.ToString()) && x.ProcessedList[ProcessingResult.Success.ToString()] == payLoad.Count));
+            Assert.IsTrue(reportGenerator.ModuleProcessingSummaries.Any(x => x.ResultCategories.ContainsKey(ProcessingResult.Success.ToString()) && x.ResultCategories[ProcessingResult.Success.ToString()] == payLoad.Count));
         }
 
         [Test]
@@ -92,13 +92,13 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
                 .RunAsync();
 
             //assert
-            Assert.IsTrue(reportGenerator.ModuleProcessingSummaries.Any(x=>x.ProcessedList.Count == 3));
+            Assert.IsTrue(reportGenerator.ModuleProcessingSummaries.Any(x=>x.ResultCategories.Count == 3));
             Assert.IsTrue(reportGenerator.ModuleProcessingSummaries.Any(x =>
-                x.ProcessedListExtraDetail.ContainsKey(ProcessingResult.Fail.ToString()) &&
-                x.ProcessedListExtraDetail[ProcessingResult.Fail.ToString()].Count == 2));
+                x.ResultCategoryExtraDetail.ContainsKey(ProcessingResult.Fail.ToString()) &&
+                x.ResultCategoryExtraDetail[ProcessingResult.Fail.ToString()].Count == 2));
             Assert.IsTrue(reportGenerator.ModuleProcessingSummaries.Any(x =>
-                      x.ProcessedListExtraDetail.ContainsKey("Other") &&
-                      x.ProcessedListExtraDetail["Other"].Any(t=>t.Message == "Delivery API couldn't be contacted")));
+                      x.ResultCategoryExtraDetail.ContainsKey("Other") &&
+                      x.ResultCategoryExtraDetail["Other"].Any(t=>t.Message == "Delivery API couldn't be contacted")));
         }
 
         [Test]
@@ -116,20 +116,52 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
                 .AttachReportGenerator(reportGenerator)
                 .RunAsync();
 
+            await Task.Delay(TimeSpan.FromTicks(100));
+
             //assert
-            Assert.IsTrue(reportGenerator.ModuleProcessingSummaries.All(x => x.Duration.TotalMilliseconds > 0));
+            Assert.IsTrue(reportGenerator.ModuleProcessingSummaries.All(x => x.Duration.Ticks > 0));
         }
 
         [Test]
         public async Task Processed_Details_Are_Assigned_A_DateTime()
         {
-            throw new NotImplementedException();
+            //arrange
+            var reportGenerator = new Fakes.ReportGenerationFake();
+            var payLoad = new List<object>() { new object(), new object() };
+
+
+            //act
+            await WorkflowSession.StartBuild()
+                .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
+                .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
+                .WithQueueMechanism(new InMemoryQueueFactory())
+                .AttachReportGenerator(reportGenerator)
+                .RunAsync();
+
+            //assert
+            Assert.IsTrue(
+                reportGenerator.ModuleProcessingSummaries.All(
+                    x => x.ResultCategoryExtraDetail.All(t => t.Value.All(d => d.ProcessedTime != null))));
         }
 
         [Test]
         public async Task Overall_Duration_Of_Session_Is_Added_To_Summary()
         {
-            throw new NotImplementedException();
+            //arrange
+            var reportGenerator = new Fakes.ReportGenerationFake();
+            var payLoad = new List<object>() { new object(), new object() };
+
+            //act
+            await WorkflowSession.StartBuild()
+                .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
+                .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
+                .WithQueueMechanism(new InMemoryQueueFactory())
+                .AttachReportGenerator(reportGenerator)
+                .RunAsync();
+
+            //assert
+            Assert.IsTrue(reportGenerator.Session.TotalDuration != null &&
+                          reportGenerator.Session.TotalDuration.Ticks > 0);
         }
     }
 }

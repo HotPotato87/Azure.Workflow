@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FarFetched.AzureWorkflow.Core;
 using FarFetched.AzureWorkflow.Core.Enums;
+using FarFetched.AzureWorkflow.Core.Implementation;
 using FarFetched.AzureWorkflow.Core.Interfaces;
 using FarFetched.AzureWorkflow.Core.Plugins;
 using FarFetched.AzureWorkflow.Core.Plugins.Alerts;
@@ -28,6 +29,7 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
             public override async Task OnStart()
             {
                 base.Session.AddToQueue(_typeToSendTo, _payload);
+                await Task.Delay(10);
             }
         }
 
@@ -42,7 +44,7 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
             {
                 this.Recieved = queueCollection;
 
-                this.Recieved.ToList().ForEach(x=>this.RaiseProcessed(ProcessingResult.Success));
+                this.Recieved.ToList().ForEach(x=>this.CategorizeResult(ProcessingResult.Success));
             }
 
             public IEnumerable<object> Recieved { get; set; }
@@ -80,7 +82,9 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
             {
                 this.Recieved = queueCollection;
 
-                _processMessages.ForEach(x=>base.RaiseProcessed(x.Item1, x.Item2));
+                _processMessages.ForEach(x=>base.CategorizeResult(x.Item1, x.Item2));
+
+                await Task.Delay(10);
             }
 
             public IEnumerable<object> Recieved { get; set; }
@@ -135,9 +139,11 @@ namespace FarFetched.AzureWorkflow.Tests.IntegrationTests
 
         internal class ReportGenerationFake : ReportGenerationPlugin
         {
-            public override void SendSessionReport(IEnumerable<ModuleProcessingSummary> moduleSummaries)
+            internal WorkflowSession Session { get; private set; }
+
+            public override void SendSessionReport(WorkflowSession workflowSession, IEnumerable<ModuleProcessingSummary> moduleSummaries)
             {
-                
+                this.Session = workflowSession;
             }
         }
     }

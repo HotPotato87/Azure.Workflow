@@ -8,16 +8,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FarFetched.Workflow.Demo {
+namespace FarFetched.AzureWorkflow.Tests {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0")]
-    internal sealed partial class APISettings : global::System.Configuration.ApplicationSettingsBase {
+    internal sealed partial class DemoSettings : global::System.Configuration.ApplicationSettingsBase {
         
-        private static APISettings defaultInstance = ((APISettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new APISettings())));
+        private static DemoSettings defaultInstance = ((DemoSettings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new DemoSettings())));
         
-        public static APISettings Default {
+        public static DemoSettings Default {
             get {
                 return defaultInstance;
             }
@@ -25,13 +25,14 @@ namespace FarFetched.Workflow.Demo {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("qnaz45gef9gne76fm8uqkb2n")]
-        public string RottenTomatoesKey {
+        [global::System.Configuration.DefaultSettingValueAttribute("Endpoint=sb://whatsonglobal.servicebus.windows.net/;SharedSecretIssuer=owner;Shar" +
+            "edSecretValue=kVWNOEp5cdNS8rZytOc02Cvp1gr0gh0AEpOLWzejWU4=")]
+        public string ServiceBusConnectionString {
             get {
-                return ((string)(this["RottenTomatoesKey"]));
+                return ((string)(this["ServiceBusConnectionString"]));
             }
             set {
-                this["RottenTomatoesKey"] = value;
+                this["ServiceBusConnectionString"] = value;
             }
         }
     }

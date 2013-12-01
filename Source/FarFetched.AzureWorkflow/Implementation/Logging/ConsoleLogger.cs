@@ -12,6 +12,14 @@ namespace FarFetched.AzureWorkflow.Core.Implementation.Logging
         }
     }
 
+    public class AzureStorageLogger : LogManagerBase
+    {
+        public override void OnLogMessage(LogMessage message)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class DebugLogger : LogManagerBase
     {
         public override void OnLogMessage(LogMessage message)

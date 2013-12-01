@@ -19,7 +19,7 @@ namespace FarFetched.AzureWorkflow.Core.ServiceBus
 
         public ICloudQueue CreateQueue(IWorkflowModule module)
         {
-            return new AzureServiceBusQueue(module.QueueName, new ServiceBusQueueSettings());
+            return new AzureServiceBusQueue(module.QueueName, _settings);
         }
     }
 }

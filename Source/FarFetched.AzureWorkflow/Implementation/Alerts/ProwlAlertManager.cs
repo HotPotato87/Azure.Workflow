@@ -14,4 +14,12 @@ namespace FarFetched.AzureWorkflow.Core.Implementation
             
         }
     }
+
+    public class SendGridAlertManager : AlertManagerBase
+    {
+        public override void FireAlert(Alert alert)
+        {
+
+        }
+    }
 }

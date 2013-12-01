@@ -41,7 +41,7 @@ namespace FarFetched.AzureWorkflow.Core
         public event Action<string> OnLogMessage;
         public event Action<Alert> OnAlert;
         public event Action OnStarted;
-        public event Action<string, string> OnRaiseProcessed;
+        public event Action<string, string, bool> OnRaiseProcessed; //todo : eventhandler
 
         #endregion
 
@@ -105,17 +105,17 @@ namespace FarFetched.AzureWorkflow.Core
             }
         }
 
-        protected void RaiseProcessed(object key, string description = null, bool countAsProcessed = true)
+        protected void CategorizeResult(object key, string description = null, bool countAsProcessed = true)
         {
             if (this.OnRaiseProcessed != null)
             {
-                this.OnRaiseProcessed(key.ToString(), description);
+                this.OnRaiseProcessed(key.ToString(), description, countAsProcessed);
             }
         }
 
-        protected void RaiseProcessed(ProcessingResult result, string description = null, bool countAsProcessed = true)
+        protected void CategorizeResult(ProcessingResult result, string description = null, bool countAsProcessed = true)
         {
-            this.RaiseProcessed((object)result, description, countAsProcessed);
+            this.CategorizeResult((object)result, description, countAsProcessed);
         }
 
         protected void SendTo(Type workflowModuleType, T obj)

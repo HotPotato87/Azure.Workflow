@@ -14,6 +14,7 @@ namespace FarFetched.AzureWorkflow.Core.ServiceBus
         private readonly string _queueName;
         private readonly ServiceBusQueueSettings _settings;
         private QueueClient _queueClient;
+        private NamespaceManager _namespaceManager;
 
         public AzureServiceBusQueue(string queueName, ServiceBusQueueSettings settings)
         {
@@ -25,28 +26,36 @@ namespace FarFetched.AzureWorkflow.Core.ServiceBus
 
         private void SetupQueue()
         {
-            // Create a token provider with the relevant credentials.
-            TokenProvider credentials =
-                TokenProvider.CreateSharedSecretTokenProvider
-                (_settings.AccountName, _settings.Key);
+            
+            if (string.IsNullOrEmpty(_settings.ConnectionString))
+            {
+                //TODO : UT
+                throw new AzureWorkflowConfigurationException("Connection string must be set on queue", null);
+            } 
+            
+            _namespaceManager = NamespaceManager.CreateFromConnectionString(_settings.ConnectionString);
 
-            // Create a URI for the serivce bus.
-            Uri serviceBusUri = ServiceBusEnvironment.CreateServiceUri
-                ("sb", _settings.AccountNamespace, string.Empty);
+            try
+            {
+                if (!_namespaceManager.QueueExists(this._queueName))
+                {
+                    _namespaceManager.CreateQueue(this._queueName);
+                }
 
-            // Create a message factory for the service bus URI using the
-            // credentials
-            MessagingFactory factory = MessagingFactory.Create
-                (serviceBusUri, credentials);
-
-            // Create a queue client for the pizzaorders queue
-            _queueClient = factory.CreateQueueClient(_queueName);
+                _queueClient = QueueClient.CreateFromConnectionString(_settings.ConnectionString, this._queueName);
+            }
+            catch (Exception e)
+            {
+                throw new AzureWorkflowConfigurationException("Problem setting up ServiceBus queue", e);
+            }
         }
 
         public async Task<IEnumerable<T>> ReceieveAsync<T>(int batchCount)
         {
-            var messages = await _queueClient.ReceiveBatchAsync(batchCount);
-            return messages.Select(x => x.GetBody<T>());
+            var messages = await _queueClient.ReceiveBatchAsync(batchCount, TimeSpan.FromSeconds(5));
+            var result = messages.Select(x => x.GetBody<T>()).ToList();
+            messages.ToList().ForEach(x=> x.Complete());
+            return result;
         }
 
         public async Task AddToAsync<T>(IEnumerable<T> items)

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FarFetched.AzureWorkflow.Core.Architecture;
-using FarFetched.AzureWorkflow.Core.Implementation.Reports;
+using FarFetched.AzureWorkflow.Core.Implementation.Reporting;
 
 namespace FarFetched.AzureWorkflow.Core.Interfaces
 {
@@ -14,15 +14,16 @@ namespace FarFetched.AzureWorkflow.Core.Interfaces
         public int Errors { get; set; }
         public List<Exception> ErrorList { get; set; }
         public TimeSpan Duration { get; set; }
-        public Dictionary<string, int> ProcessedList { get; set; }
-        public Dictionary<string, List<ProcessedItemDetail>> ProcessedListExtraDetail { get; set; } 
+        public Dictionary<string, int> ResultCategories { get; set; }
+        public Dictionary<string, List<ProcessedItemDetail>> ResultCategoryExtraDetail { get; set; }
+        public int TotalProcessed { get; set; }
 
         public ModuleProcessingSummary(IWorkflowModule module)
         {
             Module = module;
             ErrorList = new List<Exception>();
-            ProcessedList = new Dictionary<string, int>();
-            ProcessedListExtraDetail = new Dictionary<string, List<ProcessedItemDetail>>();
+            ResultCategories = new Dictionary<string, int>();
+            ResultCategoryExtraDetail = new Dictionary<string, List<ProcessedItemDetail>>();
         }
     }
 }

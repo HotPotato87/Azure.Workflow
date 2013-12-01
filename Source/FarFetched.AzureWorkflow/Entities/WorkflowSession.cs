@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FarFetched.AzureWorkflow.Core.Architecture;
+using FarFetched.AzureWorkflow.Core.Entities;
 using FarFetched.AzureWorkflow.Core.Interfaces;
 using FarFetched.AzureWorkflow.Core.Plugins;
 
@@ -20,6 +21,19 @@ namespace FarFetched.AzureWorkflow.Core.Implementation
         internal List<WorkflowSessionPluginBase> Plugins { get; set; }
         internal ICloudQueueFactory CloudQueueFactory { get; set; }
 
+        public DateTime Started { get; private set; }
+        public DateTime Ended { get; private set; }
+
+        public TimeSpan TotalDuration
+        {
+            get
+            {
+                return Ended.Subtract(Started);
+            }
+        }
+
+        public WorkflowSessionSettings Settings { get; set; }
+
         internal WorkflowSession()
         {
             RunningModules = new ObservableCollection<IWorkflowModule>();
@@ -32,26 +46,29 @@ namespace FarFetched.AzureWorkflow.Core.Implementation
         public async Task Start()
         {
             ValidateStart();
+            this.Started = DateTime.Now;
 
             //inform plugins we have started so they can hook to events
             Plugins.ForEach(x=>x.OnSessionStarted(this));
-
             this.Modules.ForEach(x=>RunningModules.Add(x));
 
             //run the modules
-            foreach (var module in Modules)
-            {
-                await module.StartAsync();
-            }
+            await Task.WhenAll(this.Modules.Select(x => x.StartAsync()));
 
             //inform session has finished
             this.RegisterFinished(this);
+            this.Ended  = DateTime.Now;
         }
 
         #region Helpers
 
         private void ValidateStart()
         {
+            if (this.Settings == null)
+            {
+                this.Settings = new WorkflowSessionSettings();
+            }
+
             if (this.CloudQueueFactory == null)
             {
                 throw new AzureWorkflowConfigurationException("There must be a CloudQueueFactory attached in order to start the session", null);

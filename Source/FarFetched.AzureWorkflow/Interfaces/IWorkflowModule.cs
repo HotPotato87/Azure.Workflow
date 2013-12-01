@@ -25,6 +25,6 @@ namespace FarFetched.AzureWorkflow.Core.Architecture
         event Action<Alert> OnAlert;
         event Action<Exception> OnError;
         event Action OnFinished;
-        event Action<string, string> OnRaiseProcessed;
+        event Action<string, string, bool> OnRaiseProcessed;
     }
 }

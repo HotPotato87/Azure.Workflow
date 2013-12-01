@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FarFetched.AzureWorkflow.Core.Architecture;
+using FarFetched.AzureWorkflow.Core.Entities;
 using FarFetched.AzureWorkflow.Core.Implementation;
 using FarFetched.AzureWorkflow.Core.Interfaces;
 using FarFetched.AzureWorkflow.Core.Plugins;
@@ -24,6 +25,13 @@ namespace FarFetched.AzureWorkflow.Core.Builder
         {
             builder.WorkflowSession.CloudQueueFactory = cloudQueueFactory;
             
+            return builder;
+        }
+
+        public static WorkflowSessionBuilder ConfigureSessionSettings(this WorkflowSessionBuilder builder, WorkflowSessionSettings settings)
+        {
+            builder.WorkflowSession.Settings = settings;
+
             return builder;
         }
 

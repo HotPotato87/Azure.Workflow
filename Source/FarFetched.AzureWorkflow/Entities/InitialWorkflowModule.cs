@@ -1,4 +1,5 @@
-﻿using FarFetched.AzureWorkflow.Core.Implementation;
+﻿using System.Threading.Tasks;
+using FarFetched.AzureWorkflow.Core.Implementation;
 
 namespace FarFetched.AzureWorkflow.Core
 {
@@ -9,6 +10,5 @@ namespace FarFetched.AzureWorkflow.Core
         {
             
         }
-
     }
 }

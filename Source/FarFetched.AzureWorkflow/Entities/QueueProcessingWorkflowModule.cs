@@ -14,6 +14,7 @@ namespace FarFetched.AzureWorkflow.Core
     public abstract class QueueProcessingWorkflowModule<T> : WorkflowModuleBase<T>, IProcessingWorkflowModule<T> where T : class
     {
         private int _waitIterations;
+        private int _processedCount;
 
         public QueueProcessingWorkflowModule()
         {
@@ -30,21 +31,7 @@ namespace FarFetched.AzureWorkflow.Core
         {
             try
             {
-                IEnumerable<T> messages;
-                while ((messages = await this.Queue.ReceieveAsync<T>(this.Settings.QueueSettings.BatchCount)).Any())
-                {
-                    this.LogMessage("Dequeued {0} messages", messages.Count());
-                    try
-                    {
-                        await this.ProcessAsync(messages);
-                        this.LogMessage("Processed {0} messages", messages.Count());
-                    }
-                    catch (Exception processingError)
-                    {
-                        this.RaiseError(new Exception("There was an error processing the messages", processingError));
-                        continue;
-                    }
-                }
+                await ProcessQueue();
 
                 this.LogMessage("{0} : Finished Processing", this.QueueName);
             }
@@ -55,7 +42,7 @@ namespace FarFetched.AzureWorkflow.Core
 
             //finished processing, invoke wait count to see if queue is clear
             this.State = ModuleState.Waiting;
-            await Task.Delay(Settings.QueueWaitTime);
+            await Task.Delay(Settings.QueueWaitTimeBeforeFinish);
             this._waitIterations++;
             if (_waitIterations >= Settings.MaximumWaitTimesBeforeQueueFinished)
             {
@@ -64,7 +51,29 @@ namespace FarFetched.AzureWorkflow.Core
             else
             {
                 this.State = ModuleState.Waiting;
-                await StartAsync();
+                await ProcessQueue();
+            }
+
+            this.LogMessage("Total of {0} messages processed", _processedCount);
+        }
+
+        private async Task ProcessQueue()
+        {
+            IEnumerable<T> messages;
+            while ((messages = await this.Queue.ReceieveAsync<T>(this.Settings.QueueSettings.BatchCount)).Any())
+            {
+                this.LogMessage("Dequeued {0} messages", messages.Count());
+                _processedCount += messages.Count();
+                try
+                {
+                    await this.ProcessAsync(messages);
+                    this.LogMessage("Processed {0} messages", messages.Count());
+                }
+                catch (Exception processingError)
+                {
+                    this.RaiseError(new Exception("There was an error processing the messages", processingError));
+                    continue;
+                }
             }
         }
 
