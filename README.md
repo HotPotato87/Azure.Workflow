@@ -11,19 +11,19 @@ Use it for :
 
 Features
 ---------
-1. Fluent API. Build it how you love it.
+[1]. Fluent API. Build it how you love it.
 ```
 await WorkflowSession.StartBuild()
-    .AddModule(new RottenTomatoesModule())
-    .AddModule(new MetacriticModule())
-.WithQueueMechanism(new AzureServiceBusQueueFactory())
-.AttachLogger(new AzureStorageLogger())
-.AttachAlertManager(new ProwlAlertManager())
-.AttachReportGenerator(new SendGridReportGenerator())
-.RunAsync();
+       .AddModule(new RottenTomatoesModule())
+       .AddModule(new MetacriticModule())
+   .WithQueueMechanism(new AzureServiceBusQueueFactory())
+   .AttachLogger(new AzureStorageLogger())
+   .AttachAlertManager(new ProwlAlertManager())
+   .AttachReportGenerator(new SendGridReportGenerator())
+   .RunAsync();
 ```
  
-2. Read and write with queues such as Azure servicebus or cloud-storage queues.
+[2]. Read and write with queues such as Azure servicebus or cloud-storage queues.
 
 ```
 public class RottenTomatoesModule : InitialWorkflowModule<Movie>
@@ -50,7 +50,7 @@ public class MetacriticModule : QueueProcessingWorkflowModule<Movie>
     }
 ```
 
- 3. Alerting System. Get alerts on your phone or email instantaniously. 
+[3]. Alerting System. Get alerts on your phone or email instantaniously. 
 
 ```
 public override async Task ProcessAsync(IEnumerable<Movie> queueCollection)
