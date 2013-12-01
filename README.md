@@ -76,7 +76,7 @@ public override async Task ProcessAsync(IEnumerable<Movie> queueCollection)
 .AttachReportGenerator(new SendGridReportGenerator())
 ```
 
-<b> Fully extensible framework and design, want to use RabbitMQ instead? of ServiceBus? Just hot-swap the components. There are plenty out of the box, but you can easily write your own. </b>
+<b> Fully extensible framework and design, want to use RabbitMQ instead of ServiceBus? Just hot-swap the components. There are plenty out of the box, but you can easily write your own. </b>
 
 ```
 await WorkflowSession.StartBuild()
