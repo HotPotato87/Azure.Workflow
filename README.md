@@ -25,8 +25,6 @@ await WorkflowSession.StartBuild()
  
 2. Read and write with queues such as Azure servicebus or cloud-storage queues.
 
-Send
-----
 ```
 public class RottenTomatoesModule : InitialWorkflowModule<Movie>
 {
@@ -38,8 +36,6 @@ public class RottenTomatoesModule : InitialWorkflowModule<Movie>
     }
 ```
 
-Recieve
-----
 ```
 public class MetacriticModule : QueueProcessingWorkflowModule<Movie>
 {
@@ -54,7 +50,7 @@ public class MetacriticModule : QueueProcessingWorkflowModule<Movie>
     }
 ```
 
-3. Alerting System. Get alerts on your phone or email instantaniously. 
+ 3. Alerting System. Get alerts on your phone or email instantaniously. 
 
 ```
 public override async Task ProcessAsync(IEnumerable<Movie> queueCollection)
@@ -73,6 +69,18 @@ public override async Task ProcessAsync(IEnumerable<Movie> queueCollection)
     }
 ```
 
-4. 
+ 4. Get processing summaries sent to you on a schedule via email, text or alternatives. 
 
-5. Fully extensible framework and design, want to use Amazon ECS instead? Just hot-swap the components.
+```
+.AttachReportGenerator(new SendGridReportGenerator())
+```
+
+ 5. Fully extensible framework and design, want to use RabbitMQ instead? of ServiceBus? Just hot-swap the components. There are plenty out of the box, but you can easily write your own.
+
+```
+await WorkflowSession.StartBuild()
+        .AddModule(new RottenTomatoesModule())
+        .AddModule(new MetacriticModule())
+    .WithQueueMechanism(new RabbitMQFactory())
+```
+
