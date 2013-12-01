@@ -5,8 +5,8 @@ A fully extensible processing workflow library.
 
 Use it for :
 
-1. Managing cloud-based processing, get informed with alerts and summeries. Schedule your processing how you want it.
-2. Handling any processing pathway from handling orders from ecommerce system to importing data into your application.
+1. Managing asyncronous cloud-based processing, get informed with alerts and summeries. Schedule your processing how you want it.
+2. Any distributed system processing from handling orders of ecommerce systems to importing data into your application.
 3. Easily writing worker processes that take advantage of the reliability and scalability of cloud-based queues and deployment.
 
 Features
