@@ -16,7 +16,7 @@ Features
 await WorkflowSession.StartBuild()
        .AddModule(new RottenTomatoesModule())
        .AddModule(new MetacriticModule())
-   .WithQueueMechanism(new AzureServiceBusQueueFactory())
+   .WithQueueMechanism(new AzureServiceBusQueueFactory(new ServiceBusQueueSettings() { ConnectionString = ServiceBusConnectionString }))
    .AttachLogger(new AzureStorageLogger())
    .AttachAlertManager(new ProwlAlertManager())
    .AttachReportGenerator(new SendGridReportGenerator())
