@@ -14,13 +14,13 @@ Features
 1. Fluent API. Build it how you love it.
 ```
 await WorkflowSession.StartBuild()
-                        .AddModule(new RottenTomatoesModule())
-                        .AddModule(new MetacriticModule())
-                    .WithQueueMechanism(new AzureServiceBusQueueFactory(new ServiceBusQueueSettings() { ConnectionString = DemoSettings.Default.ServiceBusConnectionString }))
-                    .AttachLogger(new AzureStorageLogger())
-                    .AttachAlertManager(new ProwlAlertManager())
-                    .AttachReportGenerator(new SendGridReportGenerator())
-                    .RunAsync();
+        .AddModule(new RottenTomatoesModule())
+        .AddModule(new MetacriticModule())
+    .WithQueueMechanism(new AzureServiceBusQueueFactory(new ServiceBusQueueSettings() { ConnectionString = DemoSettings.Default.ServiceBusConnectionString }))
+    .AttachLogger(new AzureStorageLogger())
+    .AttachAlertManager(new ProwlAlertManager())
+    .AttachReportGenerator(new SendGridReportGenerator())
+    .RunAsync();
 ```
  
 2. Read and write with queues such as Azure servicebus or cloud-storage queues.
