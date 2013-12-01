@@ -11,7 +11,7 @@ Use it for :
 
 Features
 ---------
-<b>Fluent API. Build it how you love it.</b>
+<b>1. Fluent API. Build it how you love it.</b>
 ```
 await WorkflowSession.StartBuild()
        .AddModule(new RottenTomatoesModule())
@@ -23,7 +23,7 @@ await WorkflowSession.StartBuild()
    .RunAsync();
 ```
  
-<b> Read and write with queues such as Azure servicebus or cloud-storage queues. </b>
+<b>2. Read and write with queues such as Azure servicebus or cloud-storage queues. </b>
 
 Send..
 ```
@@ -51,7 +51,7 @@ public class MetacriticModule : QueueProcessingWorkflowModule<Movie>
     }
 ```
 
-<b> Alerting System. Get alerts on your phone or email instantaniously.  </b>
+<b>3.  Alerting System. Get alerts on your phone or email instantaniously.  </b>
 
 ```
 public override async Task ProcessAsync(IEnumerable<Movie> queueCollection)
@@ -70,13 +70,13 @@ public override async Task ProcessAsync(IEnumerable<Movie> queueCollection)
     }
 ```
 
-<b> Get processing summaries sent to you on a schedule via email, text or alternatives. </b> 
+<b>4. Get processing summaries sent to you on a schedule via email, text or alternatives. </b> 
 
 ```
 .AttachReportGenerator(new SendGridReportGenerator())
 ```
 
-<b> Fully extensible framework and design, want to use RabbitMQ instead of ServiceBus? Just hot-swap the components. There are plenty out of the box, but you can easily write your own. </b>
+<b>5. Fully extensible framework and design, want to use RabbitMQ instead of ServiceBus? Just hot-swap the components. There are plenty out of the box, but you can easily write your own. </b>
 
 ```
 await WorkflowSession.StartBuild()
