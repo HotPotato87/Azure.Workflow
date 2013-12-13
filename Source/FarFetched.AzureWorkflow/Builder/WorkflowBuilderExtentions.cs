@@ -9,6 +9,7 @@ using Azure.Workflow.Core.Implementation;
 using Azure.Workflow.Core.Interfaces;
 using Azure.Workflow.Core.Plugins;
 using Azure.Workflow.Core.Plugins.Alerts;
+using Azure.Workflow.Core.Plugins.Persistance;
 
 namespace Azure.Workflow.Core.Builder
 {
@@ -52,6 +53,14 @@ namespace Azure.Workflow.Core.Builder
         public static WorkflowSessionBuilder AttachLogger(this WorkflowSessionBuilder builder, LogManagerBase logger)
         {
             builder.WorkflowSession.Plugins.Add(logger);
+
+            return builder;
+        }
+
+        public static WorkflowSessionBuilder AttachPersistance(this WorkflowSessionBuilder builder,
+            PersistanceManagerBase persistance)
+        {
+            builder.WorkflowSession.Plugins.Add(persistance);
 
             return builder;
         }

@@ -24,6 +24,8 @@ namespace Azure.Workflow.Core.Architecture
         event Action<string> OnLogMessage;
         event Action<Alert> OnAlert;
         event Action<Exception> OnError;
+        event Action<string, object> OnStore;
+        event Func<string, object> OnRetrieve; 
         event Action OnFinished;
         event Action<string, string, bool> OnRaiseProcessed;
     }

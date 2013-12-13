@@ -37,6 +37,8 @@ namespace Azure.Workflow.Core
         #region Events
 
         public event Action<Exception> OnError;
+        public event Action<string, object> OnStore;
+        public event Func<string, object> OnRetrieve;
         public event Action OnFinished;
         public event Action<string> OnLogMessage;
         public event Action<Alert> OnAlert;
@@ -95,6 +97,27 @@ namespace Azure.Workflow.Core
             {
                 OnLogMessage(string.Format(this.QueueName + " : " + message, parameters));
             }
+        }
+
+        protected void Store<T>(string key, T obj)
+        {
+            if (this.OnStore != null)
+            {
+                this.OnStore(key, obj);
+            }
+        }
+
+        protected T Retrieve(string key)
+        {
+            if (this.OnRetrieve != null)
+            {
+               var result = this.OnRetrieve(key);
+               if (result != null)
+               {
+                   return (T) result;
+               }
+            }
+            return null;
         }
 
         protected void RaiseAlert(AlertLevel level, string message)
