@@ -15,7 +15,6 @@ namespace Azure.Workflow.Core
     public abstract class WorkflowModuleBase<T> : IWorkflowModule where T : class
     {
         #region Properties
-
         public ModuleState State { get; protected set; }
 
         public virtual string QueueName
@@ -37,21 +36,25 @@ namespace Azure.Workflow.Core
         #region Events
 
         public event Action<Exception> OnError;
-        public event Action<string, object> OnStore;
-        public event Func<string, object> OnRetrieve;
+        public event Func<string, object, Task> OnStoreAsync;
+        public event Func<string, Task<object>> OnRetrieveAsync;
         public event Action OnFinished;
         public event Action<string> OnLogMessage;
         public event Action<Alert> OnAlert;
         public event Action OnStarted;
         public event Action<string, string, bool> OnRaiseProcessed; //todo : eventhandler
+        public event Action<string, IEnumerable<Exception>> OnFailure;
 
         #endregion
+
+        private List<Exception> _capturedErrors = new List<Exception>(); 
 
         protected WorkflowModuleBase( WorkflowModuleSettings settings = default(WorkflowModuleSettings))
         {
             this.State = ModuleState.Waiting;
             this.Settings = settings;
             if (settings == null) Settings = new WorkflowModuleSettings();
+            HookInternalEvents();
         }
 
         public async Task StartAsync()
@@ -68,7 +71,9 @@ namespace Azure.Workflow.Core
             }
             catch (Exception e)
             {
+                _capturedErrors.Add(e);
                 RaiseError(e);
+                RaiseFailure("Critical exception caught : " + e.Message);
                 this.LogMessage("Error raised : " + e.ToString());
                 this.State = ModuleState.Error;
             }
@@ -99,23 +104,32 @@ namespace Azure.Workflow.Core
             }
         }
 
-        protected void Store<T>(string key, T obj)
+        protected async Task StoreAsync<T>(string key, T obj)
         {
-            if (this.OnStore != null)
+            if (this.OnStoreAsync != null)
             {
-                this.OnStore(key, obj);
+                await this.OnStoreAsync(key, obj);
+            }
+            else
+            {
+                this.RaiseFailure("A module attempted to store or retrieve a value, please attach a persistance component");
             }
         }
 
-        protected T Retrieve(string key)
+        protected async Task<T> RetrieveAsync(string key)
         {
-            if (this.OnRetrieve != null)
+            if (this.OnRetrieveAsync != null)
             {
-               var result = this.OnRetrieve(key);
+               var result = this.OnRetrieveAsync(key);
                if (result != null)
                {
-                   return (T) result;
+                   var resultValue = await result;
+                   return (T) resultValue;
                }
+            }
+            else
+            {
+                this.RaiseFailure("A module attempted to store or retrieve a value, please attach a persistance component");
             }
             return null;
         }
@@ -151,9 +165,18 @@ namespace Azure.Workflow.Core
             this.Session.AddToQueue(workflowModuleType, batch);
         }
 
+        private void RaiseFailure(string message = "Failure raised manually")
+        {
+            if (this.OnFailure != null)
+            {
+                this.OnFailure(message, _capturedErrors);
+            }
+        }
+
         protected void RaiseError(Exception e)
         {
             this.LogMessage("{0} : Error Occured {1}", this.QueueName, e.ToString());
+            _capturedErrors.Add(e);
             if (this.OnError != null)
             {
                 OnError(e);
@@ -163,6 +186,28 @@ namespace Azure.Workflow.Core
 #if DEBUG
                 throw e;
 #endif
+            }
+        }
+
+        #endregion
+
+        #region
+
+        private void HookInternalEvents()
+        {
+            this.OnError += HandleError;
+        }
+
+        private void HandleError(Exception exception)
+        {
+            if (this._capturedErrors.Count >= this.Settings.ThrowFailureAfterCapturedErrors)
+            {
+                RaiseFailure("Error threshold reached");
+            }
+
+            if (this.Settings.SendAlertOnCapturedError)
+            {
+                this.RaiseAlert(AlertLevel.Medium, "Error caught : " + exception.Message + " \r\n " + exception.StackTrace);
             }
         }
 

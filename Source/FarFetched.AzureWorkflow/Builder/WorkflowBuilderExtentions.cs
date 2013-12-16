@@ -15,6 +15,13 @@ namespace Azure.Workflow.Core.Builder
 {
     public static class WorkflowBuilderExtentions
     {
+        public static WorkflowSessionBuilder AddName(this WorkflowSessionBuilder builder, string name)
+        {
+            builder.WorkflowSession.SessionName = name;
+
+            return builder;
+        }
+
         public static WorkflowSessionBuilder AddModule(this WorkflowSessionBuilder builder, IWorkflowModule module)
         {
             builder.WorkflowSession.Modules.Add(module);

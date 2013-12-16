@@ -12,6 +12,8 @@ namespace Azure.Workflow.Core.Implementation
         public ServiceBusQueueSettings QueueSettings { get; set; }
         public int MaximumWaitTimesBeforeQueueFinished { get; set; }
         public TimeSpan QueueWaitTimeBeforeFinish { get; set; }
+        public int ThrowFailureAfterCapturedErrors { get; set; }
+        public bool SendAlertOnCapturedError { get; set; }
 
         public WorkflowModuleSettings()
         {
@@ -19,6 +21,8 @@ namespace Azure.Workflow.Core.Implementation
             MaximumWaitTimesBeforeQueueFinished = 3;
             QueueWaitTimeBeforeFinish = new TimeSpan(0, 0, 2);
             QueueSettings = new ServiceBusQueueSettings();
+            SendAlertOnCapturedError = true;
+            ThrowFailureAfterCapturedErrors = 2;
         }
     }
 

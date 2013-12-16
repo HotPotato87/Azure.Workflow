@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
 using System.ServiceModel.PeerResolvers;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,11 +22,13 @@ namespace Azure.Workflow.Core.Architecture
         ICloudQueue Queue { get; set; }
         string QueueName { get; }
 
+
         event Action<string> OnLogMessage;
         event Action<Alert> OnAlert;
         event Action<Exception> OnError;
-        event Action<string, object> OnStore;
-        event Func<string, object> OnRetrieve; 
+        event Action<string, IEnumerable<Exception>> OnFailure;
+        event Func<string, object, Task> OnStoreAsync;
+        event Func<string, Task<object>> OnRetrieveAsync; 
         event Action OnFinished;
         event Action<string, string, bool> OnRaiseProcessed;
     }

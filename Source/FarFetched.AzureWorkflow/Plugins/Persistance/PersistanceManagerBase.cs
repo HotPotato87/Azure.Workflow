@@ -9,14 +9,22 @@ namespace Azure.Workflow.Core.Plugins.Persistance
 {
     public abstract class PersistanceManagerBase : WorkflowSessionPluginBase
     {
-        internal override void OnModuleStarted(IWorkflowModule module)
+        public string TableName { get; set; }
+
+        public PersistanceManagerBase()
         {
-            module.OnStore += OnStore;
-            module.OnRetrieve += ModuleOnOnRetrieve;
+            
         }
 
-        protected abstract void OnStore(string key, object o);
-        protected abstract object ModuleOnOnRetrieve(string s);
+        internal override void OnModuleStarted(IWorkflowModule module)
+        {
+            this.TableName = module.Session.SessionName;
+            module.OnStoreAsync += OnStoreAsync;
+            module.OnRetrieveAsync += OnRetrieveAsync;
+        }
 
+        public abstract Task OnStoreAsync(string key, object o);
+        public abstract Task<object> OnRetrieveAsync(string key);
+        
     }
 }

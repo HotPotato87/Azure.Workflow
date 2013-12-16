@@ -6,8 +6,8 @@
     <ProjectGuid>{FA63FA15-5172-4A15-9550-2AE0CFF75D98}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FarFetched.AzureWorkflow.Tests</RootNamespace>
-    <AssemblyName>FarFetched.AzureWorkflow.Tests</AssemblyName>
+    <RootNamespace>Azure.Workflow.Tests</RootNamespace>
+    <AssemblyName>Azure.Workflow.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -74,13 +74,16 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Helpers\AzurePersistanceHelper.cs" />
     <Compile Include="IntegrationTests\Fakes.cs" />
+    <Compile Include="IntegrationTests\When_Running_A_Module_WIth_Azure_Table_Persistnace.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session_And_The_Logging_Manager_Is_Attached.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session_And_Reporting_Plugin_Is_Attached.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session_And_The_Alert_Plugin_Is_Loaded.cs" />
     <Compile Include="UnitTests\When_Using_Azure_Service_Bus.cs" />
+    <Compile Include="UnitTests\When_Using_Azure_Table_Persistance.cs" />
     <Compile Include="UnitTests\Workflow\Module\When_Running_A_Queue_Processing_Module.cs" />
     <Compile Include="UnitTests\Workflow\Module\When_Running_A_Workflow_Module.cs" />
     <Compile Include="UnitTests\Workflow\When_In_Memory_Queue_Collection_Is_Used.cs" />

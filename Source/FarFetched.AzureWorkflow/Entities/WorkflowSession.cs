@@ -24,6 +24,8 @@ namespace Azure.Workflow.Core.Implementation
         public DateTime Started { get; private set; }
         public DateTime Ended { get; private set; }
 
+        public event Action<IWorkflowModule, string> OnFailure;
+
         public TimeSpan TotalDuration
         {
             get
@@ -33,6 +35,16 @@ namespace Azure.Workflow.Core.Implementation
         }
 
         public WorkflowSessionSettings Settings { get; set; }
+
+        public Guid Guid
+        {
+            get
+            {
+                return Guid.NewGuid();
+            }
+        }
+
+        public string SessionName { get; set; }
 
         internal WorkflowSession()
         {
@@ -47,6 +59,9 @@ namespace Azure.Workflow.Core.Implementation
         {
             ValidateStart();
             this.Started = DateTime.Now;
+
+            //validate the plugins
+            Plugins.ForEach(ValidatePlugin);
 
             //inform plugins we have started so they can hook to events
             Plugins.ForEach(x=>x.OnSessionStarted(this));
@@ -75,6 +90,15 @@ namespace Azure.Workflow.Core.Implementation
             }
         }
 
+        public void ValidatePlugin(WorkflowSessionPluginBase plugin)
+        {
+            string message = "";
+            if ((message = plugin.Validate(this)) != null)
+            {
+                throw new AzureWorkflowConfigurationException(message, null);
+            }
+        }
+
         private void HookRunningModules()
         {
             RunningModules.CollectionChanged += (sender, args) =>
@@ -84,6 +108,18 @@ namespace Azure.Workflow.Core.Implementation
                     var newItem = args.NewItems[0] as IWorkflowModule;
                     newItem.Queue = CloudQueueFactory.CreateQueue(newItem);
                     newItem.Session = this;
+                    HookModule(newItem);
+                }
+            };
+        }
+
+        private void HookModule(IWorkflowModule newItem)
+        {
+            newItem.OnFailure += (s, exceptions) =>
+            {
+                if (this.OnFailure != null)
+                {
+                    this.OnFailure(newItem, "Module " + newItem.QueueName + " failed : " + s);
                 }
             };
         }
@@ -103,6 +139,11 @@ namespace Azure.Workflow.Core.Implementation
         public static WorkflowSessionBuilder StartBuild()
         {
             return new WorkflowSessionBuilder(new WorkflowSession());
+        }
+
+        public static WorkflowSessionBuilder StartBuildWithSession(WorkflowSession session)
+        {
+            return new WorkflowSessionBuilder(session);
         }
 
         #endregion

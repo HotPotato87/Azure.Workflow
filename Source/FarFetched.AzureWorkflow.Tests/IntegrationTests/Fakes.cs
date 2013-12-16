@@ -33,6 +33,29 @@ namespace Azure.Workflow.Tests.IntegrationTests
             }
         }
 
+        internal class ThrowsErrorModule : InitialWorkflowModule<object>
+        {
+            private readonly Exception _e;
+            private readonly int _times;
+            private readonly List<object> _payload;
+            private readonly Type _typeToSendTo;
+
+            public ThrowsErrorModule(Exception e, int times, WorkflowModuleSettings settings = null)
+                : base(settings)
+            {
+                _e = e;
+                _times = times;
+            }
+
+            public override async Task OnStart()
+            {
+                for (int i = 0; i < _times; i++)
+                {
+                    this.RaiseError(_e);
+                }
+            }
+        }
+
         internal class RecievesFromQueueProcessingFake : QueueProcessingWorkflowModule<object>
         {
             public RecievesFromQueueProcessingFake()

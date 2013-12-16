@@ -30,5 +30,10 @@ namespace Azure.Workflow.Core.Plugins
         }
 
         internal abstract void OnModuleStarted(IWorkflowModule module);
+
+        public virtual string Validate(WorkflowSession module)
+        {
+            return null;
+        }
     }
 }

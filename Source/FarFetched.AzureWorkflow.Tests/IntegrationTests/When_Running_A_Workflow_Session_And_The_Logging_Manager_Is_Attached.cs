@@ -25,7 +25,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
         {
             //arrange
             var message = "test message";
-            var logManager = new Mock<LogManagerBase>();
+            var logManager = new Mock<LogManagerBase>(MockBehavior.Loose);
 
             //act
             await WorkflowSession.StartBuild()
