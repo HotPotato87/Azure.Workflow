@@ -40,14 +40,14 @@ namespace Azure.Workflow.Tests.UnitTests
 
         [Test]
         [ExpectedException(typeof(InvalidCredentialException))]
-        public void Bad_Key_Throws_Exception()
+        public async Task Bad_Key_Throws_Exception()
         {
             string key = "apple";
             bool value = true;
 
             AzureTablePersistance azureTable = new AzureTablePersistance("", "");
             azureTable.TableName = tableName;
-            azureTable.OnStoreAsync(key, value);
+            await azureTable.OnStoreAsync(key, value);
         }
 
          [Test]
@@ -60,11 +60,11 @@ namespace Azure.Workflow.Tests.UnitTests
 
             AzureTablePersistance azureTable = CreateTablePersistanceClient();
             azureTable.TableName = tableName;
-            azureTable.OnStoreAsync(key, value);
+            await azureTable.OnStoreAsync(key, value);
 
             Assert.IsTrue((bool)await azureTable.OnRetrieveAsync(key) == value);
 
-            azureTable.OnStoreAsync(key, newValue);
+            await azureTable.OnStoreAsync(key, newValue);
 
             Assert.IsTrue((bool)await azureTable.OnRetrieveAsync(key) == newValue);
         }

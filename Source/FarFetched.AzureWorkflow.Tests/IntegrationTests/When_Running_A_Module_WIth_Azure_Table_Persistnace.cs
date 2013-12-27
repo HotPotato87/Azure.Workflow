@@ -42,7 +42,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
         }
 
         [Test]
-        public async Task Not_Providing_Persistance_Values_Results_In_Critical_Errors()
+        public async Task Not_Providing_Persistance_Component_Results_In_Critical_Errors()
         {
             var storeKey = "apple";
             var storeValue = Guid.NewGuid();
@@ -121,7 +121,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
 
                 public async override Task OnStart()
                 {
-                    this.Retreived = await this.RetrieveAsync(_key);
+                    this.Retreived = await this.RetrieveAsync<object>(_key);
                 }
             }
         }

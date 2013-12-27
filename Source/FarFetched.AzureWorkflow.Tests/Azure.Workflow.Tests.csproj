@@ -98,9 +98,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FarFetched.AzureWorkflow\FarFetched.AzureWorkflow.Core.csproj">
+    <ProjectReference Include="..\FarFetched.AzureWorkflow\Azure.Workflow.Core.csproj">
       <Project>{3f439eea-37b3-4e59-9556-af13886f9e19}</Project>
-      <Name>FarFetched.AzureWorkflow.Core</Name>
+      <Name>Azure.Workflow.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

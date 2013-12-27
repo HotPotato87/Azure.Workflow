@@ -1,35 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Azure.Workflow.Core.Architecture;
 using Azure.Workflow.Core.Enums;
 using Azure.Workflow.Core.Implementation;
 using Azure.Workflow.Core.Interfaces;
 using Azure.Workflow.Core.Plugins.Alerts;
-using Azure.Workflow.Core.ServiceBus;
-using Microsoft.ServiceBus.Messaging;
 
 namespace Azure.Workflow.Core
 {
     public abstract class WorkflowModuleBase<T> : IWorkflowModule where T : class
     {
         #region Properties
+
+        protected WorkflowModuleSettings Settings { get; set; }
         public ModuleState State { get; protected set; }
 
         public virtual string QueueName
         {
-            get
-            {
-                return this.GetType().Name.ToLower();
-            }
+            get { return GetType().Name.ToLower(); }
         }
 
         public WorkflowSession Session { get; set; }
         public DateTime Ended { get; protected set; }
         public ICloudQueue Queue { get; set; }
         public DateTime Started { get; protected set; }
-        protected WorkflowModuleSettings Settings { get; set; }
 
         #endregion
 
@@ -41,18 +36,18 @@ namespace Azure.Workflow.Core
         public event Action OnFinished;
         public event Action<string> OnLogMessage;
         public event Action<Alert> OnAlert;
-        public event Action OnStarted;
         public event Action<string, string, bool> OnRaiseProcessed; //todo : eventhandler
         public event Action<string, IEnumerable<Exception>> OnFailure;
+        public event Action OnStarted;
 
         #endregion
 
-        private List<Exception> _capturedErrors = new List<Exception>(); 
+        private readonly List<Exception> _capturedErrors = new List<Exception>();
 
-        protected WorkflowModuleBase( WorkflowModuleSettings settings = default(WorkflowModuleSettings))
+        protected WorkflowModuleBase(WorkflowModuleSettings settings = default(WorkflowModuleSettings))
         {
-            this.State = ModuleState.Waiting;
-            this.Settings = settings;
+            State = ModuleState.Waiting;
+            Settings = settings;
             if (settings == null) Settings = new WorkflowModuleSettings();
             HookInternalEvents();
         }
@@ -61,9 +56,9 @@ namespace Azure.Workflow.Core
         {
             //register start
             Started = DateTime.Now;
-            this.State = ModuleState.Processing;
+            State = ModuleState.Processing;
             if (OnStarted != null) OnStarted();
-            this.LogMessage("Started");
+            LogMessage("Started");
 
             try
             {
@@ -71,19 +66,18 @@ namespace Azure.Workflow.Core
             }
             catch (Exception e)
             {
-                _capturedErrors.Add(e);
                 RaiseError(e);
-                RaiseFailure("Critical exception caught : " + e.Message);
-                this.LogMessage("Error raised : " + e.ToString());
-                this.State = ModuleState.Error;
+                RaiseFailure("Critical exception caught : " + e.Message, false);
+                LogMessage("Error raised : " + e);
+                State = ModuleState.Error;
             }
 
             //register finish
-            if (this.State != ModuleState.Error)
+            if (State != ModuleState.Error)
             {
-                this.State = ModuleState.Finished;
+                State = ModuleState.Finished;
             }
-            this.LogMessage("Finished");
+            LogMessage("Finished");
             Ended = DateTime.Now;
             if (OnFinished != null) OnFinished();
         }
@@ -98,94 +92,92 @@ namespace Azure.Workflow.Core
 
         protected void LogMessage(string message, params object[] parameters)
         {
-            if (this.OnLogMessage != null)
+            if (OnLogMessage != null)
             {
-                OnLogMessage(string.Format(this.QueueName + " : " + message, parameters));
+                OnLogMessage(string.Format(QueueName + " : " + message, parameters));
             }
         }
 
         protected async Task StoreAsync<T>(string key, T obj)
         {
-            if (this.OnStoreAsync != null)
+            if (OnStoreAsync != null)
             {
-                await this.OnStoreAsync(key, obj);
+                await OnStoreAsync(key, obj);
             }
             else
             {
-                this.RaiseFailure("A module attempted to store or retrieve a value, please attach a persistance component");
+                RaiseFailure("A module attempted to store or retrieve a value, please attach a persistance component");
             }
         }
 
-        protected async Task<T> RetrieveAsync(string key)
+        protected async Task<V> RetrieveAsync<V>(string key)
         {
-            if (this.OnRetrieveAsync != null)
+            if (OnRetrieveAsync != null)
             {
-               var result = this.OnRetrieveAsync(key);
-               if (result != null)
-               {
-                   var resultValue = await result;
-                   return (T) resultValue;
-               }
+                Task<object> result = OnRetrieveAsync(key);
+                if (result != null)
+                {
+                    object resultValue = await result;
+                    return (V) resultValue;
+                }
             }
             else
             {
-                this.RaiseFailure("A module attempted to store or retrieve a value, please attach a persistance component");
+                RaiseFailure("A module attempted to store or retrieve a value, please attach a persistance component");
             }
-            return null;
+            return default(V);
         }
 
         protected void RaiseAlert(AlertLevel level, string message)
         {
-            if (this.OnAlert != null)
+            if (OnAlert != null)
             {
-                this.OnAlert(new Alert() { AlertLevel = level, Message = message});
+                OnAlert(new Alert {AlertLevel = level, Message = message});
             }
         }
 
         protected void CategorizeResult(object key, string description = null, bool countAsProcessed = true)
         {
-            if (this.OnRaiseProcessed != null)
+            if (OnRaiseProcessed != null)
             {
-                this.OnRaiseProcessed(key.ToString(), description, countAsProcessed);
+                OnRaiseProcessed(key.ToString(), description, countAsProcessed);
             }
         }
 
         protected void CategorizeResult(ProcessingResult result, string description = null, bool countAsProcessed = true)
         {
-            this.CategorizeResult((object)result, description, countAsProcessed);
+            CategorizeResult((object) result, description, countAsProcessed);
         }
 
         protected void SendTo(Type workflowModuleType, T obj)
         {
-            this.SendTo(workflowModuleType, new[] {obj});
+            SendTo(workflowModuleType, new[] {obj});
         }
 
         protected void SendTo(Type workflowModuleType, IEnumerable<T> batch)
         {
-            this.Session.AddToQueue(workflowModuleType, batch);
+            Session.AddToQueue(workflowModuleType, batch);
         }
 
-        private void RaiseFailure(string message = "Failure raised manually")
+        private void RaiseFailure(string message = "Failure raised manually", bool addAsError = true)
         {
-            if (this.OnFailure != null)
+            if (OnFailure != null)
             {
-                this.OnFailure(message, _capturedErrors);
+                if (addAsError)
+                {
+                    _capturedErrors.Add(new Exception(message));
+                }
+                OnFailure(message, _capturedErrors);
             }
         }
 
         protected void RaiseError(Exception e)
         {
-            this.LogMessage("{0} : Error Occured {1}", this.QueueName, e.ToString());
+            LogMessage("{0} : Error Occured {1}", QueueName, e.ToString());
             _capturedErrors.Add(e);
-            if (this.OnError != null)
+            if (OnError != null)
             {
                 OnError(e);
-            }
-            else
-            {
-#if DEBUG
-                throw e;
-#endif
             }
         }
 
@@ -195,19 +187,19 @@ namespace Azure.Workflow.Core
 
         private void HookInternalEvents()
         {
-            this.OnError += HandleError;
+            OnError += HandleError;
         }
 
         private void HandleError(Exception exception)
         {
-            if (this._capturedErrors.Count >= this.Settings.ThrowFailureAfterCapturedErrors)
+            if (_capturedErrors.Count >= Settings.ThrowFailureAfterCapturedErrors)
             {
                 RaiseFailure("Error threshold reached");
             }
 
-            if (this.Settings.SendAlertOnCapturedError)
+            if (Settings.SendAlertOnCapturedError)
             {
-                this.RaiseAlert(AlertLevel.Medium, "Error caught : " + exception.Message + " \r\n " + exception.StackTrace);
+                RaiseAlert(AlertLevel.Medium, "Error caught : " + exception.Message + " \r\n " + exception.StackTrace);
             }
         }
 
