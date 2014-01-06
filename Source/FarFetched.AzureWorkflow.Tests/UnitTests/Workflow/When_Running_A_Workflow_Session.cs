@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Azure.Workflow.Core;
 using Azure.Workflow.Core.Architecture;
+using Azure.Workflow.Core.Enums;
 using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.Implementation.StopStrategy;
 using Azure.Workflow.Core.Plugins;
 using Azure.Workflow.Core.ServiceBus;
 using Azure.Workflow.Core.Builder;
@@ -60,7 +62,7 @@ namespace Azure.Workflow.Tests.UnitTests
         #endregion
 
         [Test]
-        [NUnit.Framework.ExpectedException(typeof(AzureWorkflowConfigurationException))]
+        [NUnit.Framework.ExpectedException(typeof(WorkflowConfigurationException))]
         public async Task Session_Throws_If_No_Queue_Mechanism()
         {
             //arrange
@@ -154,6 +156,31 @@ namespace Azure.Workflow.Tests.UnitTests
 
             //assert
             Assert.IsTrue(session.TotalDuration.Ticks > 0);
+        }
+
+        [Test]
+        public async Task Workflow_Default_Stop_Strategy_Is_Continuous_Processing()
+        {
+            var session = new WorkflowSession();
+
+            Assert.IsTrue(session.StopStrategy is ContinousProcessingStategy);
+        }
+
+        [Test]
+        public async Task Workflow_Session_Stop_Strategy_Determines_Workflow_Session_Stopping()
+        {
+            var session = new WorkflowSession();
+            session.CloudQueueFactory = new Mock<ICloudQueueFactory>().Object;
+            var mockStopStrategy = new Mock<IProcessingStopStrategy>();
+            session.StopStrategy = mockStopStrategy.Object;
+            mockStopStrategy.Setup(x => x.ShouldStop(It.IsAny<WorkflowSession>())).Returns(true);
+            session.Settings.CheckStopStrategyEvery = TimeSpan.FromMilliseconds(1);
+
+            session.Modules.Add(new Fakes.RaisesProcessingStateViaEnum(ProcessingResult.Success));
+
+            await session.Start();
+
+            mockStopStrategy.Verify(x=>x.ShouldStop(It.IsAny<WorkflowSession>()));
         }
     }
 

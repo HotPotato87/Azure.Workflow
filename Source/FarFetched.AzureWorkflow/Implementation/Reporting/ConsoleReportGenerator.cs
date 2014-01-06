@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Azure.Workflow.Core.Architecture;
 using Azure.Workflow.Core.Interfaces;
 using Azure.Workflow.Core.Plugins;
 
@@ -23,30 +24,45 @@ namespace Azure.Workflow.Core.Implementation.Reporting
 
             foreach (var processingSummary in moduleSummaries)
             {
-                Console.WriteLine();
+                Console.WriteLine(" ");
                 Console.WriteLine("[{0}]", processingSummary.Module.QueueName);
                 Console.WriteLine("-------------------------------------");
+                Console.WriteLine("Total Processed {0}", processingSummary.TotalProcessed);
+                Console.WriteLine("Started {0}", processingSummary.Module.Started);
+                Console.WriteLine("Finished {0}", processingSummary.Module.Ended);
+
+                foreach (var sentToAudit in processingSummary.Module.SentToAudit)
+                {
+                    Console.WriteLine("{0}:{1} Sent Count", sentToAudit.Key, sentToAudit.Value);
+                }
+
                 foreach (var category in processingSummary.ResultCategories)
                 {
                     Console.WriteLine("[{0} : {1} items]", category.Key, category.Value);
+                }
+
+                if (WorkflowDetail != null)
+                {
+                    Console.WriteLine(WorkflowDetail(processingSummary.Module));
                 }
 
                 foreach (var detail in processingSummary.ResultCategoryExtraDetail)
                 {
                     detail.Value.ForEach(x=>Console.WriteLine("----{0}:{1}", x.ProcessedTime, x.Message));
                 }
-                Console.WriteLine();
-                Console.WriteLine();
+
+                Console.WriteLine(" ");
             }
 
             Console.WriteLine("********* Finished! *********");
         }
 
+        public Func<IWorkflowModule, string> WorkflowDetail { get; set; }
+
         //All 5 modules completed successfully
         //4 modules completed successfully, 1 error
         private void InsertModuleStates()
         {
-            
             //if error
             PrintErrors();
         }

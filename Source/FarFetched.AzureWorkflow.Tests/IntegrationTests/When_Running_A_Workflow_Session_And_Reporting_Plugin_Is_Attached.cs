@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Azure.Workflow.Core.Enums;
 using Azure.Workflow.Core.Implementation;
+using Azure.Workflow.Core.Implementation.StopStrategy;
 using Azure.Workflow.Core.ServiceBus;
 using Azure.Workflow.Core.Builder;
 using Azure.Workflow.Tests.IntegrationTests;
@@ -88,6 +89,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
                 .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
                 .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
                 .WithQueueMechanism(new InMemoryQueueFactory())
+                .WithSessionStopStrategy(new NoQueueInteractionTimeoutStopStrategy(TimeSpan.FromMilliseconds(1000)))
                 .AttachReportGenerator(reportGenerator)
                 .RunAsync();
 

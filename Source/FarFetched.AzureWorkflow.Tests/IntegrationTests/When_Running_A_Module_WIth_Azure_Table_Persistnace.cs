@@ -27,7 +27,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
         #endregion
 
         [Test]
-        [ExpectedException(typeof(AzureWorkflowConfigurationException))]
+        [ExpectedException(typeof(WorkflowConfigurationException))]
         public async Task Not_Providing_A_Session_Name_Raises_A_Configuration_Exception()
         {
             var storeKey = "apple";

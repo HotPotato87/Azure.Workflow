@@ -172,6 +172,20 @@ namespace Azure.Workflow.Tests.UnitTests
             //assert
             Assert.IsTrue(calledLog);
         }
+
+
+        [Test]
+        public async Task Module_Records_Where_Data_Is_Sent_To()
+        {
+            var fakeSendModule = new FakeSendToModule(typeof (AlertStub), 5);
+            var stubSession = new Mock<WorkflowSession>();
+            fakeSendModule.Session = stubSession.Object;
+
+            await fakeSendModule.StartAsync();
+
+            Assert.IsTrue(fakeSendModule.SentToAudit.Count == 1);
+            Assert.IsTrue(fakeSendModule.SentToAudit[typeof(AlertStub)] == 5);
+        }
     }
 
     public class AlertStub : WorkflowModuleBase<object>
@@ -188,4 +202,25 @@ namespace Azure.Workflow.Tests.UnitTests
             base.RaiseAlert(_alert.AlertLevel, _alert.Message);
         }
     }
+
+    public class FakeSendToModule : WorkflowModuleBase<object>
+    {
+        private readonly Type _sendToType;
+        private readonly int _times;
+
+        public FakeSendToModule(Type sendToType, int times)
+        {
+            _sendToType = sendToType;
+            _times = times;
+        }
+
+        public async override Task OnStart()
+        {
+            for (int i = 0; i < _times; i++)
+            {
+                this.SendTo(_sendToType, new object());    
+            }
+        }
+    }
+
 }

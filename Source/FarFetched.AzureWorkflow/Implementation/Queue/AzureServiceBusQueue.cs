@@ -30,7 +30,7 @@ namespace Azure.Workflow.Core.ServiceBus
             if (string.IsNullOrEmpty(_settings.ConnectionString))
             {
                 //TODO : UT
-                throw new AzureWorkflowConfigurationException("Connection string must be set on queue", null);
+                throw new WorkflowConfigurationException("Connection string must be set on queue", null);
             } 
             
             _namespaceManager = NamespaceManager.CreateFromConnectionString(_settings.ConnectionString);
@@ -46,7 +46,7 @@ namespace Azure.Workflow.Core.ServiceBus
             }
             catch (Exception e)
             {
-                throw new AzureWorkflowConfigurationException("Problem setting up ServiceBus queue", e);
+                throw new WorkflowConfigurationException("Problem setting up ServiceBus queue", e);
             }
         }
 

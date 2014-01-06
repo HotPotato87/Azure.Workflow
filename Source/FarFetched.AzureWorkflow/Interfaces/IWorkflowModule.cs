@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Permissions;
 using System.ServiceModel.PeerResolvers;
 using System.Text;
@@ -21,7 +22,8 @@ namespace Azure.Workflow.Core.Architecture
         WorkflowSession Session { get; set; }
         ICloudQueue Queue { get; set; }
         string QueueName { get; }
-
+        int ProcessedCount { get; }
+        Dictionary<Type, int> SentToAudit { get; } 
 
         event Action<string> OnLogMessage;
         event Action<Alert> OnAlert;

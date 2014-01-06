@@ -27,7 +27,7 @@ namespace Azure.Workflow.Tests.UnitTests
             get
             {
                 var service = new Mock<ICloudQueue>();
-                service.Setup(x => x.ReceieveAsync<object>(It.IsAny<int>())).Returns(async () => new List<object>());
+                service.Setup(x => x.ReceieveAsync<object>(It.IsAny<int>())).Returns(new Task<IEnumerable<object>>(() => new List<object>()));
                 return service.Object;
             }
         }
@@ -46,15 +46,21 @@ namespace Azure.Workflow.Tests.UnitTests
         {
             //arr
             var service = new Mock<ICloudQueue>();
-            var module = new Fakes.StubProcessingModule();
-            service.Setup(x => x.ReceieveAsync<object>(It.IsAny<int>())).Returns(async () => new List<object>());
+            var module = new Fakes.StubProcessingModule(UnitTestingSettings());
+            service.Setup(x => x.ReceieveAsync<object>(It.IsAny<int>())).Returns(async() => new List<object>());
             module.Queue = service.Object;
 
             //act
-            await module.StartAsync();
+            Task.Run(async () => await module.StartAsync());
+            await Task.Delay(TimeSpan.FromMilliseconds(300));
 
             //assert
             service.Verify(x => x.ReceieveAsync<object>(It.IsAny<int>()), Times.AtLeastOnce);
+        }
+
+        private static WorkflowModuleSettings UnitTestingSettings()
+        {
+            return new WorkflowModuleSettings() { QueuePollTime = TimeSpan.FromMilliseconds(0)};
         }
 
         [Test]
@@ -62,7 +68,7 @@ namespace Azure.Workflow.Tests.UnitTests
         {
             //arrange
             var waitTime = 50;
-            var module = new Fakes.StubProcessingModule(new WorkflowModuleSettings() { QueueWaitTimeBeforeFinish = TimeSpan.FromMilliseconds(300), MaximumWaitTimesBeforeQueueFinished = 3 });
+            var module = new Fakes.StubProcessingModule(UnitTestingSettings());
             module.Queue = DefaultEmptyQueue;
 
             //act
@@ -76,17 +82,18 @@ namespace Azure.Workflow.Tests.UnitTests
         }
 
         [Test]
-        public async Task When_The_Queue_Retrurns_Empty_Over_Threshold_Signifies_Queue_Finished()
+        public async Task When_Module_Stop_Is_Called_Module_Is_Now_Finished()
         {
             //arrange
-            var module = new Fakes.StubProcessingModule(new WorkflowModuleSettings() { QueueWaitTimeBeforeFinish = TimeSpan.FromMilliseconds(50), MaximumWaitTimesBeforeQueueFinished = 3 });
-            module.Queue = DefaultEmptyQueue;
+            var module = new Fakes.StubProcessingModule(UnitTestingSettings());
+            module.Queue = NonEmptyQueue;
 
             //act
-            await module.StartAsync();
+            Task.Run(() => module.StartAsync());
 
-            //assert
-            await Task.Delay(1000);
+            module.Stop();
+
+            await Task.Delay(TimeSpan.FromMilliseconds(250));
 
             Assert.IsTrue(module.State == ModuleState.Finished);
         }
@@ -95,7 +102,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Can_Raise_Process_Status_Via_Enum()
         {
             var success = ProcessingResult.Success;
-            var module = new Fakes.RaisesProcessingStateViaEnum(success);
+            var module = new Fakes.RaisesProcessingStateViaEnum(success, UnitTestingSettings());
             module.Queue = NonEmptyQueue;
             
             object _eventResult = null;
@@ -117,7 +124,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Can_Raise_Process_Status_Via_Custom_Status()
         {
             var success = "ORANGES";
-            var module = new Fakes.RaisesProcessingStateViaString(success);
+            var module = new Fakes.RaisesProcessingStateViaString(success, UnitTestingSettings());
             module.Queue = NonEmptyQueue;
             object _eventResult = null;
             module.OnRaiseProcessed += (resultObject, detail, countsAsProcessed) =>
@@ -129,8 +136,6 @@ namespace Azure.Workflow.Tests.UnitTests
             await module.StartAsync();
 
             //assert
-            await Task.Delay(1000);
-
             Assert.IsTrue(_eventResult == success);
         }
 
@@ -140,7 +145,7 @@ namespace Azure.Workflow.Tests.UnitTests
             //arrange
             Exception raisedException = null;
             var exception = new ActivationException();
-            var module = new Fakes.CapturedErrorsModule(exception);
+            var module = new Fakes.CapturedErrorsModule(exception, 1, UnitTestingSettings());
             module.Queue = NonEmptyQueue;
             module.OnError += exception1 =>
             {
@@ -160,7 +165,9 @@ namespace Azure.Workflow.Tests.UnitTests
             //arrange
             Exception raisedException = null;
             var exception = new ActivationException();
-            var module = new Fakes.CapturedErrorsModule(exception, 5, new WorkflowModuleSettings() { ThrowFailureAfterCapturedErrors = 5});
+            var settings = UnitTestingSettings();
+            settings.ThrowFailureAfterCapturedErrors = 5;
+            var module = new Fakes.CapturedErrorsModule(exception, 5, settings);
             module.Queue = NonEmptyQueue;
             var failureMessage = "";
             var failureErrors = new List<Exception>();
@@ -175,8 +182,8 @@ namespace Azure.Workflow.Tests.UnitTests
 
             //assert
             Assert.IsTrue(failureMessage == "Error threshold reached");
-            Assert.IsTrue(failureErrors.Count == 5);
-            CollectionAssert.AllItemsAreInstancesOfType(failureErrors, typeof(ActivationException));
+            Assert.IsTrue(failureErrors.Count >= 5);
+            CollectionAssert.AllItemsAreInstancesOfType(failureErrors.Take(5), typeof(ActivationException));
         }
 
         [Test]
@@ -186,7 +193,9 @@ namespace Azure.Workflow.Tests.UnitTests
             bool failurehit = false;
             Exception raisedException = null;
             var exception = new ActivationException();
-            var module = new Fakes.CapturedErrorsModule(exception, 4, new WorkflowModuleSettings() { ThrowFailureAfterCapturedErrors = 5 });
+            var settings = UnitTestingSettings();
+            settings.ThrowFailureAfterCapturedErrors = 5;
+            var module = new Fakes.CapturedErrorsModule(exception, 4, settings);
             module.Queue = NonEmptyQueue;
             module.OnFailure += (message, errors) =>
             {
@@ -206,7 +215,9 @@ namespace Azure.Workflow.Tests.UnitTests
             //arrange
             Alert moduleAlert = null;
             var exception = new ActivationException();
-            var module = new Fakes.CapturedErrorsModule(exception, 5, new WorkflowModuleSettings() { ThrowFailureAfterCapturedErrors = 5 });
+            var settings = UnitTestingSettings();
+            settings.ThrowFailureAfterCapturedErrors = 5;
+            var module = new Fakes.CapturedErrorsModule(exception, 5, settings);
             module.Queue = NonEmptyQueue;
             var failureMessage = "";
             var failureErrors = new List<Exception>();
@@ -227,8 +238,11 @@ namespace Azure.Workflow.Tests.UnitTests
         {
             //arrange
             Alert moduleAlert = null;
-            var exception = new ActivationException();
-            var module = new Fakes.CapturedErrorsModule(exception, 5, new WorkflowModuleSettings() { ThrowFailureAfterCapturedErrors = 5, SendAlertOnCapturedError = false});
+            var exception = new ActivationException(); 
+            var settings = UnitTestingSettings();
+            settings.ThrowFailureAfterCapturedErrors = 5;
+            settings.SendAlertOnCapturedError = false;
+            var module = new Fakes.CapturedErrorsModule(exception, 5, settings);
             module.Queue = NonEmptyQueue;
             module.OnAlert += (alert) =>
             {
@@ -241,6 +255,52 @@ namespace Azure.Workflow.Tests.UnitTests
             //assert
             Assert.IsNull(moduleAlert);
         }
+
+        [Test]
+        public async Task Module_Can_Be_Stopped_By_Calling_Stop_Function()
+        {
+            //arrange
+            var settings = UnitTestingSettings();
+            var module = new Mock<QueueProcessingWorkflowModule<object>>(settings) { CallBase = true};
+            module.Setup(x => x.ProcessAsync(It.IsAny<IEnumerable<object>>())).Returns(() => Task.Delay(1));
+            var obj = module.Object;
+            var stubQueue = new Mock<ICloudQueue>();
+            var items = new List<object>(new[] { new object(), new object(), new object()});
+
+            var getItems = new Func<List<object>>(() =>
+            {
+                var result = items.ToList();
+                items.Clear();
+                return result;
+            });
+
+            stubQueue.Setup(x => x.ReceieveAsync<object>(It.IsAny<int>())).Returns(async () => getItems());
+            obj.Queue = stubQueue.Object;
+
+            //act
+            obj.OnStart();
+            obj.Stop();
+
+            await Task.Delay(TimeSpan.FromMilliseconds(50));
+
+            //assert
+            Assert.IsTrue(module.Object.State == ModuleState.Finished);
+        }
+
+        [Test]
+        public async Task Number_Of_Processed_Items_Is_Captured_By_Module()
+        {
+            //arrange
+            var module = new Fakes.RaisesProcessingStateViaString("str");
+            var fakeData = new List<object>(new[] { new object(), new object()  });
+
+            //act
+            await module.ProcessAsync(fakeData);
+
+            //assert
+            Assert.IsTrue(module.ProcessedCount == fakeData.Count);
+        }
+
     }
 
 
@@ -254,6 +314,7 @@ namespace Azure.Workflow.Tests.UnitTests
             public CapturedErrorsModule(Exception exceptionToThrow, int exceptionsToThrow = 1, WorkflowModuleSettings settings = null)
                 : base(settings)
             {
+                _recievedLimit = 1;
                 _exceptionToThrow = exceptionToThrow;
                 _exceptionsToThrow = exceptionsToThrow;
             }
@@ -271,7 +332,7 @@ namespace Azure.Workflow.Tests.UnitTests
             public StubProcessingModule(WorkflowModuleSettings settings = null)
                 : base(settings)
             {
-
+                _recievedLimit = 1;
             }
             public override async Task ProcessAsync(IEnumerable<object> queueCollection)
             {
@@ -287,6 +348,7 @@ namespace Azure.Workflow.Tests.UnitTests
                 : base(settings)
             {
                 _str = str;
+                _recievedLimit = 1;
             }
 
             public override async Task ProcessAsync(IEnumerable<object> queueCollection)
@@ -306,6 +368,7 @@ namespace Azure.Workflow.Tests.UnitTests
                 : base(settings)
             {
                 _result = result;
+                _recievedLimit = 1;
             }
 
             public override async Task ProcessAsync(IEnumerable<object> queueCollection)
@@ -319,7 +382,7 @@ namespace Azure.Workflow.Tests.UnitTests
             public StubAddsProcessedInfoProcessingModule(WorkflowModuleSettings settings = null)
                 : base(settings)
             {
-
+                _recievedLimit = 1;
             }
             public override async Task ProcessAsync(IEnumerable<object> queueCollection)
             {
