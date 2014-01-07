@@ -17,6 +17,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +27,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,6 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -43,6 +46,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -52,6 +56,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
@@ -114,6 +119,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Environment\WorkflowEnvironment.cs" />
+    <Compile Include="Entities\Environment\WorkflowEnvironmentBuilder.cs" />
     <Compile Include="Entities\Scheduler\WorkflowSchedulerBuilder.cs" />
     <Compile Include="Extentions\WorkflowBuilderExtentions.cs" />
     <Compile Include="Entities\Module\InitialWorkflowModule.cs" />
@@ -125,8 +132,11 @@
     <Compile Include="Enums\ModuleState.cs" />
     <Compile Include="Enums\ProcessingResult.cs" />
     <Compile Include="Exception\WorkflowConfigurationException.cs" />
+    <Compile Include="Extentions\WorkflowEnvironmentExtentions.cs" />
     <Compile Include="Extentions\WorkflowSchedulerExtentions.cs" />
+    <Compile Include="Helpers\EnvironmentHelpers.cs" />
     <Compile Include="Implementation\Alerts\SendGridAlertManager.cs" />
+    <Compile Include="Implementation\IOC\NinjectIOCContainer.cs" />
     <Compile Include="Implementation\Logging\ConsoleLogger.cs" />
     <Compile Include="Implementation\Alerts\ProwlAlertManager.cs" />
     <Compile Include="Implementation\Persistance\AzureTablePersistance.cs" />
@@ -141,6 +151,7 @@
     <Compile Include="Interfaces\ICloudQueue.cs" />
     <Compile Include="Entities\Module\WorkflowModuleSettings.cs" />
     <Compile Include="Entities\Session\WorkflowSession.cs" />
+    <Compile Include="Interfaces\IIOCContainer.cs" />
     <Compile Include="Interfaces\IProcessingStopStrategy.cs" />
     <Compile Include="Interfaces\IQueueProcessingWorkflowModule.cs" />
     <Compile Include="Interfaces\IWorkflowModule.cs" />

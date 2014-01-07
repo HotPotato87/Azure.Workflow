@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Azure.Workflow.Core.Architecture;
 using Azure.Workflow.Core.Entities;
-using Azure.Workflow.Core.Enums;
+using Azure.Workflow.Core.Entities.Environment;
+using Azure.Workflow.Core.Helpers;
 using Azure.Workflow.Core.Implementation.StopStrategy;
 using Azure.Workflow.Core.Interfaces;
 using Azure.Workflow.Core.Plugins;
@@ -16,23 +16,36 @@ namespace Azure.Workflow.Core.Implementation
 {
     public class WorkflowSession
     {
+        private bool _continueMonitoringWorkflow = true;
+
         public WorkflowSession()
         {
-            this.Settings = new WorkflowSessionSettings();
+            Settings = new WorkflowSessionSettings();
 
             RunningModules = new ObservableCollection<IWorkflowModule>();
-            Modules = new List<IWorkflowModule>();
+            Modules = new List<object>();
             Plugins = new List<WorkflowSessionPluginBase>();
             StopStrategy = new ContinousProcessingStategy();
-
             HookRunningModules();
+
+            if (Environment == null)
+            {
+                Environment = EnvironmentHelpers.BuildStandardEnvironment(); 
+            }
+        }
+
+        public WorkflowSession(WorkflowEnvironment environment = null) : this()
+        {
+            Environment = environment ?? EnvironmentHelpers.BuildStandardEnvironment();
         }
 
         public ObservableCollection<IWorkflowModule> RunningModules { get; internal set; }
-        public List<IWorkflowModule> Modules { get; internal set; }
+        public List<object> Modules { get; internal set; }
         public IProcessingStopStrategy StopStrategy { get; internal set; }
+        public WorkflowEnvironment Environment { get; internal set; }
         internal List<WorkflowSessionPluginBase> Plugins { get; set; }
         internal ICloudQueueFactory CloudQueueFactory { get; set; }
+        internal List<Type> ModuleTypes { get; set; }
 
         public DateTime Started { get; private set; }
         public DateTime Ended { get; private set; }
@@ -50,6 +63,8 @@ namespace Azure.Workflow.Core.Implementation
         }
 
         public string SessionName { get; set; }
+
+
         public event Action<WorkflowSession> OnSessionFinished;
         public event Action<IWorkflowModule, string> OnFailure;
 
@@ -63,22 +78,38 @@ namespace Azure.Workflow.Core.Implementation
 
             //inform plugins we have started so they can hook to events
             Plugins.ForEach(x => x.OnSessionStarted(this));
-            Modules.ForEach(x => RunningModules.Add(x));
+            Modules.ForEach(x => RunningModules.Add(ResolveModule(x)));
 
             //start the stop monitoring
-            Task.Run(() => ProcessingStopMonitoring().Start());
+            Task.Run(async () => await ProcessingStopMonitoring());
 
             //run the modules
-            await Task.WhenAll(Modules.Select(x => x.StartAsync()));
+            await Task.WhenAll(RunningModules.Select(x => x.StartAsync()));
+
+            //stop monitoring service
+            _continueMonitoringWorkflow = false;
 
             //inform session has finished
             RegisterFinished(this);
             Ended = DateTime.Now;
         }
 
+        private IWorkflowModule ResolveModule(object o)
+        {
+            if (o is IWorkflowModule)
+            {
+                return o as IWorkflowModule;
+            }
+            if (o is Type)
+            {
+                return Environment.IOCContainer.Get<IWorkflowModule>(o as Type);
+            }
+            throw new WorkflowConfigurationException("Type " + o + " added to module list. Not supported. Use type or IWorkflowModule", null);
+        }
+
         private async Task ProcessingStopMonitoring()
         {
-            while (true)
+            while (_continueMonitoringWorkflow)
             {
                 if (StopStrategy.ShouldStop(this))
                 {
@@ -91,7 +122,7 @@ namespace Azure.Workflow.Core.Implementation
                     });
                 }
 
-                foreach (var module in this.Modules.OfType<IWorkflowModule>())
+                foreach (IWorkflowModule module in Modules.OfType<IWorkflowModule>())
                 {
                     if (StopStrategy.ShouldSpecificModuleStop(module))
                     {
@@ -101,6 +132,8 @@ namespace Azure.Workflow.Core.Implementation
                         }
                     }
                 }
+
+                await Task.Delay(500);
             }
         }
 

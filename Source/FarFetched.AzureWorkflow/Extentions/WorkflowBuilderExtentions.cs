@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Azure.Workflow.Core.Architecture;
 using Azure.Workflow.Core.Entities;
 using Azure.Workflow.Core.Implementation;
@@ -22,6 +18,13 @@ namespace Azure.Workflow.Core.Builder
             return builder;
         }
 
+        public static WorkflowSessionBuilder AddModule<T>(this WorkflowSessionBuilder builder) where T : IWorkflowModule
+        {
+            builder.WorkflowSession.Modules.Add(typeof (T));
+
+            return builder;
+        }
+
         public static WorkflowSessionBuilder AddModule(this WorkflowSessionBuilder builder, IWorkflowModule module)
         {
             builder.WorkflowSession.Modules.Add(module);
@@ -32,7 +35,7 @@ namespace Azure.Workflow.Core.Builder
         public static WorkflowSessionBuilder WithQueueMechanism(this WorkflowSessionBuilder builder, ICloudQueueFactory cloudQueueFactory)
         {
             builder.WorkflowSession.CloudQueueFactory = cloudQueueFactory;
-            
+
             return builder;
         }
 

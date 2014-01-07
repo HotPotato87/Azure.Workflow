@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,6 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.ServiceBus, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -75,6 +78,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Helpers\AzurePersistanceHelper.cs" />
+    <Compile Include="Helpers\TestHelpers.cs" />
     <Compile Include="IntegrationTests\Fakes.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Module_WIth_Azure_Table_Persistnace.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session.cs" />
@@ -84,7 +88,7 @@
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session_And_The_Logging_Manager_Is_Attached.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session_And_Reporting_Plugin_Is_Attached.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session_And_The_Alert_Plugin_Is_Loaded.cs" />
-    <Compile Include="UnitTests\When_Scheduling_A_Workflow_Session.cs" />
+    <Compile Include="UnitTests\Scheduling\When_Scheduling_A_Workflow_Session.cs" />
     <Compile Include="UnitTests\Workflow\Module\When_Running_A_Queue_Processing_Module.cs" />
     <Compile Include="UnitTests\Workflow\Module\When_Running_A_Workflow_Module.cs" />
     <Compile Include="UnitTests\Workflow\When_In_Memory_Queue_Collection_Is_Used.cs" />
@@ -104,7 +108,9 @@
       <Name>Azure.Workflow.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UnitTests\Environment\" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

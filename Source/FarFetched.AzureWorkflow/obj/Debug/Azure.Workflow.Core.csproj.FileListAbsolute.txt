@@ -59,7 +59,6 @@ C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkf
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow\bin\Debug\zh-Hans\System.Spatial.resources.dll
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow\bin\Debug\zh-Hant\System.Spatial.resources.dll
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow\obj\Debug\Azure.Workflow.Core.csproj.App.config
-C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow\obj\Debug\Azure.Workflow.Core.csprojResolveAssemblyReference.cache
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow\obj\Debug\Azure.Workflow.dll
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow\obj\Debug\Azure.Workflow.pdb
 C:\Users\Patrick\Documents\GitHub\Azure.Workflow\Source\FarFetched.AzureWorkflow\bin\Debug\Azure.Workflow.dll.config

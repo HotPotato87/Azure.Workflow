@@ -7,7 +7,9 @@ C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkf
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Moq.dll
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Ninject.dll
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\nunit.framework.dll
+C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Quartz.dll
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Microsoft.WindowsAzure.Storage.dll
+C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Common.Logging.dll
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Microsoft.Data.OData.dll
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Microsoft.Data.Edm.dll
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\System.Spatial.dll
@@ -17,8 +19,12 @@ C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkf
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Ninject.pdb
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Ninject.xml
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\nunit.framework.xml
+C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Quartz.pdb
+C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Quartz.xml
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Microsoft.WindowsAzure.Storage.pdb
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Microsoft.WindowsAzure.Storage.xml
+C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Common.Logging.pdb
+C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Common.Logging.xml
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Microsoft.Data.OData.xml
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\Microsoft.Data.Edm.xml
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Release\System.Spatial.xml
