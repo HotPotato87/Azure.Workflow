@@ -166,6 +166,7 @@
     <Compile Include="IOC\IOC.cs" />
     <Compile Include="Plugins\Reporting\ReportGenerationPlugin.cs" />
     <Compile Include="Plugins\WorkflowSessionPluginBase.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementation\Queue\InMemoryQueue.cs" />
     <Compile Include="Implementation\Queue\AzureServiceBusQueue.cs" />

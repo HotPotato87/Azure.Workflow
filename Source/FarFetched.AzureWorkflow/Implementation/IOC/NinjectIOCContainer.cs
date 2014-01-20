@@ -4,11 +4,11 @@ using Ninject;
 
 namespace Azure.Workflow.Core.Implementation.IOC
 {
-    public class NinjectIOCContainer : IIocContainer
+    public class NinjectIocContainer : IIocContainer
     {
         private readonly StandardKernel kernel;
 
-        public NinjectIOCContainer()
+        public NinjectIocContainer()
         {
             kernel = new StandardKernel();
         }

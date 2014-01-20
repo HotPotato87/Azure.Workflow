@@ -46,6 +46,13 @@ namespace Azure.Workflow.Core.Builder
             return builder;
         }
 
+        public static WorkflowSessionBuilder ConfigureDefaultModuleSettings(this WorkflowSessionBuilder builder, WorkflowModuleSettings settings)
+        {
+            builder.WorkflowSession.DefaultModuleSettings = settings;
+
+            return builder;
+        }
+
         public static WorkflowSessionBuilder ConfigureSessionSettings(this WorkflowSessionBuilder builder, WorkflowSessionSettings settings)
         {
             builder.WorkflowSession.Settings = settings;

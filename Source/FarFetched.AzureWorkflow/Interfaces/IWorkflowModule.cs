@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Permissions;
@@ -13,7 +14,7 @@ using Azure.Workflow.Core.Plugins.Alerts;
 
 namespace Azure.Workflow.Core.Architecture
 {
-    public interface IWorkflowModule
+    public interface IWorkflowModule : INotifyPropertyChanged
     {
         Task StartAsync();
         ModuleState State { get; }
@@ -23,7 +24,8 @@ namespace Azure.Workflow.Core.Architecture
         ICloudQueue Queue { get; set; }
         string QueueName { get; }
         int ProcessedCount { get; }
-        Dictionary<Type, int> SentToAudit { get; } 
+        Dictionary<Type, int> SentToAudit { get; }
+        WorkflowModuleSettings Settings { get; set; }
 
         event Action<string> OnLogMessage;
         event Action<Alert> OnAlert;

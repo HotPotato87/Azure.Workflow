@@ -16,14 +16,12 @@ namespace Azure.Workflow.Core.ServiceBus
 
         public InMemoryQueue(ServiceBusQueueSettings settings = null)
         {
-            _settings = settings;
-
-            if (_settings == null) _settings = new ServiceBusQueueSettings();
+            _settings = settings ?? new ServiceBusQueueSettings();
         }
 
         public async Task<IEnumerable<T>> ReceieveAsync<T>(int batchCount)
         {
-            List<T> result = new List<T>();
+            var result = new List<T>();
             for (int i = 0; i < batchCount; i++)
             {
                 if (_inMemoryCollection.Any())

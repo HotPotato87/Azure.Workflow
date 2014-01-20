@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Azure.Workflow.Core.Annotations;
 using Azure.Workflow.Core.Architecture;
 using Azure.Workflow.Core.Enums;
 using Azure.Workflow.Core.Implementation;
@@ -13,8 +16,17 @@ namespace Azure.Workflow.Core
     {
         #region Properties
 
-        protected WorkflowModuleSettings Settings { get; set; }
-        public ModuleState State { get; protected set; }
+        public WorkflowModuleSettings Settings { get; set; }
+
+        public ModuleState State
+        {
+            get { return _state; }
+            protected set
+            {
+                _state = value;
+                OnPropertyChanged();
+            }
+        }
 
         public virtual string QueueName
         {
@@ -46,6 +58,7 @@ namespace Azure.Workflow.Core
         #endregion
 
         private readonly List<Exception> _capturedErrors = new List<Exception>();
+        private ModuleState _state;
 
         protected WorkflowModuleBase(WorkflowModuleSettings settings = default(WorkflowModuleSettings))
         {
@@ -239,5 +252,18 @@ namespace Azure.Workflow.Core
         }
 
         #endregion
+
+        #region Property Notification
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
     }
 }

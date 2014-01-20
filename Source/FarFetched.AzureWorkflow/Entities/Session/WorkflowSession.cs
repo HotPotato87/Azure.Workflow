@@ -18,34 +18,13 @@ namespace Azure.Workflow.Core.Implementation
     {
         private bool _continueMonitoringWorkflow = true;
 
-        public WorkflowSession()
-        {
-            Settings = new WorkflowSessionSettings();
-
-            RunningModules = new ObservableCollection<IWorkflowModule>();
-            Modules = new List<object>();
-            Plugins = new List<WorkflowSessionPluginBase>();
-            StopStrategy = new ContinousProcessingStategy();
-            HookRunningModules();
-
-            if (Environment == null)
-            {
-                Environment = EnvironmentHelpers.BuildStandardEnvironment(); 
-            }
-        }
-
-        public WorkflowSession(WorkflowEnvironment environment = null) : this()
-        {
-            Environment = environment ?? EnvironmentHelpers.BuildStandardEnvironment();
-        }
-
         public ObservableCollection<IWorkflowModule> RunningModules { get; internal set; }
         public List<object> Modules { get; internal set; }
         public IProcessingStopStrategy StopStrategy { get; internal set; }
         public WorkflowEnvironment Environment { get; internal set; }
-        internal List<WorkflowSessionPluginBase> Plugins { get; set; }
+        public List<WorkflowSessionPluginBase> Plugins { get; private set; }
         internal ICloudQueueFactory CloudQueueFactory { get; set; }
-        internal List<Type> ModuleTypes { get; set; }
+        internal List<Type> ModuleTypes { get; private set; }
 
         public DateTime Started { get; private set; }
         public DateTime Ended { get; private set; }
@@ -64,9 +43,32 @@ namespace Azure.Workflow.Core.Implementation
 
         public string SessionName { get; set; }
 
+        internal WorkflowModuleSettings DefaultModuleSettings { get; set; }
 
         public event Action<WorkflowSession> OnSessionFinished;
         public event Action<IWorkflowModule, string> OnFailure;
+
+        public WorkflowSession()
+        {
+            Settings = new WorkflowSessionSettings();
+
+            RunningModules = new ObservableCollection<IWorkflowModule>();
+            Modules = new List<object>();
+            Plugins = new List<WorkflowSessionPluginBase>();
+            StopStrategy = new ContinousProcessingStategy();
+            HookRunningModules();
+
+            if (Environment == null)
+            {
+                Environment = EnvironmentHelpers.BuildStandardEnvironment();
+            }
+        }
+
+        public WorkflowSession(WorkflowEnvironment environment = null)
+            : this()
+        {
+            Environment = environment ?? EnvironmentHelpers.BuildStandardEnvironment();
+        }
 
         public async Task Start()
         {
@@ -170,6 +172,7 @@ namespace Azure.Workflow.Core.Implementation
                     var newItem = args.NewItems[0] as IWorkflowModule;
                     newItem.Queue = CloudQueueFactory.CreateQueue(newItem);
                     newItem.Session = this;
+                    if (this.DefaultModuleSettings != null) newItem.Settings = this.DefaultModuleSettings;
                     HookModule(newItem);
                 }
             };

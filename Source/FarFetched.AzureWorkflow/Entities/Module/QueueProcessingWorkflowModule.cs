@@ -38,6 +38,7 @@ namespace Azure.Workflow.Core
             while (_running)
             {
                 this.State = ModuleState.Processing;
+
                 await ProcessQueue();
 
                 this.State = ModuleState.Waiting;
@@ -89,6 +90,7 @@ namespace Azure.Workflow.Core
         public async void Stop()
         {
             await this.OnStop();
+            this.State = ModuleState.Finished;
         }
     }
 

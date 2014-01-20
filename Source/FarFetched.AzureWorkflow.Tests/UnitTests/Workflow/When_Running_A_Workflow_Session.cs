@@ -249,7 +249,7 @@ namespace Azure.Workflow.Tests.UnitTests
         {
             //arrange
             WorkflowEnvironment environment = WorkflowEnvironment.BuildEnvironment()
-                .WithIOCContainer(new NinjectIOCContainer())
+                .WithIOCContainer(new NinjectIocContainer())
                 .RegisterType<WorkflowSessionFakes.IToResolve, WorkflowSessionFakes.ConcreteResolve>().
                 Build();
 
@@ -283,6 +283,25 @@ namespace Azure.Workflow.Tests.UnitTests
             await session.Start();
 
             mockStopStrategy.Verify(x => x.ShouldStop(It.IsAny<WorkflowSession>()));
+        }
+
+        [Test]
+        public async Task Workflow_Sessions_Default_Settings_Get_Injected_Into_Modules()
+        {
+            //arrange
+            var session = new WorkflowSession();
+            var workflowModuleSettings = new WorkflowModuleSettings();
+            session.DefaultModuleSettings = workflowModuleSettings;
+            session.CloudQueueFactory = TestHelpers.CreateNonEmptyStubQueueFactory().Object;
+            var module = new Fakes.RaisesProcessingStateViaEnum(ProcessingResult.Success);
+            session.Modules.Add(module);
+
+            //act
+            await session.Start();
+
+            //assert
+            Assert.AreSame(workflowModuleSettings, module.Settings);
+
         }
     }
 }
