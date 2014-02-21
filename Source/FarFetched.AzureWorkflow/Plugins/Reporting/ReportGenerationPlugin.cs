@@ -5,14 +5,14 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.Implementation.Reporting;
-using Azure.Workflow.Core.Interfaces;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.Implementation.Reporting;
+using ServerShot.Framework.Core.Interfaces;
 
-namespace Azure.Workflow.Core.Plugins
+namespace ServerShot.Framework.Core.Plugins
 {
-    public abstract class ReportGenerationPlugin : WorkflowSessionPluginBase
+    public abstract class ReportGenerationPlugin : ServerShotSessionPluginBase
     {
         public ReadOnlyCollection<ModuleProcessingSummary> ModuleProcessingSummaries { get; set; }
         private readonly List<ModuleProcessingSummary> _moduleProcessingSummaries = new List<ModuleProcessingSummary>(); 
@@ -22,14 +22,14 @@ namespace Azure.Workflow.Core.Plugins
             ModuleProcessingSummaries = new ReadOnlyCollection<ModuleProcessingSummary>(_moduleProcessingSummaries);
         }
 
-        internal override void OnSessionStarted(WorkflowSession session)
+        internal override void OnSessionStarted(ServerShotSession session)
         {
             base.OnSessionStarted(session);
 
-            session.OnSessionFinished += workflowSession => this.SendSessionReport(workflowSession, ModuleProcessingSummaries);
+            session.OnSessionFinished += ServerShotSession => this.SendSessionReport(ServerShotSession, ModuleProcessingSummaries);
         }
 
-        internal override void OnModuleStarted(IWorkflowModule module)
+        internal override void OnModuleStarted(IServerShotModule module)
         {
             //TODO : Unit test this logic around categorization properly
             _moduleProcessingSummaries.Add(new ModuleProcessingSummary(module));
@@ -59,6 +59,6 @@ namespace Azure.Workflow.Core.Plugins
             };
         }
 
-        public abstract void SendSessionReport(WorkflowSession workflowSession, IEnumerable<ModuleProcessingSummary> moduleSummaries);
+        public abstract void SendSessionReport(ServerShotSession ServerShotSession, IEnumerable<ModuleProcessingSummary> moduleSummaries);
     }
 }

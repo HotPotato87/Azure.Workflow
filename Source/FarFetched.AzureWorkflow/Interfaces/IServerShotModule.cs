@@ -7,32 +7,35 @@ using System.Security.Permissions;
 using System.ServiceModel.PeerResolvers;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Enums;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.Interfaces;
-using Azure.Workflow.Core.Plugins.Alerts;
+using ServerShot.Framework.Core.Enums;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.Interfaces;
+using ServerShot.Framework.Core.Plugins.Alerts;
 
-namespace Azure.Workflow.Core.Architecture
+namespace ServerShot.Framework.Core.Architecture
 {
-    public interface IWorkflowModule : INotifyPropertyChanged
+    public interface IServerShotModule : INotifyPropertyChanged
     {
         Task StartAsync();
+        Task Stop();
         ModuleState State { get; }
         DateTime Started { get; }
         DateTime Ended { get; }
-        WorkflowSession Session { get; set; }
+        ServerShotSession Session { get; set; }
         ICloudQueue Queue { get; set; }
         string QueueName { get; }
         int ProcessedCount { get; }
         Dictionary<Type, int> SentToAudit { get; }
-        WorkflowModuleSettings Settings { get; set; }
+        ServerShotModuleSettings Settings { get; set; }
 
         event Action<string> OnLogMessage;
         event Action<Alert> OnAlert;
         event Action<Exception> OnError;
         event Action<string, IEnumerable<Exception>> OnFailure;
         event Func<string, object, Task> OnStoreAsync;
-        event Func<string, Task<object>> OnRetrieveAsync; 
+        event Func<string, Task<object>> OnRetrieveAsync;
+        event Func<string, object, Task> OnStoreEnumerableAsync;
+        event Func<string, Task<IEnumerable<object>>> OnRetrieveEnumerableAsync; 
         event Action OnFinished;
         event Action<string, string, bool> OnRaiseProcessed;
     }

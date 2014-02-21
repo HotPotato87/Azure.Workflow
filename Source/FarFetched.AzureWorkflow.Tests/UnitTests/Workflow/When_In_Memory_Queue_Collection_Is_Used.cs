@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.ServiceBus;
+using ServerShot.Framework.Core.ServiceBus;
 using NUnit.Framework;
 
-namespace Azure.Workflow.Tests.UnitTests
+namespace ServerShot.Framework.Tests.UnitTests
 {
     [TestFixture]
     public class When_In_Memory_Queue_Collection_Is_Used

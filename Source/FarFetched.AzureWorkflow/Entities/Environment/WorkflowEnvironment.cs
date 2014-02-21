@@ -1,7 +1,7 @@
-﻿using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.Interfaces;
+﻿using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.Interfaces;
 
-namespace Azure.Workflow.Core.Entities.Environment
+namespace ServerShot.Framework.Core.Entities.Environment
 {
     public class WorkflowEnvironment
     {
@@ -12,9 +12,9 @@ namespace Azure.Workflow.Core.Entities.Environment
             return new WorkflowEnvironmentBuilder(new WorkflowEnvironment());
         }
 
-        public WorkflowSession CreateSession()
+        public ServerShotSession CreateSession()
         {
-            return new WorkflowSession(this);
+            return new ServerShotSession(this);
         }
     }
 }

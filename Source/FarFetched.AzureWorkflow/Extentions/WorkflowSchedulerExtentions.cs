@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Entities.Scheduler;
-using Azure.Workflow.Core.Entities.Scheduler.Deployments;
-using Azure.Workflow.Core.Implementation;
 using Quartz;
+using ServerShot.Framework.Core.Entities.Scheduler;
+using ServerShot.Framework.Core.Entities.Scheduler.Deployments;
+using ServerShot.Framework.Core.Implementation;
 
-namespace Azure.Workflow.Core.Extentions
+namespace ServerShot.Framework.Core.Extentions
 {
     public static class WorkflowSchedulerExtentions
     {
-        public static WorkflowSchedulerWithSessionBuilder AddSession(this WorkflowSchedulerBuilder builder, WorkflowSession session)
+        public static WorkflowSchedulerWithSessionBuilder AddSession(this WorkflowSchedulerBuilder builder, ServerShotSession session)
         {
             builder.Scheduler.Session.Add(session);
 

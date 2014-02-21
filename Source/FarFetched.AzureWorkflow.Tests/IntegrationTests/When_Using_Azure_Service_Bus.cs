@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Azure.Workflow.Core;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.ServiceBus;
+using ServerShot.Framework.Core;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.ServiceBus;
 using Microsoft.ServiceBus;
 using NUnit.Framework;
 
-namespace Azure.Workflow.Tests.IntegrationTests
+namespace ServerShot.Framework.Tests.IntegrationTests
 {
     [TestFixture]
     public class When_Using_Azure_Service_Bus

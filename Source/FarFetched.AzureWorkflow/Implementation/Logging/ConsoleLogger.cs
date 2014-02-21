@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
-using Azure.Workflow.Core.Plugins.Alerts;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Plugins.Alerts;
 
-namespace Azure.Workflow.Core.Implementation.Logging
+namespace ServerShot.Framework.Core.Implementation.Logging
 {
     public class ConsoleLogger : LogManagerBase
     {
-        public override void OnLogMessage(LogMessage message)
+        public override void OnLogMessage(IServerShotModule module, LogMessage message)
         {
             Console.WriteLine("{0} : {1}", message.DateTime, message.Message);
         }
@@ -14,7 +15,7 @@ namespace Azure.Workflow.Core.Implementation.Logging
 
     public class AzureStorageLogger : LogManagerBase
     {
-        public override void OnLogMessage(LogMessage message)
+        public override void OnLogMessage(IServerShotModule module, LogMessage message)
         {
             throw new NotImplementedException();
         }
@@ -22,7 +23,7 @@ namespace Azure.Workflow.Core.Implementation.Logging
 
     public class DebugLogger : LogManagerBase
     {
-        public override void OnLogMessage(LogMessage message)
+        public override void OnLogMessage(IServerShotModule module, LogMessage message)
         {
             Debug.WriteLine("{0} : {1}", message.DateTime, message.Message);
         }

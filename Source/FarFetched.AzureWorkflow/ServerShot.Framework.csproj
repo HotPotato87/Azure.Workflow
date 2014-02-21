@@ -7,8 +7,8 @@
     <ProjectGuid>{3F439EEA-37B3-4E59-9556-AF13886F9E19}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Azure.Workflow.Core</RootNamespace>
-    <AssemblyName>Azure.Workflow</AssemblyName>
+    <RootNamespace>Servershot.Framework</RootNamespace>
+    <AssemblyName>Servershot.Framework</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\..\..\..\WS\Wong\Importing\WhatsonGlobal.Importing\Source\WhatsonGlobal.Importing\</SolutionDir>
@@ -122,13 +122,14 @@
     <Compile Include="Entities\Environment\WorkflowEnvironment.cs" />
     <Compile Include="Entities\Environment\WorkflowEnvironmentBuilder.cs" />
     <Compile Include="Entities\Scheduler\WorkflowSchedulerBuilder.cs" />
+    <Compile Include="Extentions\AsyncHelpers.cs" />
     <Compile Include="Extentions\WorkflowBuilderExtentions.cs" />
-    <Compile Include="Entities\Module\InitialWorkflowModule.cs" />
-    <Compile Include="Entities\Module\QueueProcessingWorkflowModule.cs" />
+    <Compile Include="Entities\Module\InitialServerShotModule.cs" />
+    <Compile Include="Entities\Module\QueueProcessingServerShotModule.cs" />
     <Compile Include="Entities\Scheduler\Deployments\IDeploymentStrategy.cs" />
     <Compile Include="Entities\Scheduler\Deployments\LocalDeploymentStrategy.cs" />
     <Compile Include="Entities\Scheduler\WorkflowScheduler.cs" />
-    <Compile Include="Entities\Session\WorkflowSessionSettings.cs" />
+    <Compile Include="Entities\Session\SessionSettings.cs" />
     <Compile Include="Enums\ModuleState.cs" />
     <Compile Include="Enums\ProcessingResult.cs" />
     <Compile Include="Exception\WorkflowConfigurationException.cs" />
@@ -145,17 +146,17 @@
     <Compile Include="Implementation\Reporting\ConsoleReportGenerator.cs" />
     <Compile Include="Implementation\Reporting\ProcessedItemDetail.cs" />
     <Compile Include="Implementation\Reporting\SendGridReportGenerator.cs" />
-    <Compile Include="Entities\Session\WorkflowSessionBuilder.cs" />
+    <Compile Include="Entities\Session\ServerShotSessionBuilder.cs" />
     <Compile Include="Implementation\StopStrategy\ContinousProcessingStategy.cs" />
     <Compile Include="Implementation\StopStrategy\NoQueueInteractionTimeoutStopStrategy.cs" />
     <Compile Include="Interfaces\ICloudQueue.cs" />
-    <Compile Include="Entities\Module\WorkflowModuleSettings.cs" />
-    <Compile Include="Entities\Session\WorkflowSession.cs" />
+    <Compile Include="Entities\Module\ServerShotModuleSettings.cs" />
+    <Compile Include="Entities\Session\ServerShotSession.cs" />
     <Compile Include="Interfaces\IIOCContainer.cs" />
     <Compile Include="Interfaces\IProcessingStopStrategy.cs" />
-    <Compile Include="Interfaces\IQueueProcessingWorkflowModule.cs" />
-    <Compile Include="Interfaces\IWorkflowModule.cs" />
-    <Compile Include="Entities\Module\WorkflowModuleBase.cs" />
+    <Compile Include="Interfaces\IQueueProcessingServerShotModule.cs" />
+    <Compile Include="Interfaces\IServerShotModule.cs" />
+    <Compile Include="Entities\Module\ServerShotModuleBase.cs" />
     <Compile Include="Plugins\Alerts\Alert.cs" />
     <Compile Include="Plugins\Alerts\AlertLevel.cs" />
     <Compile Include="Plugins\Alerts\AlertManagerBase.cs" />
@@ -165,7 +166,7 @@
     <Compile Include="Plugins\Reporting\ModuleProcessingSummary.cs" />
     <Compile Include="IOC\IOC.cs" />
     <Compile Include="Plugins\Reporting\ReportGenerationPlugin.cs" />
-    <Compile Include="Plugins\WorkflowSessionPluginBase.cs" />
+    <Compile Include="Plugins\ServerShotSessionPluginBase.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementation\Queue\InMemoryQueue.cs" />

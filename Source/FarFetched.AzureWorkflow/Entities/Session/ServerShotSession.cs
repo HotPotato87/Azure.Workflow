@@ -4,25 +4,25 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Entities;
-using Azure.Workflow.Core.Entities.Environment;
-using Azure.Workflow.Core.Helpers;
-using Azure.Workflow.Core.Implementation.StopStrategy;
-using Azure.Workflow.Core.Interfaces;
-using Azure.Workflow.Core.Plugins;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Entities;
+using ServerShot.Framework.Core.Entities.Environment;
+using ServerShot.Framework.Core.Helpers;
+using ServerShot.Framework.Core.Implementation.StopStrategy;
+using ServerShot.Framework.Core.Interfaces;
+using ServerShot.Framework.Core.Plugins;
 
-namespace Azure.Workflow.Core.Implementation
+namespace ServerShot.Framework.Core.Implementation
 {
-    public class WorkflowSession
+    public class ServerShotSession
     {
         private bool _continueMonitoringWorkflow = true;
 
-        public ObservableCollection<IWorkflowModule> RunningModules { get; internal set; }
+        public ObservableCollection<IServerShotModule> RunningModules { get; internal set; }
         public List<object> Modules { get; internal set; }
         public IProcessingStopStrategy StopStrategy { get; internal set; }
         public WorkflowEnvironment Environment { get; internal set; }
-        public List<WorkflowSessionPluginBase> Plugins { get; private set; }
+        public List<ServerShotSessionPluginBase> Plugins { get; private set; }
         internal ICloudQueueFactory CloudQueueFactory { get; set; }
         internal List<Type> ModuleTypes { get; private set; }
 
@@ -34,7 +34,7 @@ namespace Azure.Workflow.Core.Implementation
             get { return Ended.Subtract(Started); }
         }
 
-        public WorkflowSessionSettings Settings { get; internal set; }
+        public SessionSettings Settings { get; internal set; }
 
         public Guid Guid
         {
@@ -43,18 +43,18 @@ namespace Azure.Workflow.Core.Implementation
 
         public string SessionName { get; set; }
 
-        internal WorkflowModuleSettings DefaultModuleSettings { get; set; }
+        public ServerShotModuleSettings DefaultModuleSettings { get; internal set; }
 
-        public event Action<WorkflowSession> OnSessionFinished;
-        public event Action<IWorkflowModule, string> OnFailure;
+        public event Action<ServerShotSession> OnSessionFinished;
+        public event Action<IServerShotModule, string> OnFailure;
 
-        public WorkflowSession()
+        public ServerShotSession()
         {
-            Settings = new WorkflowSessionSettings();
+            Settings = new SessionSettings();
 
-            RunningModules = new ObservableCollection<IWorkflowModule>();
+            RunningModules = new ObservableCollection<IServerShotModule>();
             Modules = new List<object>();
-            Plugins = new List<WorkflowSessionPluginBase>();
+            Plugins = new List<ServerShotSessionPluginBase>();
             StopStrategy = new ContinousProcessingStategy();
             HookRunningModules();
 
@@ -64,7 +64,7 @@ namespace Azure.Workflow.Core.Implementation
             }
         }
 
-        public WorkflowSession(WorkflowEnvironment environment = null)
+        public ServerShotSession(WorkflowEnvironment environment = null)
             : this()
         {
             Environment = environment ?? EnvironmentHelpers.BuildStandardEnvironment();
@@ -96,17 +96,17 @@ namespace Azure.Workflow.Core.Implementation
             Ended = DateTime.Now;
         }
 
-        private IWorkflowModule ResolveModule(object o)
+        private IServerShotModule ResolveModule(object o)
         {
-            if (o is IWorkflowModule)
+            if (o is IServerShotModule)
             {
-                return o as IWorkflowModule;
+                return o as IServerShotModule;
             }
             if (o is Type)
             {
-                return Environment.IOCContainer.Get<IWorkflowModule>(o as Type);
+                return Environment.IOCContainer.Get<IServerShotModule>(o as Type);
             }
-            throw new WorkflowConfigurationException("Type " + o + " added to module list. Not supported. Use type or IWorkflowModule", null);
+            throw new WorkflowConfigurationException("Type " + o + " added to module list. Not supported. Use type or IServerShotModule", null);
         }
 
         private async Task ProcessingStopMonitoring()
@@ -115,22 +115,16 @@ namespace Azure.Workflow.Core.Implementation
             {
                 if (StopStrategy.ShouldStop(this))
                 {
-                    Modules.ForEach(x =>
-                    {
-                        if (x is IQueueProcessingWorkflowModule)
-                        {
-                            (x as IQueueProcessingWorkflowModule).Stop();
-                        }
-                    });
+                    Stop();
                 }
 
-                foreach (IWorkflowModule module in Modules.OfType<IWorkflowModule>())
+                foreach (IServerShotModule module in Modules.OfType<IServerShotModule>())
                 {
                     if (StopStrategy.ShouldSpecificModuleStop(module))
                     {
-                        if (module is IQueueProcessingWorkflowModule)
+                        if (module is IQueueProcessingServerShotModule)
                         {
-                            (module as IQueueProcessingWorkflowModule).Stop();
+                            (module as IQueueProcessingServerShotModule).Stop();
                         }
                     }
                 }
@@ -139,13 +133,24 @@ namespace Azure.Workflow.Core.Implementation
             }
         }
 
+        public void Stop()
+        {
+            Modules.ForEach(x =>
+            {
+                if (x is IServerShotModule)
+                {
+                    (x as IServerShotModule).Stop();
+                }
+            });
+        }
+
         #region Helpers
 
         private void ValidateStart()
         {
             if (Settings == null)
             {
-                Settings = new WorkflowSessionSettings();
+                Settings = new SessionSettings();
             }
 
             if (CloudQueueFactory == null)
@@ -154,7 +159,7 @@ namespace Azure.Workflow.Core.Implementation
             }
         }
 
-        internal void ValidatePlugin(WorkflowSessionPluginBase plugin)
+        internal void ValidatePlugin(ServerShotSessionPluginBase plugin)
         {
             string message = "";
             if ((message = plugin.Validate(this)) != null)
@@ -169,7 +174,7 @@ namespace Azure.Workflow.Core.Implementation
             {
                 if (args.Action == NotifyCollectionChangedAction.Add)
                 {
-                    var newItem = args.NewItems[0] as IWorkflowModule;
+                    var newItem = args.NewItems[0] as IServerShotModule;
                     newItem.Queue = CloudQueueFactory.CreateQueue(newItem);
                     newItem.Session = this;
                     if (this.DefaultModuleSettings != null) newItem.Settings = this.DefaultModuleSettings;
@@ -178,7 +183,7 @@ namespace Azure.Workflow.Core.Implementation
             };
         }
 
-        private void HookModule(IWorkflowModule newItem)
+        private void HookModule(IServerShotModule newItem)
         {
             newItem.OnFailure += (s, exceptions) =>
             {
@@ -186,10 +191,11 @@ namespace Azure.Workflow.Core.Implementation
                 {
                     OnFailure(newItem, "Module " + newItem.QueueName + " failed : " + s);
                 }
+                this.Stop();
             };
         }
 
-        private void RegisterFinished(WorkflowSession session)
+        private void RegisterFinished(ServerShotSession session)
         {
             if (OnSessionFinished != null)
             {
@@ -201,14 +207,14 @@ namespace Azure.Workflow.Core.Implementation
 
         #region Builder
 
-        public static WorkflowSessionBuilder StartBuild()
+        public static ServerShotSessionBuilder StartBuild()
         {
-            return new WorkflowSessionBuilder(new WorkflowSession());
+            return new ServerShotSessionBuilder(new ServerShotSession());
         }
 
-        public static WorkflowSessionBuilder StartBuildWithSession(WorkflowSession session)
+        public static ServerShotSessionBuilder StartBuildWithSession(ServerShotSession session)
         {
-            return new WorkflowSessionBuilder(session);
+            return new ServerShotSessionBuilder(session);
         }
 
         #endregion
@@ -218,7 +224,7 @@ namespace Azure.Workflow.Core.Implementation
         public virtual void AddToQueue(Type workflowModuleType, IEnumerable<object> batch)
         {
             Type type = workflowModuleType;
-            IWorkflowModule module = RunningModules.SingleOrDefault(x => x.GetType() == type);
+            IServerShotModule module = RunningModules.SingleOrDefault(x => x.GetType() == type);
             module.Queue.AddToAsync(batch);
         }
 

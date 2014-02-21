@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Interfaces;
-using Azure.Workflow.Core.Plugins;
-using Azure.Workflow.Core.Architecture;
+using ServerShot.Framework.Core.Interfaces;
+using ServerShot.Framework.Core.Plugins;
+using ServerShot.Framework.Core.Architecture;
 
-namespace Azure.Workflow.Core.Implementation.Reporting
+namespace ServerShot.Framework.Core.Implementation.Reporting
 {
     public class SendGridReportGenerator : ReportGenerationPlugin
     {
-        public override void SendSessionReport(WorkflowSession workflowSession, IEnumerable<ModuleProcessingSummary> moduleSummaries)
+        public override void SendSessionReport(ServerShotSession ServerShotSession, IEnumerable<ModuleProcessingSummary> moduleSummaries)
         {
             throw new NotImplementedException();
         }

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Implementation;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Implementation;
 
-namespace Azure.Workflow.Core.Interfaces
+namespace ServerShot.Framework.Core.Interfaces
 {
     public interface IProcessingStopStrategy
     {
-        bool ShouldStop(WorkflowSession session);
-        bool ShouldSpecificModuleStop(IWorkflowModule module);
+        bool ShouldStop(ServerShotSession session);
+        bool ShouldSpecificModuleStop(IServerShotModule module);
     }
 }

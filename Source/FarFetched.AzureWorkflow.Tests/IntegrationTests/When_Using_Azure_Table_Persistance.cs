@@ -1,9 +1,10 @@
-﻿using System.Security.Authentication;
+﻿using System;
+using System.Security.Authentication;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Implementation.Persistance;
+using ServerShot.Framework.Core.Implementation.Persistance;
 using NUnit.Framework;
 
-namespace Azure.Workflow.Tests.IntegrationTests
+namespace ServerShot.Framework.Tests.IntegrationTests
 {
     public class When_Using_Azure_Table_Persistance
     {
@@ -28,9 +29,9 @@ namespace Azure.Workflow.Tests.IntegrationTests
 
             AzureTablePersistance azureTable = CreateTablePersistanceClient();
             azureTable.TableName = tableName;
-            await azureTable.OnStoreAsync(key, value);
+            await azureTable.StoreAsync(key, value);
 
-            Assert.IsTrue((bool)await azureTable.OnRetrieveAsync(key) == value);
+            Assert.IsTrue(await azureTable.RetrieveAsync<bool>(key) == value);
         }
 
         [Test]
@@ -42,10 +43,10 @@ namespace Azure.Workflow.Tests.IntegrationTests
 
             AzureTablePersistance azureTable = new AzureTablePersistance("", "");
             azureTable.TableName = tableName;
-            await azureTable.OnStoreAsync(key, value);
+            await azureTable.StoreAsync(key, value);
         }
 
-         [Test]
+        [Test]
         public async Task Items_Can_Be_Replaced()
         {
             string key = "apple";
@@ -55,14 +56,13 @@ namespace Azure.Workflow.Tests.IntegrationTests
 
             AzureTablePersistance azureTable = CreateTablePersistanceClient();
             azureTable.TableName = tableName;
-            await azureTable.OnStoreAsync(key, value);
+            await azureTable.StoreAsync(key, value);
 
-            Assert.IsTrue((bool)await azureTable.OnRetrieveAsync(key) == value);
+            Assert.IsTrue(await azureTable.RetrieveAsync<bool>(key) == value);
 
-            await azureTable.OnStoreAsync(key, newValue);
+            await azureTable.StoreAsync(key, newValue);
 
-            Assert.IsTrue((bool)await azureTable.OnRetrieveAsync(key) == newValue);
+            Assert.IsTrue(await azureTable.RetrieveAsync<bool>(key) == newValue);
         }
-
     }
 }

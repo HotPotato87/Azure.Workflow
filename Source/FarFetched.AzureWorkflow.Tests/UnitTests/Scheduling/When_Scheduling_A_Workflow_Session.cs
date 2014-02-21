@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core;
-using Azure.Workflow.Core.Entities.Scheduler;
-using Azure.Workflow.Core.Entities.Scheduler.Deployments;
-using Azure.Workflow.Core.Extentions;
-using Azure.Workflow.Core.Implementation;
+using ServerShot.Framework.Core;
+using ServerShot.Framework.Core.Entities.Scheduler;
+using ServerShot.Framework.Core.Entities.Scheduler.Deployments;
+using ServerShot.Framework.Core.Extentions;
+using ServerShot.Framework.Core.Implementation;
 using Moq;
 using NUnit.Framework;
 
-namespace Azure.Workflow.Tests.UnitTests
+namespace ServerShot.Framework.Tests.UnitTests
 {
     [TestFixture]
     public class When_Scheduling_A_Workflow_Session
@@ -19,7 +19,7 @@ namespace Azure.Workflow.Tests.UnitTests
         [Test]
         public async Task Developer_Can_Specify_A_Deployment_Strategy()
         {
-            var stubSession = new Mock<WorkflowSession>();
+            var stubSession = new Mock<ServerShotSession>();
             IDeploymentStrategy strategy = new LocalDeploymentStrategy();
 
             await WorkflowScheduler.Build()
@@ -41,7 +41,7 @@ namespace Azure.Workflow.Tests.UnitTests
         [ExpectedException(typeof(WorkflowConfigurationException), ExpectedMessage = "There is no deployment strategy added to this scheduler. Please add one before execution")]
         public async Task Calling_Run_Now_With_No_Deployment_Strategy_Throws_Exception()
         {
-            var stubSession = new Mock<WorkflowSession>();
+            var stubSession = new Mock<ServerShotSession>();
             await WorkflowScheduler.Build()
                 .AddSession(stubSession.Object)
                  .BeginSchedulerAsync();

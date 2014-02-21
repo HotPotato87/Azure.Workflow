@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.Interfaces;
 using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.Interfaces;
 
-namespace Azure.Workflow.Core.ServiceBus
+namespace ServerShot.Framework.Core.ServiceBus
 {
     public class AzureServiceBusQueue : ICloudQueue
     {

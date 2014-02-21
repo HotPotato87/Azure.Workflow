@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.Plugins.Alerts;
-using Azure.Workflow.Core.ServiceBus;
-using Azure.Workflow.Core.Builder;
-using Azure.Workflow.Tests.IntegrationTests;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.Plugins.Alerts;
+using ServerShot.Framework.Core.ServiceBus;
+using ServerShot.Framework.Core.Builder;
+using ServerShot.Framework.Tests.IntegrationTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NUnit.Framework;
 
-namespace Azure.Workflow.Tests.IntegrationTests
+namespace ServerShot.Framework.Tests.IntegrationTests
 {
     [TestClass]
     public class When_Running_A_Workflow_Session_And_The_Alert_Plugin_Is_Loaded
@@ -25,7 +25,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
             var alertManager = new Mock<AlertManagerBase>();
 
             //act
-            await WorkflowSession.StartBuild()
+            await ServerShotSession.StartBuild()
                 .AddModule(new Fakes.AlertModuleFake(message))
                 .WithQueueMechanism(new InMemoryQueueFactory())
                 .AttachAlertManager(alertManager.Object)

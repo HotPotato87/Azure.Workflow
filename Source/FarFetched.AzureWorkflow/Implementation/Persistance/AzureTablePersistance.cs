@@ -4,11 +4,12 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Plugins.Persistance;
+using System.Windows.Forms.VisualStyles;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using ServerShot.Framework.Core.Plugins.Persistance;
 
-namespace Azure.Workflow.Core.Implementation.Persistance
+namespace ServerShot.Framework.Core.Implementation.Persistance
 {
     public class AzureTablePersistance : PersistanceManagerBase
     {
@@ -18,6 +19,7 @@ namespace Azure.Workflow.Core.Implementation.Persistance
         private CloudStorageAccount _storageAccount;
         private CloudTable _table;
         private bool _isInitialised = false;
+        private CloudTableClient _tableClient;
 
         public AzureTablePersistance(string accountName, string accountKey)
         {
@@ -30,17 +32,22 @@ namespace Azure.Workflow.Core.Implementation.Persistance
             _accountKey = accountKey;
         }
 
-        public override string Validate(WorkflowSession module)
+        public AzureTablePersistance(string accountName, string accountKey, string tableName) : this(accountName, accountKey)
+        {
+            this.TableName = tableName;
+        }
+
+        public override string Validate(ServerShotSession module)
         {
             if (string.IsNullOrEmpty(module.SessionName))
             {
-                return "Workflow session must specify a name for Azure table persistance to be used. See WorkflowSession.SessionName";
+                return "ServerShot session must specify a name for Azure table persistance to be used. See ServerShotSession.SessionName";
             }
 
             return base.Validate(module);
         }
 
-        public override async Task OnStoreAsync(string key, object o)
+        protected override async Task OnStoreAsync(string key, object o)
         {
             if (!this._isInitialised) await Initialize();
 
@@ -53,22 +60,58 @@ namespace Azure.Workflow.Core.Implementation.Persistance
             _table.Execute(operation);
         }
 
-        public override async Task<object> OnRetrieveAsync(string key)
+        protected override async Task<T> OnRetrieveAsync<T>(string key)
         {
             if (!this._isInitialised) await Initialize();
 
             var prop = _table.CreateQuery<DynamicTableEntity>();
             var result = _table.ExecuteQuery(prop).FirstOrDefault();
-            return result[key].PropertyAsObject;
+            return (T)result[key].PropertyAsObject;
         }
 
-        private async Task Initialize()
+        protected override async Task OnStoreEnumerableAsync(string table, object o)
         {
+            this.TableName = table;
+            if (!this._isInitialised) await Initialize();
+
+            var entity1 = new DynamicTableEntity();
+            entity1.PartitionKey = table;
+            entity1.RowKey = DateTime.Now.Ticks.ToString();
+            entity1["item"] = EntityProperty.CreateEntityPropertyFromObject(o);
+
+            TableOperation operation = TableOperation.InsertOrReplace(entity1);
+            _table.Execute(operation);
+        }
+
+        protected override async Task<IEnumerable<T>> OnRetrieveEnumerableAsync<T>(string table)
+        {
+            this.TableName = table;
+            if (!this._isInitialised) await Initialize();
+
+            var prop = _table.CreateQuery<DynamicTableEntity>();
+            var result = _table.ExecuteQuery(prop).ToList();
+            return result.Select(x=>x["item"].PropertyAsObject).Cast<T>();
+        }
+
+        private async Task Initialize(string tableName = "")
+        {
+            if (string.IsNullOrEmpty(this.TableName))
+            {
+                if (string.IsNullOrEmpty(tableName))
+                {
+                    throw new Exception("TableName has not been set");
+                }
+                else
+                {
+                    this.TableName = tableName;
+                }
+            }
+
             _storageAccount = CloudStorageAccount.Parse(String.Format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", _accountName, _accountKey));
 
-            CloudTableClient tableClient = _storageAccount.CreateCloudTableClient();
+            _tableClient = _storageAccount.CreateCloudTableClient();
 
-            _table = tableClient.GetTableReference(this.TableName);
+            _table = _tableClient.GetTableReference(this.TableName);
 
             if (!await _table.ExistsAsync())
             {
@@ -76,6 +119,13 @@ namespace Azure.Workflow.Core.Implementation.Persistance
             }
 
             this._isInitialised = true;
+        }
+
+        public async Task DeleteTableAsync(string tableName)
+        {
+            if (!this._isInitialised) await Initialize(tableName);
+
+            await _table.DeleteAsync();
         }
     }
 }

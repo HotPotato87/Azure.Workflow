@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Azure.Workflow.Core.Implementation;
+using ServerShot.Framework.Core.Implementation;
 
-namespace Azure.Workflow.Core.Entities.Scheduler.Deployments
+namespace ServerShot.Framework.Core.Entities.Scheduler.Deployments
 {
     public interface IDeploymentStrategy
     {
-        Task Deploy(WorkflowSession session);
+        Task Deploy(ServerShotSession session);
     }
 }

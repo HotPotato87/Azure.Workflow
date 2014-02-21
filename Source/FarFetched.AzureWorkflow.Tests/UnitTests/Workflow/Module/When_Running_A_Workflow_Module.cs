@@ -5,19 +5,19 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core;
-using Azure.Workflow.Core.Enums;
-using Azure.Workflow.Core.Interfaces;
-using Azure.Workflow.Core.Plugins.Alerts;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.ServiceBus;
+using ServerShot.Framework.Core;
+using ServerShot.Framework.Core.Enums;
+using ServerShot.Framework.Core.Interfaces;
+using ServerShot.Framework.Core.Plugins.Alerts;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace Azure.Workflow.Tests.UnitTests
+namespace ServerShot.Framework.Tests.UnitTests
 {
     [TestFixture]
     partial class When_Running_A_Workflow_Module
@@ -40,7 +40,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Modules_Call_Started_Event_On_Start()
         {
             //arrange
-            var mock = new Mock<QueueProcessingWorkflowModule<object>>(MockBehavior.Loose);
+            var mock = new Mock<QueueProcessingServerShotModule<object>>(MockBehavior.Loose);
             mock.Setup(x => x.OnStart()).Returns(async () => { });
             var module = mock.Object;
             module.Queue = DefaultEmptyQueue;
@@ -62,7 +62,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Module_Calls_Event_Finished_When_Done()
         {
             //arrange
-            var mock = new Mock<QueueProcessingWorkflowModule<object>>(MockBehavior.Loose);
+            var mock = new Mock<QueueProcessingServerShotModule<object>>(MockBehavior.Loose);
             mock.Setup(x => x.OnStart()).Returns(async () => { });
             var module = mock.Object;
             module.Queue = DefaultEmptyQueue;
@@ -83,7 +83,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Module_Calls_Event_Error_On_Error()
         {
             //arrange
-            var mock = new Mock<QueueProcessingWorkflowModule<object>>(MockBehavior.Loose);
+            var mock = new Mock<QueueProcessingServerShotModule<object>>(MockBehavior.Loose);
             var module = mock.Object;
             mock.Setup(x => x.OnStart()).Throws<Exception>();
             module.Queue = DefaultEmptyQueue;
@@ -103,7 +103,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Module_State_Waiting_On_Construction()
         {
             //arrange
-            var mock = new Mock<QueueProcessingWorkflowModule<object>>(MockBehavior.Loose);
+            var mock = new Mock<QueueProcessingServerShotModule<object>>(MockBehavior.Loose);
             var module = mock.Object;
             module.Queue = DefaultEmptyQueue;
 
@@ -115,7 +115,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Module_State_Error_On_Error()
         {
             //arrange
-            var mock = new Mock<QueueProcessingWorkflowModule<object>>(MockBehavior.Loose);
+            var mock = new Mock<QueueProcessingServerShotModule<object>>(MockBehavior.Loose);
             mock.Setup(x => x.OnStart()).Throws<Exception>();
             var module = mock.Object;
             module.Queue = DefaultEmptyQueue;
@@ -156,7 +156,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Module_Calls_Log_When_Starting_Processing()
         {
             //arrange
-            var mock = new Mock<QueueProcessingWorkflowModule<object>>(MockBehavior.Loose);
+            var mock = new Mock<QueueProcessingServerShotModule<object>>(MockBehavior.Loose);
             mock.Setup(x => x.OnStart()).Returns(async() => { });
             var module = mock.Object;
             module.Queue = DefaultEmptyQueue;
@@ -178,7 +178,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Module_Records_Where_Data_Is_Sent_To()
         {
             var fakeSendModule = new FakeSendToModule(typeof (AlertStub), 5);
-            var stubSession = new Mock<WorkflowSession>();
+            var stubSession = new Mock<ServerShotSession>();
             fakeSendModule.Session = stubSession.Object;
 
             await fakeSendModule.StartAsync();
@@ -188,7 +188,7 @@ namespace Azure.Workflow.Tests.UnitTests
         }
     }
 
-    public class AlertStub : WorkflowModuleBase<object>
+    public class AlertStub : ServerShotModuleBase<object>
     {
         private readonly Alert _alert;
 
@@ -203,7 +203,7 @@ namespace Azure.Workflow.Tests.UnitTests
         }
     }
 
-    public class FakeSendToModule : WorkflowModuleBase<object>
+    public class FakeSendToModule : ServerShotModuleBase<object>
     {
         private readonly Type _sendToType;
         private readonly int _times;

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Implementation.Persistance;
-using Azure.Workflow.Core.Plugins.Persistance;
+using ServerShot.Framework.Core.Implementation.Persistance;
+using ServerShot.Framework.Core.Plugins.Persistance;
 
 namespace FarFetched.AzureWorkflow.Tests.Helpers
 {

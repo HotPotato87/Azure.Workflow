@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core;
-using Azure.Workflow.Core.Enums;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.Interfaces;
-using Azure.Workflow.Core.Plugins;
-using Azure.Workflow.Core.Plugins.Alerts;
+using ServerShot.Framework.Core;
+using ServerShot.Framework.Core.Enums;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.Interfaces;
+using ServerShot.Framework.Core.Plugins;
+using ServerShot.Framework.Core.Plugins.Alerts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Azure.Workflow.Tests.IntegrationTests
+namespace ServerShot.Framework.Tests.IntegrationTests
 {
     internal class Fakes
     {
-        internal class AddsToQueueProcessingFake : InitialWorkflowModule<object>
+        internal class AddsToQueueProcessingFake : InitialServerShotModule<object>
         {
             private readonly List<object> _payload;
             private readonly Type _typeToSendTo;
@@ -33,14 +33,14 @@ namespace Azure.Workflow.Tests.IntegrationTests
             }
         }
 
-        internal class ThrowsErrorModule : InitialWorkflowModule<object>
+        internal class ThrowsErrorModule : InitialServerShotModule<object>
         {
             private readonly Exception _e;
             private readonly int _times;
             private readonly List<object> _payload;
             private readonly Type _typeToSendTo;
 
-            public ThrowsErrorModule(Exception e, int times, WorkflowModuleSettings settings = null)
+            public ThrowsErrorModule(Exception e, int times, ServerShotModuleSettings settings = null)
                 : base(settings)
             {
                 _e = e;
@@ -56,7 +56,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
             }
         }
 
-        internal class RecievesFromQueueProcessingFake : QueueProcessingWorkflowModule<object>
+        internal class RecievesFromQueueProcessingFake : QueueProcessingServerShotModule<object>
         {
             public RecievesFromQueueProcessingFake()
             {
@@ -73,7 +73,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
             public IEnumerable<object> Recieved { get; set; }
         }
 
-        internal class QueueProcessingThowsErrorFake : QueueProcessingWorkflowModule<object>
+        internal class QueueProcessingThowsErrorFake : QueueProcessingServerShotModule<object>
         {
             private readonly Func<Exception> _exceptionFactory;
 
@@ -92,7 +92,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
             public IEnumerable<object> Recieved { get; set; }
         }
 
-        internal class CategorisesProcessingResultFake : QueueProcessingWorkflowModule<object>
+        internal class CategorisesProcessingResultFake : QueueProcessingServerShotModule<object>
         {
             private readonly List<Tuple<object, string>> _processMessages;
 
@@ -113,7 +113,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
             public IEnumerable<object> Recieved { get; set; }
         }
 
-        internal class QueueProcessingThowsException : QueueProcessingWorkflowModule<object>
+        internal class QueueProcessingThowsException : QueueProcessingServerShotModule<object>
         {
             private readonly Func<Exception> _exceptionFactory;
 
@@ -130,7 +130,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
             public IEnumerable<object> Recieved { get; set; }
         }
 
-        internal class LogsMessageFake : QueueProcessingWorkflowModule<object>
+        internal class LogsMessageFake : QueueProcessingServerShotModule<object>
         {
             private readonly string _message;
 
@@ -145,7 +145,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
             }
         }
 
-        internal class AlertModuleFake : InitialWorkflowModule<object>
+        internal class AlertModuleFake : InitialServerShotModule<object>
         {
             private readonly string _message;
 
@@ -162,11 +162,11 @@ namespace Azure.Workflow.Tests.IntegrationTests
 
         internal class ReportGenerationFake : ReportGenerationPlugin
         {
-            internal WorkflowSession Session { get; private set; }
+            internal ServerShotSession Session { get; private set; }
 
-            public override void SendSessionReport(WorkflowSession workflowSession, IEnumerable<ModuleProcessingSummary> moduleSummaries)
+            public override void SendSessionReport(ServerShotSession ServerShotSession, IEnumerable<ModuleProcessingSummary> moduleSummaries)
             {
-                this.Session = workflowSession;
+                this.Session = ServerShotSession;
             }
         }
     }

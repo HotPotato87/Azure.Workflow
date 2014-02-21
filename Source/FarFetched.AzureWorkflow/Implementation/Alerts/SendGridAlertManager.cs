@@ -1,7 +1,7 @@
 ﻿using System;
-using Azure.Workflow.Core.Plugins.Alerts;
+using ServerShot.Framework.Core.Plugins.Alerts;
 
-namespace Azure.Workflow.Core.Implementation
+namespace ServerShot.Framework.Core.Implementation
 {
     public class SendGridAlertManager : AlertManagerBase
     {

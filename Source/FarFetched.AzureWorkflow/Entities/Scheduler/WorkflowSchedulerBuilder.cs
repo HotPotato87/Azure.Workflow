@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Azure.Workflow.Core.Entities.Scheduler
+namespace ServerShot.Framework.Core.Entities.Scheduler
 {
     public class WorkflowSchedulerBuilder
     {

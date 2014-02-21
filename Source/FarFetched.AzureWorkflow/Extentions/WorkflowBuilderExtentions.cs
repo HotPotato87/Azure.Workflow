@@ -1,105 +1,105 @@
 ﻿using System.Threading.Tasks;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Entities;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.Interfaces;
-using Azure.Workflow.Core.Plugins;
-using Azure.Workflow.Core.Plugins.Alerts;
-using Azure.Workflow.Core.Plugins.Persistance;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Entities;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.Interfaces;
+using ServerShot.Framework.Core.Plugins;
+using ServerShot.Framework.Core.Plugins.Alerts;
+using ServerShot.Framework.Core.Plugins.Persistance;
 
-namespace Azure.Workflow.Core.Builder
+namespace ServerShot.Framework.Core.Builder
 {
     public static class WorkflowBuilderExtentions
     {
-        public static WorkflowSessionBuilder AddName(this WorkflowSessionBuilder builder, string name)
+        public static ServerShotSessionBuilder AddName(this ServerShotSessionBuilder builder, string name)
         {
-            builder.WorkflowSession.SessionName = name;
+            builder.ServerShotSession.SessionName = name;
 
             return builder;
         }
 
-        public static WorkflowSessionBuilder AddModule<T>(this WorkflowSessionBuilder builder) where T : IWorkflowModule
+        public static ServerShotSessionBuilder AddModule<T>(this ServerShotSessionBuilder builder) where T : IServerShotModule
         {
-            builder.WorkflowSession.Modules.Add(typeof (T));
+            builder.ServerShotSession.Modules.Add(typeof (T));
 
             return builder;
         }
 
-        public static WorkflowSessionBuilder AddModule(this WorkflowSessionBuilder builder, IWorkflowModule module)
+        public static ServerShotSessionBuilder AddModule(this ServerShotSessionBuilder builder, IServerShotModule module)
         {
-            builder.WorkflowSession.Modules.Add(module);
+            builder.ServerShotSession.Modules.Add(module);
 
             return builder;
         }
 
-        public static WorkflowSessionBuilder WithQueueMechanism(this WorkflowSessionBuilder builder, ICloudQueueFactory cloudQueueFactory)
+        public static ServerShotSessionBuilder WithQueueMechanism(this ServerShotSessionBuilder builder, ICloudQueueFactory cloudQueueFactory)
         {
-            builder.WorkflowSession.CloudQueueFactory = cloudQueueFactory;
+            builder.ServerShotSession.CloudQueueFactory = cloudQueueFactory;
 
             return builder;
         }
 
-        public static WorkflowSessionBuilder WithSessionStopStrategy(this WorkflowSessionBuilder builder, IProcessingStopStrategy stopStrategy)
+        public static ServerShotSessionBuilder WithSessionStopStrategy(this ServerShotSessionBuilder builder, IProcessingStopStrategy stopStrategy)
         {
-            builder.WorkflowSession.StopStrategy = stopStrategy;
+            builder.ServerShotSession.StopStrategy = stopStrategy;
 
             return builder;
         }
 
-        public static WorkflowSessionBuilder ConfigureDefaultModuleSettings(this WorkflowSessionBuilder builder, WorkflowModuleSettings settings)
+        public static ServerShotSessionBuilder ConfigureDefaultModuleSettings(this ServerShotSessionBuilder builder, ServerShotModuleSettings settings)
         {
-            builder.WorkflowSession.DefaultModuleSettings = settings;
+            builder.ServerShotSession.DefaultModuleSettings = settings;
 
             return builder;
         }
 
-        public static WorkflowSessionBuilder ConfigureSessionSettings(this WorkflowSessionBuilder builder, WorkflowSessionSettings settings)
+        public static ServerShotSessionBuilder ConfigureSessionSettings(this ServerShotSessionBuilder builder, SessionSettings settings)
         {
-            builder.WorkflowSession.Settings = settings;
+            builder.ServerShotSession.Settings = settings;
 
             return builder;
         }
 
-        public static WorkflowSessionBuilder AttachReportGenerator(this WorkflowSessionBuilder builder, ReportGenerationPlugin report)
+        public static ServerShotSessionBuilder AttachReportGenerator(this ServerShotSessionBuilder builder, ReportGenerationPlugin report)
         {
-            builder.WorkflowSession.Plugins.Add(report);
+            builder.ServerShotSession.Plugins.Add(report);
 
             return builder;
         }
 
-        public static WorkflowSessionBuilder AttachAlertManager(this WorkflowSessionBuilder builder, AlertManagerBase alertManager)
+        public static ServerShotSessionBuilder AttachAlertManager(this ServerShotSessionBuilder builder, AlertManagerBase alertManager)
         {
-            builder.WorkflowSession.Plugins.Add(alertManager);
+            builder.ServerShotSession.Plugins.Add(alertManager);
 
             return builder;
         }
 
-        public static WorkflowSessionBuilder AttachLogger(this WorkflowSessionBuilder builder, LogManagerBase logger)
+        public static ServerShotSessionBuilder AttachLogger(this ServerShotSessionBuilder builder, LogManagerBase logger)
         {
-            builder.WorkflowSession.Plugins.Add(logger);
+            builder.ServerShotSession.Plugins.Add(logger);
 
             return builder;
         }
 
-        public static WorkflowSessionBuilder AttachPersistance(this WorkflowSessionBuilder builder,
+        public static ServerShotSessionBuilder AttachPersistance(this ServerShotSessionBuilder builder,
             PersistanceManagerBase persistance)
         {
-            builder.WorkflowSession.Plugins.Add(persistance);
+            builder.ServerShotSession.Plugins.Add(persistance);
 
             return builder;
         }
 
-        public static WorkflowSessionBuilder AttachPlugin(this WorkflowSessionBuilder builder, WorkflowSessionPluginBase plugin)
+        public static ServerShotSessionBuilder AttachPlugin(this ServerShotSessionBuilder builder, ServerShotSessionPluginBase plugin)
         {
-            builder.WorkflowSession.Plugins.Add(plugin);
+            builder.ServerShotSession.Plugins.Add(plugin);
 
             return builder;
         }
 
-        public static async Task<WorkflowSession> RunAsync(this WorkflowSessionBuilder builder)
+        public static async Task<ServerShotSession> RunAsync(this ServerShotSessionBuilder builder)
         {
-            await builder.WorkflowSession.Start();
-            return builder.WorkflowSession;
+            await builder.ServerShotSession.Start();
+            return builder.ServerShotSession;
         }
     }
 }

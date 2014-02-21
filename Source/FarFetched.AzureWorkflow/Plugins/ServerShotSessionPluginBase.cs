@@ -4,16 +4,16 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Implementation;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Implementation;
 
-namespace Azure.Workflow.Core.Plugins
+namespace ServerShot.Framework.Core.Plugins
 {
-    public abstract class WorkflowSessionPluginBase
+    public abstract class ServerShotSessionPluginBase
     {
-        protected WorkflowSession Session { get; set; }
+        protected ServerShotSession Session { get; set; }
 
-        internal virtual void OnSessionStarted(WorkflowSession session)
+        internal virtual void OnSessionStarted(ServerShotSession session)
         {
             this.Session = session;
 
@@ -23,15 +23,15 @@ namespace Azure.Workflow.Core.Plugins
                 {
                     foreach (var module in  args.NewItems)
                     {
-                        this.OnModuleStarted(module as IWorkflowModule);
+                        this.OnModuleStarted(module as IServerShotModule);
                     }    
                 }
             };
         }
 
-        internal abstract void OnModuleStarted(IWorkflowModule module);
+        internal abstract void OnModuleStarted(IServerShotModule module);
 
-        public virtual string Validate(WorkflowSession module)
+        public virtual string Validate(ServerShotSession module)
         {
             return null;
         }

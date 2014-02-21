@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Interfaces;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Interfaces;
 using Moq;
 
-namespace Azure.Workflow.Tests.Helpers
+namespace ServerShot.Framework.Tests.Helpers
 {
     public static class TestHelpers
     {
         public static Mock<ICloudQueueFactory> CreateNonEmptyStubQueueFactory()
         {
             var mockFactory = new Mock<ICloudQueueFactory>();
-            mockFactory.Setup(x => x.CreateQueue(It.IsAny<IWorkflowModule>())).Returns(() => CreateNonEmptyCloudQueue().Object);
+            mockFactory.Setup(x => x.CreateQueue(It.IsAny<IServerShotModule>())).Returns(() => CreateNonEmptyCloudQueue().Object);
             return mockFactory;
         }
 

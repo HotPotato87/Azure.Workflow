@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Interfaces;
-using Azure.Workflow.Core.Plugins;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Interfaces;
+using ServerShot.Framework.Core.Plugins;
 
-namespace Azure.Workflow.Core.Implementation.Reporting
+namespace ServerShot.Framework.Core.Implementation.Reporting
 {
     public class ConsoleReportGenerator : ReportGenerationPlugin
     {
-        public override void SendSessionReport(WorkflowSession workflowSession, IEnumerable<ModuleProcessingSummary> moduleSummaries)
+        public override void SendSessionReport(ServerShotSession ServerShotSession, IEnumerable<ModuleProcessingSummary> moduleSummaries)
         {
             Console.WriteLine();
             Console.WriteLine("*****************************");
@@ -57,7 +57,7 @@ namespace Azure.Workflow.Core.Implementation.Reporting
             Console.WriteLine("********* Finished! *********");
         }
 
-        public Func<IWorkflowModule, string> WorkflowDetail { get; set; }
+        public Func<IServerShotModule, string> WorkflowDetail { get; set; }
 
         //All 5 modules completed successfully
         //4 modules completed successfully, 1 error

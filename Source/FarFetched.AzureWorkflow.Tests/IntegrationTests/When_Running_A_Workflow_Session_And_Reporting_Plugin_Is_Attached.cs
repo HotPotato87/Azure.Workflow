@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Enums;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.ServiceBus;
-using Azure.Workflow.Core.Builder;
-using Azure.Workflow.Tests.IntegrationTests;
+using ServerShot.Framework.Core.Enums;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.ServiceBus;
+using ServerShot.Framework.Core.Builder;
+using ServerShot.Framework.Tests.IntegrationTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace Azure.Workflow.Tests.IntegrationTests
+namespace ServerShot.Framework.Tests.IntegrationTests
 {
 
     [TestClass]
@@ -42,7 +42,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
             var payLoad = new List<object>() {new object(), new object()};
 
             //act
-            await WorkflowSession.StartBuild()
+            await ServerShotSession.StartBuild()
                 .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.RecievesFromQueueProcessingFake)))
                 .AddModule(new Fakes.RecievesFromQueueProcessingFake())
                 .WithQueueMechanism(new InMemoryQueueFactory())
@@ -63,7 +63,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
             var sampleException = new Exception("Expected Exception");
 
             //act
-            await WorkflowSession.StartBuild()
+            await ServerShotSession.StartBuild()
                 .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.QueueProcessingThowsErrorFake)))
                 .AddModule(new Fakes.QueueProcessingThowsErrorFake(() => { return sampleException; }))
                 .WithQueueMechanism(new InMemoryQueueFactory())
@@ -84,11 +84,11 @@ namespace Azure.Workflow.Tests.IntegrationTests
 
            
             //act
-            await WorkflowSession.StartBuild()
+            await ServerShotSession.StartBuild()
                 .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
                 .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
                 .WithQueueMechanism(new InMemoryQueueFactory())
-                .WithSessionStopStrategy(new Azure.Workflow.Core.Implementation.StopStrategy.NoQueueInteractionTimeoutStopStrategy(TimeSpan.FromMilliseconds(1000)))
+                .WithSessionStopStrategy(new ServerShot.Framework.Core.Implementation.StopStrategy.NoQueueInteractionTimeoutStopStrategy(TimeSpan.FromMilliseconds(1000)))
                 .AttachReportGenerator(reportGenerator)
                 .RunAsync();
 
@@ -110,7 +110,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
             var payLoad = new List<object>() { new object(), new object() };
 
             //act
-            await WorkflowSession.StartBuild()
+            await ServerShotSession.StartBuild()
                 .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
                 .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
                 .WithQueueMechanism(new InMemoryQueueFactory())
@@ -132,7 +132,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
 
 
             //act
-            await WorkflowSession.StartBuild()
+            await ServerShotSession.StartBuild()
                 .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
                 .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
                 .WithQueueMechanism(new InMemoryQueueFactory())
@@ -153,7 +153,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
             var payLoad = new List<object>() { new object(), new object() };
 
             //act
-            await WorkflowSession.StartBuild()
+            await ServerShotSession.StartBuild()
                 .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
                 .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
                 .WithQueueMechanism(new InMemoryQueueFactory())

@@ -1,8 +1,8 @@
 ﻿using System;
-using Azure.Workflow.Core.Interfaces;
 using Ninject;
+using ServerShot.Framework.Core.Interfaces;
 
-namespace Azure.Workflow.Core.Implementation.IOC
+namespace ServerShot.Framework.Core.Implementation.IOC
 {
     public class NinjectIocContainer : IIocContainer
     {

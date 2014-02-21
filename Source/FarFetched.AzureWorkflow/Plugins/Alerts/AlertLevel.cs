@@ -1,4 +1,4 @@
-﻿namespace Azure.Workflow.Core.Plugins.Alerts
+﻿namespace ServerShot.Framework.Core.Plugins.Alerts
 {
     public enum AlertLevel
     {

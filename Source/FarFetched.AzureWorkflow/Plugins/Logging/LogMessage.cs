@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Azure.Workflow.Core.Plugins.Alerts
+namespace ServerShot.Framework.Core.Plugins.Alerts
 {
     public class LogMessage
     {

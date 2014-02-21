@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ninject;
 
-namespace Azure.Workflow.Core
+namespace ServerShot.Framework.Core
 {
     public static class IOC
     {

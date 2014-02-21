@@ -6,8 +6,8 @@
     <ProjectGuid>{FA63FA15-5172-4A15-9550-2AE0CFF75D98}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Azure.Workflow.Tests</RootNamespace>
-    <AssemblyName>Azure.Workflow.Tests</AssemblyName>
+    <RootNamespace>ServerShot.Framework.Tests</RootNamespace>
+    <AssemblyName>ServerShot.Framework.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -84,6 +84,7 @@
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session.cs" />
     <Compile Include="IntegrationTests\When_Using_Azure_Service_Bus.cs" />
     <Compile Include="IntegrationTests\When_Using_Azure_Table_Persistance.cs" />
+    <Compile Include="IntegrationTests\When_Using_Azure_Table_Persistance_Manager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session_And_The_Logging_Manager_Is_Attached.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session_And_Reporting_Plugin_Is_Attached.cs" />
@@ -103,13 +104,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FarFetched.AzureWorkflow\Azure.Workflow.Core.csproj">
-      <Project>{3f439eea-37b3-4e59-9556-af13886f9e19}</Project>
-      <Name>Azure.Workflow.Core</Name>
-    </ProjectReference>
+    <Folder Include="UnitTests\Environment\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UnitTests\Environment\" />
+    <ProjectReference Include="..\FarFetched.AzureWorkflow\ServerShot.Framework.csproj">
+      <Project>{3f439eea-37b3-4e59-9556-af13886f9e19}</Project>
+      <Name>ServerShot.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.Plugins.Alerts;
-using Azure.Workflow.Core.ServiceBus;
-using Azure.Workflow.Core.Builder;
-using Azure.Workflow.Tests.IntegrationTests;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.Plugins.Alerts;
+using ServerShot.Framework.Core.ServiceBus;
+using ServerShot.Framework.Core.Builder;
+using ServerShot.Framework.Tests.IntegrationTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NUnit.Framework;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 using CollectionAssert = Microsoft.VisualStudio.TestTools.UnitTesting.CollectionAssert;
 
-namespace Azure.Workflow.Tests.IntegrationTests
+namespace ServerShot.Framework.Tests.IntegrationTests
 {
 
     [TestClass]
@@ -28,14 +29,14 @@ namespace Azure.Workflow.Tests.IntegrationTests
             var logManager = new Mock<LogManagerBase>(MockBehavior.Loose);
 
             //act
-            await WorkflowSession.StartBuild()
+            await ServerShotSession.StartBuild()
                 .AddModule(new Fakes.LogsMessageFake(message))
                 .WithQueueMechanism(new InMemoryQueueFactory())
                 .AttachLogger(logManager.Object)
                 .RunAsync();
 
             //assert
-            logManager.Verify(x=>x.OnLogMessage(It.IsAny<LogMessage>()), Times.AtLeastOnce);
+            logManager.Verify(x=>x.OnLogMessage(It.IsAny<IServerShotModule>(), It.IsAny<LogMessage>()), Times.AtLeastOnce);
         }
     }
 }

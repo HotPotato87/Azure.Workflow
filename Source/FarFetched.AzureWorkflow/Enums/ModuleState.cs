@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Azure.Workflow.Core.Enums
+namespace ServerShot.Framework.Core.Enums
 {
     public enum ModuleState
     {

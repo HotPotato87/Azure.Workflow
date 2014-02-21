@@ -1,11 +1,11 @@
-﻿using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Interfaces;
+﻿using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Interfaces;
 
-namespace Azure.Workflow.Core.ServiceBus
+namespace ServerShot.Framework.Core.ServiceBus
 {
     public class InMemoryQueueFactory : ICloudQueueFactory
     {
-        public ICloudQueue CreateQueue(IWorkflowModule module)
+        public ICloudQueue CreateQueue(IServerShotModule module)
         {
             return new InMemoryQueue();
         }

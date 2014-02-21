@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Entities.Scheduler.Deployments;
-using Azure.Workflow.Core.Implementation;
+using ServerShot.Framework.Core.Entities.Scheduler.Deployments;
+using ServerShot.Framework.Core.Implementation;
 
-namespace Azure.Workflow.Core.Entities.Scheduler
+namespace ServerShot.Framework.Core.Entities.Scheduler
 {
     /// <summary>
     /// This component manages the deployment and execution of workflow sessions.
@@ -14,7 +14,7 @@ namespace Azure.Workflow.Core.Entities.Scheduler
     /// </summary>
     public class WorkflowScheduler
     {
-        public List<WorkflowSession> Session { get; internal set; }
+        public List<ServerShotSession> Session { get; internal set; }
         public IDeploymentStrategy DeploymentStrategy { get; internal set; }
 
         public static WorkflowSchedulerBuilder Build()
@@ -24,7 +24,7 @@ namespace Azure.Workflow.Core.Entities.Scheduler
 
         internal WorkflowScheduler()
         {
-            Session = new List<WorkflowSession>();
+            Session = new List<ServerShotSession>();
         }
 
         internal async Task RunAsync()

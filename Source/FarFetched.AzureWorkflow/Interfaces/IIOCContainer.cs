@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Azure.Workflow.Core.Interfaces
+namespace ServerShot.Framework.Core.Interfaces
 {
     public interface IIocContainer
     {

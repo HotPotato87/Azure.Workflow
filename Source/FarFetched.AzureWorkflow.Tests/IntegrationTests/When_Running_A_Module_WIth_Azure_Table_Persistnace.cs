@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core;
-using Azure.Workflow.Core.Builder;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.Implementation.Persistance;
-using Azure.Workflow.Core.Plugins.Persistance;
-using Azure.Workflow.Core.ServiceBus;
+using ServerShot.Framework.Core;
+using ServerShot.Framework.Core.Builder;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.Implementation.Persistance;
+using ServerShot.Framework.Core.Plugins.Persistance;
+using ServerShot.Framework.Core.ServiceBus;
 using FarFetched.AzureWorkflow.Tests.Helpers;
 using NUnit.Framework;
 
-namespace Azure.Workflow.Tests.IntegrationTests
+namespace ServerShot.Framework.Tests.IntegrationTests
 {
     [TestFixture]
     public class When_Running_A_Module_WIth_Azure_Table_Persistnace
@@ -32,9 +32,9 @@ namespace Azure.Workflow.Tests.IntegrationTests
         {
             var storeKey = "apple";
             var storeValue = Guid.NewGuid();
-            var session = new WorkflowSession();
+            var session = new ServerShotSession();
 
-            var session1 = await WorkflowSession.StartBuildWithSession(session)
+            var session1 = await ServerShotSession.StartBuildWithSession(session)
                 .AddModule(new Fakes.StoreValueModule(storeKey, storeValue))
                 .WithQueueMechanism(new InMemoryQueueFactory())
                 .AttachPersistance(GetAzurePersistance())
@@ -47,7 +47,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
             var storeKey = "apple";
             var storeValue = Guid.NewGuid();
             var retrivalModule = new Fakes.RetreiveValueModule(storeKey);
-            var session = new WorkflowSession();
+            var session = new ServerShotSession();
             session.SessionName = "Utsession";
             string message = null;
 
@@ -56,7 +56,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
                 message = s;
             };
 
-            var session1 = await WorkflowSession.StartBuildWithSession(session)
+            var session1 = await ServerShotSession.StartBuildWithSession(session)
                 .AddModule(new Fakes.StoreValueModule(storeKey, storeValue))
                 .WithQueueMechanism(new InMemoryQueueFactory())
                 .RunAsync();
@@ -65,21 +65,21 @@ namespace Azure.Workflow.Tests.IntegrationTests
         }
 
         [Test]
-        public async Task A_Module_Can_Store_Then_Retrive_A_Value_In_Seperate_Sessions()
+        public async Task A_Module_Can_Store_Then_Retrieve_A_Value_In_Seperate_Sessions()
         {
             var sessionName = "testsession";
             var storeKey = "apple";
             var storeValue = Guid.NewGuid();
             var retrivalModule = new Fakes.RetreiveValueModule(storeKey);
 
-            var session1 = await WorkflowSession.StartBuild()
+            var session1 = await ServerShotSession.StartBuild()
                 .AddName(sessionName)
                 .AddModule(new Fakes.StoreValueModule(storeKey, storeValue))
                 .WithQueueMechanism(new InMemoryQueueFactory())
                 .AttachPersistance(GetAzurePersistance())
                 .RunAsync();
 
-            var session2 = await WorkflowSession.StartBuild()
+            var session2 = await ServerShotSession.StartBuild()
                 .AddName(sessionName)
                 .AddModule(retrivalModule)
                 .WithQueueMechanism(new InMemoryQueueFactory())
@@ -92,7 +92,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
 
         private class Fakes
         {
-            public class StoreValueModule : InitialWorkflowModule<object>
+            public class StoreValueModule : InitialServerShotModule<object>
             {
                 private readonly string _key;
                 private readonly object _value;
@@ -109,7 +109,7 @@ namespace Azure.Workflow.Tests.IntegrationTests
                 }
             }
 
-            public class RetreiveValueModule : InitialWorkflowModule<object>
+            public class RetreiveValueModule : InitialServerShotModule<object>
             {
                 private readonly string _key;
                 public object Retreived { get; private set; }

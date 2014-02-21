@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Azure.Workflow.Core
+namespace ServerShot.Framework.Core
 {
     public class WorkflowConfigurationException : Exception
     {

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Azure.Workflow.Core.Entities
+namespace ServerShot.Framework.Core.Entities
 {
-    public class WorkflowSessionSettings
+    public class SessionSettings
     {
-        public WorkflowSessionSettings()
+        public SessionSettings()
         {
             ErrorThresholdBeforeFail = 1;
             CheckStopStrategyEvery = TimeSpan.FromSeconds(1);

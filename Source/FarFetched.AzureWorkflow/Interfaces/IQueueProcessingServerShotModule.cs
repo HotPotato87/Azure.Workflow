@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Azure.Workflow.Core.Architecture
+namespace ServerShot.Framework.Core.Architecture
 {
-    public interface IQueueProcessingWorkflowModule : IWorkflowModule
+    public interface IQueueProcessingServerShotModule : IServerShotModule
     {
-        void Stop();
         DateTime LastRecieved { get; }
         int EmptyQueueIterations { get; }
         bool IsRecievedItems { get; set; }
     }
 
-    public interface IQueueProcessingWorkflowModule<T> : IQueueProcessingWorkflowModule
+    public interface IQueueProcessingServerShotModule<T> : IQueueProcessingServerShotModule
     {
         Task ProcessAsync(IEnumerable<T> queueCollection);
     }

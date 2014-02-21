@@ -1,6 +1,6 @@
-﻿using Azure.Workflow.Core.Entities.Environment;
+﻿using ServerShot.Framework.Core.Entities.Environment;
 
-namespace Azure.Workflow.Core.Helpers
+namespace ServerShot.Framework.Core.Helpers
 {
     public class EnvironmentHelpers
     {

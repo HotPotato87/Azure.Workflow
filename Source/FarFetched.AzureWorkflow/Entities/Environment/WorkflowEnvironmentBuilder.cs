@@ -1,4 +1,4 @@
-﻿namespace Azure.Workflow.Core.Entities.Environment
+﻿namespace ServerShot.Framework.Core.Entities.Environment
 {
     public class WorkflowEnvironmentBuilder
     {

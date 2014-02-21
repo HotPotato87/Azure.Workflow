@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Implementation;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Implementation;
 
-namespace Azure.Workflow.Core.Plugins.Alerts
+namespace ServerShot.Framework.Core.Plugins.Alerts
 {
-    public abstract class AlertManagerBase : WorkflowSessionPluginBase
+    public abstract class AlertManagerBase : ServerShotSessionPluginBase
     {
-        internal override void OnModuleStarted(IWorkflowModule module)
+        internal override void OnModuleStarted(IServerShotModule module)
         {
             module.OnAlert += this.FireAlert;
         }

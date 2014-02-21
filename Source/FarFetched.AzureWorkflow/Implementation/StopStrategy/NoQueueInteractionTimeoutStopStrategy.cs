@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Interfaces;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Interfaces;
 
-namespace Azure.Workflow.Core.Implementation.StopStrategy
+namespace ServerShot.Framework.Core.Implementation.StopStrategy
 {
     /// <summary>
     /// Will finish the session when no queue interaction over the threshold time
@@ -20,13 +20,13 @@ namespace Azure.Workflow.Core.Implementation.StopStrategy
             _threshold = threshold;
         }
 
-        public bool ShouldStop(WorkflowSession session)
+        public bool ShouldStop(ServerShotSession session)
         {
-            var processingSessions = session.RunningModules.OfType<IQueueProcessingWorkflowModule>();
+            var processingSessions = session.RunningModules.OfType<IQueueProcessingServerShotModule>();
 
             if (processingSessions.Any(x => x.LastRecieved != DateTime.MinValue))
             {
-                var lastReceived = processingSessions.Where(x=>x.LastRecieved != DateTime.MinValue).Min(x => x.LastRecieved);
+                var lastReceived = processingSessions.Where(x=>x.LastRecieved != DateTime.MinValue).Max(x => x.LastRecieved);
                 var timeSinceLastRecieved = DateTime.Now.Subtract(lastReceived);
 
                 if (timeSinceLastRecieved.TotalMilliseconds > _threshold.TotalMilliseconds)
@@ -38,7 +38,7 @@ namespace Azure.Workflow.Core.Implementation.StopStrategy
             return false;
         }
 
-        public bool ShouldSpecificModuleStop(IWorkflowModule module)
+        public bool ShouldSpecificModuleStop(IServerShotModule module)
         {
             return false;
         }

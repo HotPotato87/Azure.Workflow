@@ -1,4 +1,4 @@
-﻿namespace Azure.Workflow.Core.Plugins.Alerts
+﻿namespace ServerShot.Framework.Core.Plugins.Alerts
 {
     public class Alert{
         public AlertLevel AlertLevel { get; set; }

@@ -1,7 +1,7 @@
-﻿using Azure.Workflow.Core.Entities.Environment;
-using Azure.Workflow.Core.Interfaces;
+﻿using ServerShot.Framework.Core.Entities.Environment;
+using ServerShot.Framework.Core.Interfaces;
 
-namespace Azure.Workflow.Core.Extentions
+namespace ServerShot.Framework.Core.Extentions
 {
     public static class WorkflowEnvironmentExtentions
     {

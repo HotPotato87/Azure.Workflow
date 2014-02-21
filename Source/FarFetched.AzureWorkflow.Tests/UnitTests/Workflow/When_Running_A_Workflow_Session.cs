@@ -1,67 +1,67 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Azure.Workflow.Core;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Builder;
-using Azure.Workflow.Core.Entities.Environment;
-using Azure.Workflow.Core.Enums;
-using Azure.Workflow.Core.Extentions;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.Implementation.IOC;
-using Azure.Workflow.Core.Implementation.StopStrategy;
-using Azure.Workflow.Core.Interfaces;
-using Azure.Workflow.Core.Plugins;
-using Azure.Workflow.Core.Plugins.Alerts;
-using Azure.Workflow.Core.ServiceBus;
-using Azure.Workflow.Tests.Helpers;
+using ServerShot.Framework.Core;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Builder;
+using ServerShot.Framework.Core.Entities.Environment;
+using ServerShot.Framework.Core.Enums;
+using ServerShot.Framework.Core.Extentions;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.Implementation.IOC;
+using ServerShot.Framework.Core.Implementation.StopStrategy;
+using ServerShot.Framework.Core.Interfaces;
+using ServerShot.Framework.Core.Plugins;
+using ServerShot.Framework.Core.Plugins.Alerts;
+using ServerShot.Framework.Core.ServiceBus;
+using ServerShot.Framework.Tests.Helpers;
 using Moq;
 using NUnit.Framework;
 
-namespace Azure.Workflow.Tests.UnitTests
+namespace ServerShot.Framework.Tests.UnitTests
 {
     [TestFixture]
     public class When_Running_A_Workflow_Session
     {
         private Mock<ReportGenerationPlugin> _summaryReportGenerator;
-        private Mock<IWorkflowModule> _module1;
-        private Mock<IWorkflowModule> _module2;
+        private Mock<IServerShotModule> _module1;
+        private Mock<IServerShotModule> _module2;
 
-        public WorkflowSession GetStandardSession()
+        public ServerShotSession GetStandardSession()
         {
-            _module1 = new Mock<IWorkflowModule>();
-            _module2 = new Mock<IWorkflowModule>();
+            _module1 = new Mock<IServerShotModule>();
+            _module2 = new Mock<IServerShotModule>();
 
             _module1.Setup(x => x.StartAsync()).Returns(async () => { await Task.Delay(10); });
             _module2.Setup(x => x.StartAsync()).Returns(async () => { await Task.Delay(10); });
 
-            return WorkflowSession.StartBuild()
+            return ServerShotSession.StartBuild()
                 .AddModule(_module1.Object)
-                .AddModule(_module2.Object).WorkflowSession;
+                .AddModule(_module2.Object).ServerShotSession;
         }
 
-        public WorkflowSession GetStandardSessionWithQueue()
+        public ServerShotSession GetStandardSessionWithQueue()
         {
-            _module1 = new Mock<IWorkflowModule>();
-            _module2 = new Mock<IWorkflowModule>();
+            _module1 = new Mock<IServerShotModule>();
+            _module2 = new Mock<IServerShotModule>();
 
             _module1.Setup(x => x.StartAsync()).Returns(async () => { await Task.Delay(10); });
             _module2.Setup(x => x.StartAsync()).Returns(async () => { await Task.Delay(10); });
 
-            return WorkflowSession.StartBuild()
+            return ServerShotSession.StartBuild()
                 .AddModule(_module1.Object)
                 .AddModule(_module2.Object)
                 .WithQueueMechanism(new InMemoryQueueFactory())
-                .WorkflowSession;
+                .ServerShotSession;
         }
 
-        public class WorkflowSessionFakes
+        public class ServerShotSessionFakes
         {
             public class ConcreteResolve : IToResolve
             {
             }
 
-            public class IOCInjectedFake : InitialWorkflowModule<object>
+            public class IOCInjectedFake : InitialServerShotModule<object>
             {
                 public IOCInjectedFake(IToResolve toResolve)
                 {
@@ -84,7 +84,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Modules_Are_Added_To_Running_Sessions()
         {
             //arrange
-            WorkflowSession session = GetStandardSessionWithQueue();
+            ServerShotSession session = GetStandardSessionWithQueue();
 
             //act
             await session.Start();
@@ -97,17 +97,17 @@ namespace Azure.Workflow.Tests.UnitTests
         [Test]
         public async Task Not_Specifying_A_Workflow_Environment_Results_In_Standard_Environment_Being_Built()
         {
-            _module1 = new Mock<IWorkflowModule>();
-            _module2 = new Mock<IWorkflowModule>();
+            _module1 = new Mock<IServerShotModule>();
+            _module2 = new Mock<IServerShotModule>();
 
             _module1.Setup(x => x.StartAsync()).Returns(async () => { await Task.Delay(10); });
             _module2.Setup(x => x.StartAsync()).Returns(async () => { await Task.Delay(10); });
 
-            WorkflowSession session = WorkflowSession.StartBuild()
+            ServerShotSession session = ServerShotSession.StartBuild()
                 .AddModule(_module1.Object)
                 .AddModule(_module2.Object)
                 .WithQueueMechanism(new InMemoryQueueFactory())
-                .WorkflowSession;
+                .ServerShotSession;
 
             Assert.IsTrue(session.Environment != null);
         }
@@ -116,10 +116,10 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Session_Calls_Register_Finished()
         {
             //arrange
-            WorkflowSession session = GetStandardSessionWithQueue();
+            ServerShotSession session = GetStandardSessionWithQueue();
             bool called = false;
 
-            session.OnSessionFinished += workflowSession => { called = true; };
+            session.OnSessionFinished += ServerShotSession => { called = true; };
 
             //act
             await session.Start();
@@ -132,7 +132,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Session_Populates_Total_Duration_In_Real_Time()
         {
             //act
-            WorkflowSession session = GetStandardSessionWithQueue();
+            ServerShotSession session = GetStandardSessionWithQueue();
 
             //arrange
             await session.Start();
@@ -145,7 +145,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Session_Sets_Start_Time_When_Started()
         {
             //act
-            WorkflowSession session = GetStandardSessionWithQueue();
+            ServerShotSession session = GetStandardSessionWithQueue();
 
             //arrange
             await session.Start();
@@ -159,7 +159,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Session_Throws_If_No_Queue_Mechanism()
         {
             //arrange
-            WorkflowSession session = GetStandardSession();
+            ServerShotSession session = GetStandardSession();
 
             //act 
             await session.Start();
@@ -169,7 +169,7 @@ namespace Azure.Workflow.Tests.UnitTests
         public async Task Session_sets_End_Time_When_Finished()
         {
             //act
-            WorkflowSession session = GetStandardSessionWithQueue();
+            ServerShotSession session = GetStandardSessionWithQueue();
 
             //arrange
             await session.Start();
@@ -181,29 +181,29 @@ namespace Azure.Workflow.Tests.UnitTests
         [Test]
         public async Task Specifying_A_Workflow_Environment_Results_In_Specified_One_Being_Used()
         {
-            _module1 = new Mock<IWorkflowModule>();
-            _module2 = new Mock<IWorkflowModule>();
+            _module1 = new Mock<IServerShotModule>();
+            _module2 = new Mock<IServerShotModule>();
 
             _module1.Setup(x => x.StartAsync()).Returns(async () => { await Task.Delay(10); });
             _module2.Setup(x => x.StartAsync()).Returns(async () => { await Task.Delay(10); });
 
             var mockEnvironment = new Mock<WorkflowEnvironment>();
-            var session = new WorkflowSession(mockEnvironment.Object);
+            var session = new ServerShotSession(mockEnvironment.Object);
 
-            WorkflowSession builtSession = WorkflowSession.StartBuildWithSession(session)
+            ServerShotSession builtSession = ServerShotSession.StartBuildWithSession(session)
                 .AddModule(_module1.Object)
                 .AddModule(_module2.Object)
                 .WithQueueMechanism(new InMemoryQueueFactory())
-                .WorkflowSession;
+                .ServerShotSession;
 
             Assert.IsTrue(builtSession.Environment == mockEnvironment.Object);
         }
 
         [Test]
-        public async Task WorkflowSessionStartCallsStartOnModules()
+        public async Task ServerShotSessionStartCallsStartOnModules()
         {
             //arrange
-            WorkflowSession session = GetStandardSessionWithQueue();
+            ServerShotSession session = GetStandardSessionWithQueue();
 
             //act
             await session.Start();
@@ -216,7 +216,7 @@ namespace Azure.Workflow.Tests.UnitTests
         [Test]
         public async Task Workflow_Default_Stop_Strategy_Is_Continuous_Processing()
         {
-            var session = new WorkflowSession();
+            var session = new ServerShotSession();
 
             Assert.IsTrue(session.StopStrategy is ContinousProcessingStategy);
         }
@@ -226,22 +226,22 @@ namespace Azure.Workflow.Tests.UnitTests
         {
             //arrange
             var mockIOCContainer = new Mock<IIocContainer>();
-            mockIOCContainer.Setup(x => x.Get<IWorkflowModule>(typeof (AlertStub))).Returns(new AlertStub(new Alert()));
+            mockIOCContainer.Setup(x => x.Get<IServerShotModule>(typeof (AlertStub))).Returns(new AlertStub(new Alert()));
 
             WorkflowEnvironment environment = WorkflowEnvironment.BuildEnvironment()
                 .WithIOCContainer(mockIOCContainer.Object)
                 .Build();
 
-            WorkflowSession session = environment.CreateSession();
+            ServerShotSession session = environment.CreateSession();
 
             //act
-            await WorkflowSession.StartBuildWithSession(session)
+            await ServerShotSession.StartBuildWithSession(session)
                 .AddModule<AlertStub>()
                 .WithQueueMechanism(new InMemoryQueueFactory())
                 .RunAsync();
 
             //assert
-            mockIOCContainer.Verify(x => x.Get<IWorkflowModule>(typeof (AlertStub)), Times.Once);
+            mockIOCContainer.Verify(x => x.Get<IServerShotModule>(typeof (AlertStub)), Times.Once);
         }
 
         [Test]
@@ -250,47 +250,47 @@ namespace Azure.Workflow.Tests.UnitTests
             //arrange
             WorkflowEnvironment environment = WorkflowEnvironment.BuildEnvironment()
                 .WithIOCContainer(new NinjectIocContainer())
-                .RegisterType<WorkflowSessionFakes.IToResolve, WorkflowSessionFakes.ConcreteResolve>().
+                .RegisterType<ServerShotSessionFakes.IToResolve, ServerShotSessionFakes.ConcreteResolve>().
                 Build();
 
-            WorkflowSession session = environment.CreateSession();
+            ServerShotSession session = environment.CreateSession();
 
             //act
-            WorkflowSession builtSession = WorkflowSession.StartBuildWithSession(session)
-                .AddModule<WorkflowSessionFakes.IOCInjectedFake>()
+            ServerShotSession builtSession = ServerShotSession.StartBuildWithSession(session)
+                .AddModule<ServerShotSessionFakes.IOCInjectedFake>()
                 .WithQueueMechanism(new InMemoryQueueFactory())
-                .WorkflowSession;
+                .ServerShotSession;
 
             await builtSession.Start();
 
             //assert
-            var runningModule = builtSession.RunningModules.First() as WorkflowSessionFakes.IOCInjectedFake;
-            Assert.IsTrue(runningModule.ToResolve is WorkflowSessionFakes.ConcreteResolve);
+            var runningModule = builtSession.RunningModules.First() as ServerShotSessionFakes.IOCInjectedFake;
+            Assert.IsTrue(runningModule.ToResolve is ServerShotSessionFakes.ConcreteResolve);
         }
 
         [Test]
         public async Task Workflow_Session_Stop_Strategy_Determines_Workflow_Session_Stopping()
         {
-            var session = new WorkflowSession();
+            var session = new ServerShotSession();
             session.CloudQueueFactory = TestHelpers.CreateNonEmptyStubQueueFactory().Object;
 
             var mockStopStrategy = new Mock<IProcessingStopStrategy>();
             session.StopStrategy = mockStopStrategy.Object;
-            mockStopStrategy.Setup(x => x.ShouldStop(It.IsAny<WorkflowSession>())).Returns(true);
+            mockStopStrategy.Setup(x => x.ShouldStop(It.IsAny<ServerShotSession>())).Returns(true);
             session.Settings.CheckStopStrategyEvery = TimeSpan.FromMilliseconds(1);
             session.Modules.Add(new Fakes.RaisesProcessingStateViaEnum(ProcessingResult.Success));
 
             await session.Start();
 
-            mockStopStrategy.Verify(x => x.ShouldStop(It.IsAny<WorkflowSession>()));
+            mockStopStrategy.Verify(x => x.ShouldStop(It.IsAny<ServerShotSession>()));
         }
 
         [Test]
         public async Task Workflow_Sessions_Default_Settings_Get_Injected_Into_Modules()
         {
             //arrange
-            var session = new WorkflowSession();
-            var workflowModuleSettings = new WorkflowModuleSettings();
+            var session = new ServerShotSession();
+            var workflowModuleSettings = new ServerShotModuleSettings();
             session.DefaultModuleSettings = workflowModuleSettings;
             session.CloudQueueFactory = TestHelpers.CreateNonEmptyStubQueueFactory().Object;
             var module = new Fakes.RaisesProcessingStateViaEnum(ProcessingResult.Success);

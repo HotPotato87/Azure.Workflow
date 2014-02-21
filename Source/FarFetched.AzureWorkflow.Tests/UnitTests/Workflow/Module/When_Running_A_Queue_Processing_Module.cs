@@ -5,18 +5,18 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core;
-using Azure.Workflow.Core.Enums;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.Interfaces;
-using Azure.Workflow.Core.Plugins.Alerts;
-using Azure.Workflow.Core.ServiceBus;
 using Moq;
 using Ninject;
 using NUnit.Framework;
+using ServerShot.Framework.Core;
+using ServerShot.Framework.Core.Enums;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.Interfaces;
+using ServerShot.Framework.Core.Plugins.Alerts;
+using ServerShot.Framework.Core.ServiceBus;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace Azure.Workflow.Tests.UnitTests
+namespace ServerShot.Framework.Tests.UnitTests
 {
     [TestFixture]
     public class When_Running_A_Queue_Processing_Module
@@ -58,9 +58,9 @@ namespace Azure.Workflow.Tests.UnitTests
             service.Verify(x => x.ReceieveAsync<object>(It.IsAny<int>()), Times.AtLeastOnce);
         }
 
-        private static WorkflowModuleSettings UnitTestingSettings()
+        private static ServerShotModuleSettings UnitTestingSettings()
         {
-            return new WorkflowModuleSettings() { QueuePollTime = TimeSpan.FromMilliseconds(0)};
+            return new ServerShotModuleSettings() { QueuePollTime = TimeSpan.FromMilliseconds(0)};
         }
 
         [Test]
@@ -261,7 +261,7 @@ namespace Azure.Workflow.Tests.UnitTests
         {
             //arrange
             var settings = UnitTestingSettings();
-            var module = new Mock<QueueProcessingWorkflowModule<object>>(settings) { CallBase = true};
+            var module = new Mock<QueueProcessingServerShotModule<object>>(settings) { CallBase = true};
             module.Setup(x => x.ProcessAsync(It.IsAny<IEnumerable<object>>())).Returns(() => Task.Delay(1));
             var obj = module.Object;
             var stubQueue = new Mock<ICloudQueue>();
@@ -306,12 +306,12 @@ namespace Azure.Workflow.Tests.UnitTests
 
     internal class Fakes
     {
-        public class CapturedErrorsModule : QueueProcessingWorkflowModule<object>
+        public class CapturedErrorsModule : QueueProcessingServerShotModule<object>
         {
             private readonly Exception _exceptionToThrow;
             private readonly int _exceptionsToThrow;
 
-            public CapturedErrorsModule(Exception exceptionToThrow, int exceptionsToThrow = 1, WorkflowModuleSettings settings = null)
+            public CapturedErrorsModule(Exception exceptionToThrow, int exceptionsToThrow = 1, ServerShotModuleSettings settings = null)
                 : base(settings)
             {
                 _recievedLimit = 1;
@@ -327,9 +327,9 @@ namespace Azure.Workflow.Tests.UnitTests
                 }
             }
         }
-        public class StubProcessingModule : QueueProcessingWorkflowModule<object>
+        public class StubProcessingModule : QueueProcessingServerShotModule<object>
         {
-            public StubProcessingModule(WorkflowModuleSettings settings = null)
+            public StubProcessingModule(ServerShotModuleSettings settings = null)
                 : base(settings)
             {
                 _recievedLimit = 1;
@@ -340,11 +340,11 @@ namespace Azure.Workflow.Tests.UnitTests
             }
         }
 
-        public class RaisesProcessingStateViaString : QueueProcessingWorkflowModule<object>
+        public class RaisesProcessingStateViaString : QueueProcessingServerShotModule<object>
         {
             private readonly string _str;
 
-            public RaisesProcessingStateViaString(string str, WorkflowModuleSettings settings = null)
+            public RaisesProcessingStateViaString(string str, ServerShotModuleSettings settings = null)
                 : base(settings)
             {
                 _str = str;
@@ -360,11 +360,11 @@ namespace Azure.Workflow.Tests.UnitTests
             }
         }
 
-        public class RaisesProcessingStateViaEnum : QueueProcessingWorkflowModule<object>
+        public class RaisesProcessingStateViaEnum : QueueProcessingServerShotModule<object>
         {
             private readonly ProcessingResult _result;
 
-            public RaisesProcessingStateViaEnum(ProcessingResult result, WorkflowModuleSettings settings = null)
+            public RaisesProcessingStateViaEnum(ProcessingResult result, ServerShotModuleSettings settings = null)
                 : base(settings)
             {
                 _result = result;
@@ -377,9 +377,9 @@ namespace Azure.Workflow.Tests.UnitTests
             }
         }
 
-        public class StubAddsProcessedInfoProcessingModule : QueueProcessingWorkflowModule<object>
+        public class StubAddsProcessedInfoProcessingModule : QueueProcessingServerShotModule<object>
         {
-            public StubAddsProcessedInfoProcessingModule(WorkflowModuleSettings settings = null)
+            public StubAddsProcessedInfoProcessingModule(ServerShotModuleSettings settings = null)
                 : base(settings)
             {
                 _recievedLimit = 1;

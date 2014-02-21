@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Plugins.Alerts;
-using Azure.Workflow.Core.Interfaces;
+using ServerShot.Framework.Core.Plugins.Alerts;
+using ServerShot.Framework.Core.Interfaces;
 
-namespace Azure.Workflow.Core.Implementation
+namespace ServerShot.Framework.Core.Implementation
 {
     public class ProwlAlertManager : AlertManagerBase
     {

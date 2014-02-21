@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Implementation.Reporting;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Implementation.Reporting;
 
-namespace Azure.Workflow.Core.Interfaces
+namespace ServerShot.Framework.Core.Interfaces
 {
     public class ModuleProcessingSummary
     {
-        public IWorkflowModule Module { get; private set; }
+        public IServerShotModule Module { get; private set; }
         public int Errors { get; set; }
         public List<Exception> ErrorList { get; set; }
         public TimeSpan Duration { get; set; }
@@ -18,7 +18,7 @@ namespace Azure.Workflow.Core.Interfaces
         public Dictionary<string, List<ProcessedItemDetail>> ResultCategoryExtraDetail { get; set; }
         public int TotalProcessed { get; set; }
 
-        public ModuleProcessingSummary(IWorkflowModule module)
+        public ModuleProcessingSummary(IServerShotModule module)
         {
             Module = module;
             ErrorList = new List<Exception>();

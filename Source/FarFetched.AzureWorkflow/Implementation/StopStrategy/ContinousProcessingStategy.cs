@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Enums;
-using Azure.Workflow.Core.Interfaces;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Enums;
+using ServerShot.Framework.Core.Interfaces;
 
-namespace Azure.Workflow.Core.Implementation.StopStrategy
+namespace ServerShot.Framework.Core.Implementation.StopStrategy
 {
     /// <summary>
     /// This processing strategy will ensure that any queue based processing gets run indefinately.
@@ -17,7 +17,7 @@ namespace Azure.Workflow.Core.Implementation.StopStrategy
     /// </summary>
     public class ContinousProcessingStategy : IProcessingStopStrategy
     {
-        public bool ShouldStop(WorkflowSession session)
+        public bool ShouldStop(ServerShotSession session)
         {
             return session.RunningModules.All(x => x.State == ModuleState.Finished);
         }
@@ -27,7 +27,7 @@ namespace Azure.Workflow.Core.Implementation.StopStrategy
         /// </summary>
         /// <param name="module"></param>
         /// <returns></returns>
-        public bool ShouldSpecificModuleStop(IWorkflowModule module)
+        public bool ShouldSpecificModuleStop(IServerShotModule module)
         {
             return false;
         }

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Architecture;
+using ServerShot.Framework.Core.Architecture;
 
-namespace Azure.Workflow.Core.Interfaces
+namespace ServerShot.Framework.Core.Interfaces
 {
     public interface ICloudQueueFactory
     {
-        ICloudQueue CreateQueue(IWorkflowModule module);
+        ICloudQueue CreateQueue(IServerShotModule module);
     }
 
     public interface ICloudQueue

@@ -5,14 +5,14 @@ using System.Linq;
 using System.Runtime.Remoting.Channels;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using Azure.Workflow.Core.Architecture;
-using Azure.Workflow.Core.Enums;
-using Azure.Workflow.Core.Implementation;
-using Azure.Workflow.Core.Plugins.Alerts;
+using ServerShot.Framework.Core.Architecture;
+using ServerShot.Framework.Core.Enums;
+using ServerShot.Framework.Core.Implementation;
+using ServerShot.Framework.Core.Plugins.Alerts;
 
-namespace Azure.Workflow.Core
+namespace ServerShot.Framework.Core
 {
-    public abstract class QueueProcessingWorkflowModule<T> : WorkflowModuleBase<T>, IQueueProcessingWorkflowModule<T> where T : class
+    public abstract class QueueProcessingServerShotModule<T> : ServerShotModuleBase<T>, IQueueProcessingServerShotModule<T> where T : class
     {
         public DateTime LastRecieved { get; private set; }
         public int EmptyQueueIterations { get; private set; }
@@ -21,13 +21,13 @@ namespace Azure.Workflow.Core
         private bool _running = true;
         internal int _recievedLimit = int.MaxValue;
 
-        public QueueProcessingWorkflowModule()
+        public QueueProcessingServerShotModule()
         {
             IsRecievedItems = false;
 
         }
 
-        protected QueueProcessingWorkflowModule(WorkflowModuleSettings settings = default(WorkflowModuleSettings))
+        protected QueueProcessingServerShotModule(ServerShotModuleSettings settings = default(ServerShotModuleSettings))
             :base(settings)
         {
             
@@ -91,6 +91,27 @@ namespace Azure.Workflow.Core
         {
             await this.OnStop();
             this.State = ModuleState.Finished;
+        }
+
+        protected override void CategorizeResult(ProcessingResult result, string description = null, bool countAsProcessed = true)
+        {
+            this.LastRecieved = DateTime.Now;
+
+            base.CategorizeResult(result, description, countAsProcessed);
+        }
+
+        protected override void CategorizeResult(object key, string description = null, bool countAsProcessed = true)
+        {
+            this.LastRecieved = DateTime.Now;
+
+            base.CategorizeResult(key, description, countAsProcessed);
+        }
+
+        protected override void SendTo<E>(T obj)
+        {
+            LastRecieved = DateTime.Now;
+
+            base.SendTo<E>(obj);
         }
     }
 
