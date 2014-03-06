@@ -2,22 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using ServerShot.Framework.Core.Architecture;
 using ServerShot.Framework.Core.Interfaces;
 using ServerShot.Framework.Core.Plugins;
 
 namespace ServerShot.Framework.Core.Implementation.Reporting
 {
-    public class ConsoleReportGenerator : ReportGenerationPlugin
+    public class ConsoleReportGenerator : ReportGenerationPluginBase
     {
-        public override void SendSessionReport(ServerShotSession ServerShotSession, IEnumerable<ModuleProcessingSummary> moduleSummaries)
+        public override async Task SendSessionReportAsync(ServerShotSessionBase session, IEnumerable<ModuleProcessingSummary> moduleSummaries)
         {
+
             Console.WriteLine();
             Console.WriteLine("*****************************");
             Console.WriteLine("********* SUMMARY ***********");
             Console.WriteLine("*****************************");
             Console.WriteLine("{0} Total Processed", moduleSummaries.Sum(x=>x.TotalProcessed));
-            Console.WriteLine("{0} Running Time", "(To be implemented)");
+            Console.WriteLine("{0} Running Time", session.Ended.Subtract(session.Started).TotalSeconds + "s");
             Console.WriteLine("{0} Errors", moduleSummaries.Sum(t=>t.Errors));
             InsertModuleStates();
             Console.WriteLine();

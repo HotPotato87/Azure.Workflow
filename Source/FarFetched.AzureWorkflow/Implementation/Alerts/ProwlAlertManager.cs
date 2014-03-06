@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,14 @@ namespace ServerShot.Framework.Core.Implementation
         public override void FireAlert(Alert alert)
         {
             
+        }
+    }
+
+    public class ConsoleAlertManager : AlertManagerBase
+    {
+        public override void FireAlert(Alert alert)
+        {
+            Console.WriteLine("Alert fired : ({0}) - {1}", alert.AlertLevel, alert.Message);
         }
     }
 }

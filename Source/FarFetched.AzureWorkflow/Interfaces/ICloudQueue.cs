@@ -16,5 +16,7 @@ namespace ServerShot.Framework.Core.Interfaces
     {
         Task<IEnumerable<T>> ReceieveAsync<T>(int batchCount);
         Task AddToAsync<T>(IEnumerable<T> items);
+        int Count { get; }
+        event Action<object> ObjectWrapperCreated;
     }
 }

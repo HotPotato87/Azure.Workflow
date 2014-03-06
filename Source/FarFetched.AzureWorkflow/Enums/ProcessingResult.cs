@@ -12,4 +12,10 @@ namespace ServerShot.Framework.Core.Enums
         Fail,
         Unknown
     }
+
+    public enum CategorizationLevel
+    {
+        Module,
+        Session
+    }
 }

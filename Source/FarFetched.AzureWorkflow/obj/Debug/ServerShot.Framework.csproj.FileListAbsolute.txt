@@ -62,3 +62,8 @@ C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkf
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow\obj\Debug\ServerShot.Framework.csprojResolveAssemblyReference.cache
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow\obj\Debug\Servershot.Framework.dll
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow\obj\Debug\Servershot.Framework.pdb
+C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Patrick-Laptop\Source\Workspaces\WhatsonGlobal.Importing\Source\WhatsonGlobal.Importing\External\ServerShot\Servershot.Framework.dll.config
+C:\Users\Patrick-Laptop\Source\Workspaces\WhatsonGlobal.Importing\Source\WhatsonGlobal.Importing\External\ServerShot\Servershot.Framework.dll
+C:\Users\Patrick-Laptop\Source\Workspaces\WhatsonGlobal.Importing\Source\WhatsonGlobal.Importing\External\ServerShot\Servershot.Framework.pdb

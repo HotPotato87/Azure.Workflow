@@ -8,9 +8,9 @@ using ServerShot.Framework.Core.Implementation;
 
 namespace ServerShot.Framework.Core.Plugins.Alerts
 {
-    public abstract class AlertManagerBase : ServerShotSessionPluginBase
+    public abstract class AlertManagerBase : ServerShotSessionBasePluginBase
     {
-        internal override void OnModuleStarted(IServerShotModule module)
+        public override void OnModuleStarted(IServerShotModule module)
         {
             module.OnAlert += this.FireAlert;
         }

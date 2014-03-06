@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerShot.Framework.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerShot.Framework", "FarFetched.AzureWorkflow\ServerShot.Framework.csproj", "{3F439EEA-37B3-4E59-9556-AF13886F9E19}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{52BD7A61-1757-4892-9886-916E9430E01B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Servershot.WebsiteOrderSample", "Servershot.WebsiteOrderSample\Servershot.WebsiteOrderSample.csproj", "{D5F1A8DE-DDCA-4CF0-A989-6D7792DC0528}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,11 +35,18 @@ Global
 		{3F439EEA-37B3-4E59-9556-AF13886F9E19}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3F439EEA-37B3-4E59-9556-AF13886F9E19}.Release|x86.ActiveCfg = Release|x86
 		{3F439EEA-37B3-4E59-9556-AF13886F9E19}.Release|x86.Build.0 = Release|x86
+		{D5F1A8DE-DDCA-4CF0-A989-6D7792DC0528}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5F1A8DE-DDCA-4CF0-A989-6D7792DC0528}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5F1A8DE-DDCA-4CF0-A989-6D7792DC0528}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D5F1A8DE-DDCA-4CF0-A989-6D7792DC0528}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5F1A8DE-DDCA-4CF0-A989-6D7792DC0528}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5F1A8DE-DDCA-4CF0-A989-6D7792DC0528}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FA63FA15-5172-4A15-9550-2AE0CFF75D98} = {51EE122A-A5BC-45D2-B8D9-947F85DEFA26}
+		{D5F1A8DE-DDCA-4CF0-A989-6D7792DC0528} = {52BD7A61-1757-4892-9886-916E9430E01B}
 	EndGlobalSection
 EndGlobal

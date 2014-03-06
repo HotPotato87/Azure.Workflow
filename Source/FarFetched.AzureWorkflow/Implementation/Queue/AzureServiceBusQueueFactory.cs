@@ -2,7 +2,7 @@
 using ServerShot.Framework.Core.Implementation;
 using ServerShot.Framework.Core.Interfaces;
 
-namespace ServerShot.Framework.Core.ServiceBus
+namespace ServerShot.Framework.Core.Queue
 {
     public class AzureServiceBusQueueFactory : ICloudQueueFactory
     {

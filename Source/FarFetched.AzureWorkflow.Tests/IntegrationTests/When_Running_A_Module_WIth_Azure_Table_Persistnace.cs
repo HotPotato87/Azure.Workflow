@@ -8,9 +8,10 @@ using ServerShot.Framework.Core.Builder;
 using ServerShot.Framework.Core.Implementation;
 using ServerShot.Framework.Core.Implementation.Persistance;
 using ServerShot.Framework.Core.Plugins.Persistance;
-using ServerShot.Framework.Core.ServiceBus;
+using ServerShot.Framework.Core.Queue;
 using FarFetched.AzureWorkflow.Tests.Helpers;
 using NUnit.Framework;
+using Servershot.Framework.Entities;
 
 namespace ServerShot.Framework.Tests.IntegrationTests
 {
@@ -19,7 +20,7 @@ namespace ServerShot.Framework.Tests.IntegrationTests
     {
         #region PersistanceHelper
 
-        private PersistanceManagerBase GetAzurePersistance()
+        private IPersistanceManager GetAzurePersistance()
         {
             return AzurePersistanceHelper.CreatePersistanceClient();
         }
@@ -32,12 +33,12 @@ namespace ServerShot.Framework.Tests.IntegrationTests
         {
             var storeKey = "apple";
             var storeValue = Guid.NewGuid();
-            var session = new ServerShotSession();
+            var session = new ServerShotLinearSession();
 
-            var session1 = await ServerShotSession.StartBuildWithSession(session)
-                .AddModule(new Fakes.StoreValueModule(storeKey, storeValue))
-                .WithQueueMechanism(new InMemoryQueueFactory())
-                .AttachPersistance(GetAzurePersistance())
+            var session1 = await ServerShotLinearSession.StartBuildWithSession(session)
+                .AddModule<Fakes.StoreValueModule>(storeKey, storeValue)
+                .AttachSessionQueueMechanism(new InMemoryQueueFactory())
+                .AttachSessionPersistance(GetAzurePersistance())
                 .RunAsync();
         }
 
@@ -46,8 +47,7 @@ namespace ServerShot.Framework.Tests.IntegrationTests
         {
             var storeKey = "apple";
             var storeValue = Guid.NewGuid();
-            var retrivalModule = new Fakes.RetreiveValueModule(storeKey);
-            var session = new ServerShotSession();
+            var session = new ServerShotLinearSession();
             session.SessionName = "Utsession";
             string message = null;
 
@@ -56,9 +56,9 @@ namespace ServerShot.Framework.Tests.IntegrationTests
                 message = s;
             };
 
-            var session1 = await ServerShotSession.StartBuildWithSession(session)
-                .AddModule(new Fakes.StoreValueModule(storeKey, storeValue))
-                .WithQueueMechanism(new InMemoryQueueFactory())
+            var session1 = await ServerShotLinearSession.StartBuildWithSession(session)
+                .AddModule<Fakes.StoreValueModule>(storeKey, storeValue)
+                .AttachSessionQueueMechanism(new InMemoryQueueFactory())
                 .RunAsync();
 
             Assert.IsTrue(message != null && message.Contains("please attach a persistance component"));
@@ -70,21 +70,22 @@ namespace ServerShot.Framework.Tests.IntegrationTests
             var sessionName = "testsession";
             var storeKey = "apple";
             var storeValue = Guid.NewGuid();
-            var retrivalModule = new Fakes.RetreiveValueModule(storeKey);
 
-            var session1 = await ServerShotSession.StartBuild()
+            var session1 = await ServerShotLinearSession.StartBuild()
                 .AddName(sessionName)
-                .AddModule(new Fakes.StoreValueModule(storeKey, storeValue))
-                .WithQueueMechanism(new InMemoryQueueFactory())
-                .AttachPersistance(GetAzurePersistance())
+                .AddModule<Fakes.StoreValueModule>(storeKey, storeValue)
+                .AttachSessionQueueMechanism(new InMemoryQueueFactory())
+                .AttachSessionPersistance(GetAzurePersistance())
                 .RunAsync();
 
-            var session2 = await ServerShotSession.StartBuild()
+            var session2 = await ServerShotLinearSession.StartBuild()
                 .AddName(sessionName)
-                .AddModule(retrivalModule)
-                .WithQueueMechanism(new InMemoryQueueFactory())
-                .AttachPersistance(GetAzurePersistance())
+                .AddModule<Fakes.RetreiveValueModule>(storeKey)
+                .AttachSessionQueueMechanism(new InMemoryQueueFactory())
+                .AttachSessionPersistance(GetAzurePersistance())
                 .RunAsync();
+
+            var retrivalModule = session1.RunningModules.First() as Fakes.RetreiveValueModule;
 
             Assert.IsTrue(storeValue.ToString().Equals(retrivalModule.Retreived.ToString()));
         }

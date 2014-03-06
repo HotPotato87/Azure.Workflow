@@ -11,6 +11,7 @@ using ServerShot.Framework.Core.Enums;
 using ServerShot.Framework.Core.Implementation;
 using ServerShot.Framework.Core.Interfaces;
 using ServerShot.Framework.Core.Plugins.Alerts;
+using Servershot.Framework.EventHandlers;
 
 namespace ServerShot.Framework.Core.Architecture
 {
@@ -21,14 +22,15 @@ namespace ServerShot.Framework.Core.Architecture
         ModuleState State { get; }
         DateTime Started { get; }
         DateTime Ended { get; }
-        ServerShotSession Session { get; set; }
+        ServerShotSessionBase Session { get; set; }
         ICloudQueue Queue { get; set; }
         string QueueName { get; }
         int ProcessedCount { get; }
         Dictionary<Type, int> SentToAudit { get; }
         ServerShotModuleSettings Settings { get; set; }
 
-        event Action<string> OnLogMessage;
+        event Action<string, string> OnLogMessage;
+        event Action OnStarted;
         event Action<Alert> OnAlert;
         event Action<Exception> OnError;
         event Action<string, IEnumerable<Exception>> OnFailure;
@@ -37,6 +39,6 @@ namespace ServerShot.Framework.Core.Architecture
         event Func<string, object, Task> OnStoreEnumerableAsync;
         event Func<string, Task<IEnumerable<object>>> OnRetrieveEnumerableAsync; 
         event Action OnFinished;
-        event Action<string, string, bool> OnRaiseProcessed;
+        event Action<OnRaisedProcessedArgs> OnRaiseProcessed;
     }
 }

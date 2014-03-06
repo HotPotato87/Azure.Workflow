@@ -4,9 +4,9 @@ namespace ServerShot.Framework.Core.Helpers
 {
     public class EnvironmentHelpers
     {
-        public static WorkflowEnvironment BuildStandardEnvironment()
+        public static ServerShotEnvironment BuildStandardEnvironment()
         {
-            return new WorkflowEnvironment();
+            return new ServerShotEnvironment();
         }
     }
 }

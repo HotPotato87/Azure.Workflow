@@ -45,6 +45,10 @@
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.2.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=2.1.0.3, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WindowsAzure.Storage.2.1.0.3\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.1.1311.0615\lib\net40\Moq.dll</HintPath>
     </Reference>
@@ -79,7 +83,9 @@
     </Compile>
     <Compile Include="Helpers\AzurePersistanceHelper.cs" />
     <Compile Include="Helpers\TestHelpers.cs" />
+    <Compile Include="IntegrationTests\Builders\When_Building_A_Servershot_Session.cs" />
     <Compile Include="IntegrationTests\Fakes.cs" />
+    <Compile Include="IntegrationTests\When_Configuring_An_IOC_Container.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Module_WIth_Azure_Table_Persistnace.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session.cs" />
     <Compile Include="IntegrationTests\When_Using_Azure_Service_Bus.cs" />
@@ -89,11 +95,14 @@
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session_And_The_Logging_Manager_Is_Attached.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session_And_Reporting_Plugin_Is_Attached.cs" />
     <Compile Include="IntegrationTests\When_Running_A_Workflow_Session_And_The_Alert_Plugin_Is_Loaded.cs" />
-    <Compile Include="UnitTests\Scheduling\When_Scheduling_A_Workflow_Session.cs" />
-    <Compile Include="UnitTests\Workflow\Module\When_Running_A_Queue_Processing_Module.cs" />
-    <Compile Include="UnitTests\Workflow\Module\When_Running_A_Workflow_Module.cs" />
-    <Compile Include="UnitTests\Workflow\When_In_Memory_Queue_Collection_Is_Used.cs" />
-    <Compile Include="UnitTests\Workflow\When_Running_A_Workflow_Session.cs" />
+    <Compile Include="UnitTests\InstanceScalerTests.cs" />
+    <Compile Include="UnitTests\Scheduling\LocalDeploymentStrategyTests.cs" />
+    <Compile Include="UnitTests\Module\When_Running_A_Queue_Processing_Module.cs" />
+    <Compile Include="UnitTests\Module\When_Running_A_ServerShot_Module.cs" />
+    <Compile Include="UnitTests\Session\ContinuousSessionTests.cs" />
+    <Compile Include="UnitTests\Session\When_Configuring_A_Servershot_Session.cs" />
+    <Compile Include="UnitTests\Components\InMemoryQueueTests.cs" />
+    <Compile Include="UnitTests\Session\When_Running_A_ServerShot_Session.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

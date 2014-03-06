@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ServerShot.Framework.Core.Enums;
 using ServerShot.Framework.Core.Implementation;
-using ServerShot.Framework.Core.ServiceBus;
+using ServerShot.Framework.Core.Queue;
 using ServerShot.Framework.Core.Builder;
+using Servershot.Framework.Entities;
 using ServerShot.Framework.Tests.IntegrationTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
@@ -42,11 +43,11 @@ namespace ServerShot.Framework.Tests.IntegrationTests
             var payLoad = new List<object>() {new object(), new object()};
 
             //act
-            await ServerShotSession.StartBuild()
-                .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.RecievesFromQueueProcessingFake)))
-                .AddModule(new Fakes.RecievesFromQueueProcessingFake())
-                .WithQueueMechanism(new InMemoryQueueFactory())
-                .AttachReportGenerator(reportGenerator)
+            await ServerShotLinearSession.StartBuild()
+                .AddModule<Fakes.AddsToQueueProcessingFake>(payLoad, typeof(Fakes.RecievesFromQueueProcessingFake))
+                .AddModule<Fakes.RecievesFromQueueProcessingFake>()
+                .AttachSessionQueueMechanism(new InMemoryQueueFactory())
+                .AttachSessionReportGenerator(reportGenerator)
                 .RunAsync();
 
             //assert
@@ -63,11 +64,11 @@ namespace ServerShot.Framework.Tests.IntegrationTests
             var sampleException = new Exception("Expected Exception");
 
             //act
-            await ServerShotSession.StartBuild()
-                .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.QueueProcessingThowsErrorFake)))
-                .AddModule(new Fakes.QueueProcessingThowsErrorFake(() => { return sampleException; }))
-                .WithQueueMechanism(new InMemoryQueueFactory())
-                .AttachReportGenerator(reportGenerator)
+            await ServerShotLinearSession.StartBuild()
+                .AddModule<Fakes.AddsToQueueProcessingFake>(payLoad, typeof(Fakes.QueueProcessingThowsErrorFake))
+                .AddModule<Fakes.QueueProcessingThowsErrorFake>(new Func<Exception>(() => sampleException))
+                .AttachSessionQueueMechanism(new InMemoryQueueFactory())
+                .AttachSessionReportGenerator(reportGenerator)
                 .RunAsync();
 
             //assert
@@ -84,12 +85,12 @@ namespace ServerShot.Framework.Tests.IntegrationTests
 
            
             //act
-            await ServerShotSession.StartBuild()
-                .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
-                .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
-                .WithQueueMechanism(new InMemoryQueueFactory())
+            await ServerShotLinearSession.StartBuild()
+                .AddModule<Fakes.AddsToQueueProcessingFake>(payLoad, typeof(Fakes.QueueProcessingThowsErrorFake))
+                .AddModule<Fakes.CategorisesProcessingResultFake>(GetSampleMessages())
+                .AttachSessionQueueMechanism(new InMemoryQueueFactory())
                 .WithSessionStopStrategy(new ServerShot.Framework.Core.Implementation.StopStrategy.NoQueueInteractionTimeoutStopStrategy(TimeSpan.FromMilliseconds(1000)))
-                .AttachReportGenerator(reportGenerator)
+                .AttachSessionReportGenerator(reportGenerator)
                 .RunAsync();
 
             //assert
@@ -110,11 +111,11 @@ namespace ServerShot.Framework.Tests.IntegrationTests
             var payLoad = new List<object>() { new object(), new object() };
 
             //act
-            await ServerShotSession.StartBuild()
-                .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
-                .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
-                .WithQueueMechanism(new InMemoryQueueFactory())
-                .AttachReportGenerator(reportGenerator)
+            await ServerShotLinearSession.StartBuild()
+                .AddModule<Fakes.AddsToQueueProcessingFake>(payLoad, typeof(Fakes.CategorisesProcessingResultFake))
+                .AddModule<Fakes.CategorisesProcessingResultFake>(GetSampleMessages())
+                .AttachSessionQueueMechanism(new InMemoryQueueFactory())
+                .AttachSessionReportGenerator(reportGenerator)
                 .RunAsync();
 
             await Task.Delay(TimeSpan.FromTicks(100));
@@ -132,11 +133,11 @@ namespace ServerShot.Framework.Tests.IntegrationTests
 
 
             //act
-            await ServerShotSession.StartBuild()
-                .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
-                .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
-                .WithQueueMechanism(new InMemoryQueueFactory())
-                .AttachReportGenerator(reportGenerator)
+            await ServerShotLinearSession.StartBuild()
+                .AddModule<Fakes.AddsToQueueProcessingFake>(payLoad, typeof(Fakes.CategorisesProcessingResultFake))
+                .AddModule<Fakes.CategorisesProcessingResultFake>(GetSampleMessages())
+                .AttachSessionQueueMechanism(new InMemoryQueueFactory())
+                .AttachSessionReportGenerator(reportGenerator)
                 .RunAsync();
 
             //assert
@@ -153,11 +154,11 @@ namespace ServerShot.Framework.Tests.IntegrationTests
             var payLoad = new List<object>() { new object(), new object() };
 
             //act
-            await ServerShotSession.StartBuild()
-                .AddModule(new Fakes.AddsToQueueProcessingFake(payLoad, typeof(Fakes.CategorisesProcessingResultFake)))
-                .AddModule(new Fakes.CategorisesProcessingResultFake(GetSampleMessages()))
-                .WithQueueMechanism(new InMemoryQueueFactory())
-                .AttachReportGenerator(reportGenerator)
+            await ServerShotLinearSession.StartBuild()
+                .AddModule<Fakes.AddsToQueueProcessingFake>(payLoad, typeof(Fakes.CategorisesProcessingResultFake))
+                .AddModule<Fakes.CategorisesProcessingResultFake>(GetSampleMessages())
+                .AttachSessionQueueMechanism(new InMemoryQueueFactory())
+                .AttachSessionReportGenerator(reportGenerator)
                 .RunAsync();
 
             //assert

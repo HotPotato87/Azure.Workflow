@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using ServerShot.Framework.Core.Architecture;
 using ServerShot.Framework.Core.Implementation;
 using ServerShot.Framework.Core.Plugins.Alerts;
-using ServerShot.Framework.Core.ServiceBus;
+using ServerShot.Framework.Core.Queue;
 using ServerShot.Framework.Core.Builder;
+using Servershot.Framework.Entities;
 using ServerShot.Framework.Tests.IntegrationTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -29,10 +30,10 @@ namespace ServerShot.Framework.Tests.IntegrationTests
             var logManager = new Mock<LogManagerBase>(MockBehavior.Loose);
 
             //act
-            await ServerShotSession.StartBuild()
-                .AddModule(new Fakes.LogsMessageFake(message))
-                .WithQueueMechanism(new InMemoryQueueFactory())
-                .AttachLogger(logManager.Object)
+            await ServerShotLinearSession.StartBuild()
+                .AddModule<Fakes.LogsMessageFake>(message)
+                .AttachSessionQueueMechanism(new InMemoryQueueFactory())
+                .AttachSessionLogger(logManager.Object)
                 .RunAsync();
 
             //assert

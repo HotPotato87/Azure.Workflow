@@ -10,7 +10,7 @@ namespace ServerShot.Framework.Core.Interfaces
 {
     public interface IProcessingStopStrategy
     {
-        bool ShouldStop(ServerShotSession session);
+        bool ShouldStop(ServerShotSessionBase session);
         bool ShouldSpecificModuleStop(IServerShotModule module);
     }
 }

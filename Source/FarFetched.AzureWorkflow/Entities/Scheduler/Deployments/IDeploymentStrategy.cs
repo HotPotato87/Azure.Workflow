@@ -5,6 +5,6 @@ namespace ServerShot.Framework.Core.Entities.Scheduler.Deployments
 {
     public interface IDeploymentStrategy
     {
-        Task Deploy(ServerShotSession session);
+        Task Deploy(ServerShotSessionBase session);
     }
 }

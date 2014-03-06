@@ -12,9 +12,11 @@ namespace ServerShot.Framework.Core.Entities
         {
             ErrorThresholdBeforeFail = 1;
             CheckStopStrategyEvery = TimeSpan.FromSeconds(1);
+            NeverFail = false;
         }
 
         public int ErrorThresholdBeforeFail { get; set; }
         public TimeSpan CheckStopStrategyEvery { get; set; }
+        public bool NeverFail { get; set; }
     }
 }

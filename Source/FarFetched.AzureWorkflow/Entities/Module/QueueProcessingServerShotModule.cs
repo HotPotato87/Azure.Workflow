@@ -9,6 +9,7 @@ using ServerShot.Framework.Core.Architecture;
 using ServerShot.Framework.Core.Enums;
 using ServerShot.Framework.Core.Implementation;
 using ServerShot.Framework.Core.Plugins.Alerts;
+using Servershot.Framework.Enums;
 
 namespace ServerShot.Framework.Core
 {
@@ -30,7 +31,10 @@ namespace ServerShot.Framework.Core
         protected QueueProcessingServerShotModule(ServerShotModuleSettings settings = default(ServerShotModuleSettings))
             :base(settings)
         {
-            
+            this.OnStarted += () =>
+            {
+                base.Queue.ObjectWrapperCreated += OnQueueMessageCreated;
+            };
         }
 
         public override async Task OnStart()
@@ -51,8 +55,8 @@ namespace ServerShot.Framework.Core
             }
 
             this.State = ModuleState.Finished;
-            this.LogMessage("{0} : Finished Processing", this.QueueName);
-            this.LogMessage("Total of {0} messages processed", ProcessedCount);
+            this.LogMessage("{0} : Finished Processing", LoggingType.HighImportance, this.QueueName);
+            this.LogMessage("Total of {0} messages processed", LoggingType.HighImportance, LoggingType.Infrastructure, ProcessedCount);
         }
 
         public async override Task OnStop()
@@ -62,18 +66,17 @@ namespace ServerShot.Framework.Core
 
         internal virtual async Task ProcessQueue()
         {
-            this.LogMessage("{0} : Polling Queue", this.QueueName);
             IEnumerable<T> messages;
             while ((messages = await this.Queue.ReceieveAsync<T>(this.Settings.QueueSettings.BatchCount)).Any())
             {
                 EmptyQueueIterations = 0;
                 IsRecievedItems = true;
                 this.LastRecieved = DateTime.Now;
-                this.LogMessage("Dequeued {0} messages", messages.Count());
+                this.LogMessage("Dequeued {0} messages", LoggingType.Infrastructure, messages.Count());
                 try
                 {
                     await this.ProcessAsync(messages);
-                    this.LogMessage("Processed {0} messages", messages.Count());
+                    this.LogMessage("Processed {0} messages", LoggingType.Infrastructure, messages.Count());
                 }
                 catch (Exception processingError)
                 {
@@ -82,10 +85,10 @@ namespace ServerShot.Framework.Core
                 }
             }
 
-            this.LogMessage("{0} : No Items in Queue", this.QueueName);
+            await Task.Delay(Settings.DelayIfNoQueueItems);
         }
 
-        public abstract Task ProcessAsync(IEnumerable<T> queueCollection);
+        public abstract Task ProcessAsync(IEnumerable<T> incomingOrders);
 
         public async void Stop()
         {
@@ -93,18 +96,18 @@ namespace ServerShot.Framework.Core
             this.State = ModuleState.Finished;
         }
 
-        protected override void CategorizeResult(ProcessingResult result, string description = null, bool countAsProcessed = true)
+        protected override void CategorizeResult(ProcessingResult result, string description = null, CategorizationLevel level = CategorizationLevel.Module, bool countAsProcessed = true)
         {
             this.LastRecieved = DateTime.Now;
 
-            base.CategorizeResult(result, description, countAsProcessed);
+            base.CategorizeResult(result, description, level, countAsProcessed);
         }
 
-        protected override void CategorizeResult(object key, string description = null, bool countAsProcessed = true)
+        protected override void CategorizeResult(object key, string description = null, CategorizationLevel level = CategorizationLevel.Module, bool countAsProcessed = true)
         {
             this.LastRecieved = DateTime.Now;
 
-            base.CategorizeResult(key, description, countAsProcessed);
+            base.CategorizeResult(key, description, level, countAsProcessed);
         }
 
         protected override void SendTo<E>(T obj)
@@ -112,6 +115,15 @@ namespace ServerShot.Framework.Core
             LastRecieved = DateTime.Now;
 
             base.SendTo<E>(obj);
+        }
+
+        /// <summary>
+        /// Called everytime the queue creates a new message. This is the last chance the message can be manipulated before it gets sent through the queueing technology----.
+        /// </summary>
+        /// <param name="queueMessage"></param>
+        protected virtual void OnQueueMessageCreated(object queueMessage)
+        {
+            //nothing
         }
     }
 

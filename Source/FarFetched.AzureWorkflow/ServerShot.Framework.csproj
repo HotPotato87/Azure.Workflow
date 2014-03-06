@@ -23,7 +23,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\..\Workspaces\WhatsonGlobal.Importing\Source\WhatsonGlobal.Importing\External\ServerShot\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -58,6 +58,24 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Azure|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Azure\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Azure|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Azure\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
@@ -83,6 +101,9 @@
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=2.1.0.3, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WindowsAzure.Storage.2.1.0.3\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
@@ -119,11 +140,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Environment\WorkflowEnvironment.cs" />
-    <Compile Include="Entities\Environment\WorkflowEnvironmentBuilder.cs" />
-    <Compile Include="Entities\Scheduler\WorkflowSchedulerBuilder.cs" />
+    <Compile Include="Builders\ServerShotDeploymentBuilder.cs" />
+    <Compile Include="Builders\ServerShotModuleBuilder.cs" />
+    <Compile Include="Builders\ServerShotSchedulerWithSessionBuilder.cs" />
+    <Compile Include="Entities\Environment\ServerShotEnvironment.cs" />
+    <Compile Include="Builders\ServerShotEnvironmentBuilder.cs" />
+    <Compile Include="Builders\ServerShotSchedulerBuilder.cs" />
+    <Compile Include="Entities\Module\ServiceBusQueueProcessingModule.cs" />
+    <Compile Include="Entities\Session\ServerShotContinuousSession.cs" />
+    <Compile Include="Entities\Session\ServerShotLinearSession.cs" />
+    <Compile Include="Enums\LoggingType.cs" />
+    <Compile Include="EventHandlers\OnRaisedProcessedArgs.cs" />
     <Compile Include="Extentions\AsyncHelpers.cs" />
-    <Compile Include="Extentions\WorkflowBuilderExtentions.cs" />
+    <Compile Include="Extentions\ObjectExtentions.cs" />
+    <Compile Include="Extentions\ServerShotBuilderExtentions.cs" />
     <Compile Include="Entities\Module\InitialServerShotModule.cs" />
     <Compile Include="Entities\Module\QueueProcessingServerShotModule.cs" />
     <Compile Include="Entities\Scheduler\Deployments\IDeploymentStrategy.cs" />
@@ -133,6 +163,7 @@
     <Compile Include="Enums\ModuleState.cs" />
     <Compile Include="Enums\ProcessingResult.cs" />
     <Compile Include="Exception\WorkflowConfigurationException.cs" />
+    <Compile Include="Extentions\ServershotModuleBuilderExtentions.cs" />
     <Compile Include="Extentions\WorkflowEnvironmentExtentions.cs" />
     <Compile Include="Extentions\WorkflowSchedulerExtentions.cs" />
     <Compile Include="Helpers\EnvironmentHelpers.cs" />
@@ -146,12 +177,14 @@
     <Compile Include="Implementation\Reporting\ConsoleReportGenerator.cs" />
     <Compile Include="Implementation\Reporting\ProcessedItemDetail.cs" />
     <Compile Include="Implementation\Reporting\SendGridReportGenerator.cs" />
-    <Compile Include="Entities\Session\ServerShotSessionBuilder.cs" />
+    <Compile Include="Builders\ServerShotSessionBuilder.cs" />
     <Compile Include="Implementation\StopStrategy\ContinousProcessingStategy.cs" />
+    <Compile Include="Implementation\StopStrategy\EmptyQueueCountStopStrategy.cs" />
+    <Compile Include="Implementation\StopStrategy\LinearProcessingFinishedStopStrategy.cs" />
     <Compile Include="Implementation\StopStrategy\NoQueueInteractionTimeoutStopStrategy.cs" />
     <Compile Include="Interfaces\ICloudQueue.cs" />
     <Compile Include="Entities\Module\ServerShotModuleSettings.cs" />
-    <Compile Include="Entities\Session\ServerShotSession.cs" />
+    <Compile Include="Entities\Session\ServerShotSessionBase.cs" />
     <Compile Include="Interfaces\IIOCContainer.cs" />
     <Compile Include="Interfaces\IProcessingStopStrategy.cs" />
     <Compile Include="Interfaces\IQueueProcessingServerShotModule.cs" />
@@ -160,12 +193,15 @@
     <Compile Include="Plugins\Alerts\Alert.cs" />
     <Compile Include="Plugins\Alerts\AlertLevel.cs" />
     <Compile Include="Plugins\Alerts\AlertManagerBase.cs" />
+    <Compile Include="Plugins\Logging\ILoggingManager.cs" />
     <Compile Include="Plugins\Logging\LogManagerBase.cs" />
     <Compile Include="Plugins\Logging\LogMessage.cs" />
     <Compile Include="Plugins\Persistance\PersistanceManagerBase.cs" />
     <Compile Include="Plugins\Reporting\ModuleProcessingSummary.cs" />
     <Compile Include="IOC\IOC.cs" />
     <Compile Include="Plugins\Reporting\ReportGenerationPlugin.cs" />
+    <Compile Include="Plugins\Scaling\IInstanceScaler.cs" />
+    <Compile Include="Plugins\Scaling\QueueBacklogScaler.cs" />
     <Compile Include="Plugins\ServerShotSessionPluginBase.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

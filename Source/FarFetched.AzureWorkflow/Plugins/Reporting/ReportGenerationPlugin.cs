@@ -8,41 +8,51 @@ using System.Threading.Tasks;
 using ServerShot.Framework.Core.Architecture;
 using ServerShot.Framework.Core.Implementation;
 using ServerShot.Framework.Core.Implementation.Reporting;
+using ServerShot.Framework.Core.Implementation.StopStrategy;
 using ServerShot.Framework.Core.Interfaces;
+using Servershot.Framework.Entities;
 
 namespace ServerShot.Framework.Core.Plugins
 {
-    public abstract class ReportGenerationPlugin : ServerShotSessionPluginBase
+    public abstract class ReportGenerationPluginBase : ServerShotSessionBasePluginBase
     {
         public ReadOnlyCollection<ModuleProcessingSummary> ModuleProcessingSummaries { get; set; }
         private readonly List<ModuleProcessingSummary> _moduleProcessingSummaries = new List<ModuleProcessingSummary>(); 
 
-        public ReportGenerationPlugin()
+        public ReportGenerationPluginBase()
         {
             ModuleProcessingSummaries = new ReadOnlyCollection<ModuleProcessingSummary>(_moduleProcessingSummaries);
         }
 
-        internal override void OnSessionStarted(ServerShotSession session)
+        public override void OnSessionStarted(Implementation.ServerShotSessionBase session)
         {
             base.OnSessionStarted(session);
 
-            session.OnSessionFinished += ServerShotSession => this.SendSessionReport(ServerShotSession, ModuleProcessingSummaries);
+            if (session is ServerShotLinearSession)
+            {
+                session.OnSessionFinished += ServerShotSessionBase => this.SendSessionReportAsync(ServerShotSessionBase, ModuleProcessingSummaries);
+            }
+            else if (session is ServerShotContinuousSession)
+            {
+                (session as ServerShotContinuousSession).RequestReporting += () => this.SendSessionReportAsync(session, ModuleProcessingSummaries);
+            }
+            
         }
 
-        internal override void OnModuleStarted(IServerShotModule module)
+        public override void OnModuleStarted(IServerShotModule module)
         {
             //TODO : Unit test this logic around categorization properly
             _moduleProcessingSummaries.Add(new ModuleProcessingSummary(module));
-            module.OnRaiseProcessed += (key, detail, countsAsProcessed) =>
+            module.OnRaiseProcessed += (args) =>
             {
                 var summary = this.ModuleProcessingSummaries.Single(x => x.Module == module);
-                if (!summary.ResultCategories.ContainsKey(key)) summary.ResultCategories[key] = 0;
-                if (countsAsProcessed) summary.TotalProcessed++;
-                summary.ResultCategories[key]++;
-                if (detail != null)
+                if (!summary.ResultCategories.ContainsKey(args.ResultKey.ToString())) summary.ResultCategories[args.ResultKey.ToString()] = 0;
+                if (args.CountAsProcessed) summary.TotalProcessed++;
+                summary.ResultCategories[args.ResultKey.ToString()]++;
+                if (args.Description != null)
                 {
-                    if (!summary.ResultCategoryExtraDetail.ContainsKey(key)) summary.ResultCategoryExtraDetail[key] = new List<ProcessedItemDetail>();
-                    summary.ResultCategoryExtraDetail[key].Add(new ProcessedItemDetail(detail));
+                    if (!summary.ResultCategoryExtraDetail.ContainsKey(args.ResultKey.ToString())) summary.ResultCategoryExtraDetail[args.ResultKey.ToString()] = new List<ProcessedItemDetail>();
+                    summary.ResultCategoryExtraDetail[args.ResultKey.ToString()].Add(new ProcessedItemDetail(args.Description));
                 }
             };
             
@@ -59,6 +69,6 @@ namespace ServerShot.Framework.Core.Plugins
             };
         }
 
-        public abstract void SendSessionReport(ServerShotSession ServerShotSession, IEnumerable<ModuleProcessingSummary> moduleSummaries);
+        public abstract Task SendSessionReportAsync(ServerShotSessionBase session, IEnumerable<ModuleProcessingSummary> moduleSummaries);
     }
 }

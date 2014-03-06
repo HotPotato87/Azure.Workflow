@@ -12,14 +12,14 @@ namespace ServerShot.Framework.Core.Extentions
 {
     public static class WorkflowSchedulerExtentions
     {
-        public static WorkflowSchedulerWithSessionBuilder AddSession(this WorkflowSchedulerBuilder builder, ServerShotSession session)
+        public static ServerShotSchedulerWithSessionBuilder AddSession(this ServerShotSchedulerBuilder builder, ServerShotSessionBase session)
         {
             builder.Scheduler.Session.Add(session);
 
-            return new WorkflowSchedulerWithSessionBuilder(builder.Scheduler);
+            return new ServerShotSchedulerWithSessionBuilder(builder.Scheduler);
         }
 
-        public static Task BeginSchedulerAsync(this WorkflowSchedulerBuilder builder)
+        public static Task BeginSchedulerAsync(this ServerShotSchedulerBuilder builder)
         {
             return builder.Scheduler.RunAsync();
         }
@@ -27,14 +27,14 @@ namespace ServerShot.Framework.Core.Extentions
 
     public static class WorkflowSchedulerWithSessionBuilderExtentions
     {
-        public static WorkflowSchedulerWithSessionBuilder WithDeploymentStrategy(this WorkflowSchedulerWithSessionBuilder builder, IDeploymentStrategy deploymentStrategy)
+        public static ServerShotSchedulerWithSessionBuilder WithDeploymentStrategy(this ServerShotSchedulerWithSessionBuilder builder, IDeploymentStrategy deploymentStrategy)
         {
             builder.Scheduler.DeploymentStrategy = deploymentStrategy;
 
             return builder;
         }
 
-        public static WorkflowSchedulerWithSessionBuilder WithTrigger(this WorkflowSchedulerWithSessionBuilder builder, ITrigger trigger)
+        public static ServerShotSchedulerWithSessionBuilder WithTrigger(this ServerShotSchedulerWithSessionBuilder builder, ITrigger trigger)
         {
             throw new NotImplementedException();
         }

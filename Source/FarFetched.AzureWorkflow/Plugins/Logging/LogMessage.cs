@@ -6,11 +6,13 @@ namespace ServerShot.Framework.Core.Plugins.Alerts
     {
         public DateTime DateTime { get; set; }
         public string Message { get; set; }
+        public string Category { get; set; }
 
-        public LogMessage(string message)
+        public LogMessage(string message, string category)
         {
             this.DateTime = DateTime.Now;
             this.Message = message;
+            Category = category;
         }
     }
 }

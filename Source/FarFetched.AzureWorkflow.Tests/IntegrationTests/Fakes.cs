@@ -63,14 +63,30 @@ namespace ServerShot.Framework.Tests.IntegrationTests
                 
             }
 
-            public override async Task ProcessAsync(IEnumerable<object> queueCollection)
+            public override async Task ProcessAsync(IEnumerable<object> incomingOrders)
             {
-                this.Recieved = queueCollection;
+                this.Recieved = incomingOrders;
 
                 this.Recieved.ToList().ForEach(x=>this.CategorizeResult(ProcessingResult.Success));
             }
 
             public IEnumerable<object> Recieved { get; set; }
+        }
+
+        internal class LogMessageFake : InitialServerShotModule<object>
+        {
+            private readonly string _message;
+
+            public LogMessageFake(string message)
+            {
+                _message = message;
+            }
+
+            public IEnumerable<object> Recieved { get; set; }
+            public async override Task OnStart()
+            {
+                base.LogMessage(_message);
+            }
         }
 
         internal class QueueProcessingThowsErrorFake : QueueProcessingServerShotModule<object>
@@ -82,9 +98,9 @@ namespace ServerShot.Framework.Tests.IntegrationTests
                 _exceptionFactory = exceptionFactory;
             }
 
-            public override async Task ProcessAsync(IEnumerable<object> queueCollection)
+            public override async Task ProcessAsync(IEnumerable<object> incomingOrders)
             {
-                this.Recieved = queueCollection;
+                this.Recieved = incomingOrders;
 
                 this.Recieved.ToList().ForEach(x => this.RaiseError(_exceptionFactory.Invoke()));
             }
@@ -101,9 +117,9 @@ namespace ServerShot.Framework.Tests.IntegrationTests
                 _processMessages = processMessages;
             }
 
-            public override async Task ProcessAsync(IEnumerable<object> queueCollection)
+            public override async Task ProcessAsync(IEnumerable<object> incomingOrders)
             {
-                this.Recieved = queueCollection;
+                this.Recieved = incomingOrders;
 
                 _processMessages.ForEach(x=>base.CategorizeResult(x.Item1, x.Item2));
 
@@ -122,7 +138,7 @@ namespace ServerShot.Framework.Tests.IntegrationTests
                 _exceptionFactory = exceptionFactory;
             }
 
-            public override async Task ProcessAsync(IEnumerable<object> queueCollection)
+            public override async Task ProcessAsync(IEnumerable<object> incomingOrders)
             {
                 throw new Exception("Should throw");
             }
@@ -139,7 +155,7 @@ namespace ServerShot.Framework.Tests.IntegrationTests
                 _message = message;
             }
 
-            public override async Task ProcessAsync(IEnumerable<object> queueCollection)
+            public override async Task ProcessAsync(IEnumerable<object> incomingOrders)
             {
                 this.LogMessage(_message);
             }
@@ -160,13 +176,13 @@ namespace ServerShot.Framework.Tests.IntegrationTests
             }
         }
 
-        internal class ReportGenerationFake : ReportGenerationPlugin
+        internal class ReportGenerationFake : ReportGenerationPluginBase
         {
-            internal ServerShotSession Session { get; private set; }
+            internal ServerShotSessionBase Session { get; private set; }
 
-            public override void SendSessionReport(ServerShotSession ServerShotSession, IEnumerable<ModuleProcessingSummary> moduleSummaries)
+            public override async Task SendSessionReportAsync(ServerShotSessionBase session, IEnumerable<ModuleProcessingSummary> moduleSummaries)
             {
-                this.Session = ServerShotSession;
+                this.Session = session;
             }
         }
     }

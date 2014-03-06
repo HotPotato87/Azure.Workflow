@@ -7,13 +7,13 @@ using ServerShot.Framework.Core.Implementation;
 
 namespace ServerShot.Framework.Core.Plugins.Alerts
 {
-    public abstract class LogManagerBase : ServerShotSessionPluginBase
+    public abstract class LogManagerBase : ServerShotSessionBasePluginBase, ILoggingManager
     {
-        internal override void OnModuleStarted(IServerShotModule module)
+        public override void OnModuleStarted(IServerShotModule module)
         {
-            module.OnLogMessage += message => OnLogMessage(module, new LogMessage(message));
+            module.OnLogMessage += (message, category) => OnLogMessage(new LogMessage(message, category), module);
         }
 
-        public abstract void OnLogMessage(IServerShotModule module, LogMessage message);
+        public abstract void OnLogMessage(LogMessage message, IServerShotModule module = null);
     }
 }

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using Newtonsoft.Json;
 using ServerShot.Framework.Core.Plugins.Persistance;
+using Servershot.Framework.Extentions;
 
 namespace ServerShot.Framework.Core.Implementation.Persistance
 {
@@ -20,6 +22,7 @@ namespace ServerShot.Framework.Core.Implementation.Persistance
         private CloudTable _table;
         private bool _isInitialised = false;
         private CloudTableClient _tableClient;
+        private string _tableName;
 
         public AzureTablePersistance(string accountName, string accountKey)
         {
@@ -37,11 +40,13 @@ namespace ServerShot.Framework.Core.Implementation.Persistance
             this.TableName = tableName;
         }
 
-        public override string Validate(ServerShotSession module)
+        public string TableName { get; set; }
+
+        public override string Validate(ServerShotSessionBase module)
         {
             if (string.IsNullOrEmpty(module.SessionName))
             {
-                return "ServerShot session must specify a name for Azure table persistance to be used. See ServerShotSession.SessionName";
+                return "ServerShot session must specify a name for Azure table persistance to be used. See ServerShotSessionBase.SessionName";
             }
 
             return base.Validate(module);
@@ -71,13 +76,17 @@ namespace ServerShot.Framework.Core.Implementation.Persistance
 
         protected override async Task OnStoreEnumerableAsync(string table, object o)
         {
+            
+
             this.TableName = table;
             if (!this._isInitialised) await Initialize();
+
+            await ReCheckTable(table);
 
             var entity1 = new DynamicTableEntity();
             entity1.PartitionKey = table;
             entity1.RowKey = DateTime.Now.Ticks.ToString();
-            entity1["item"] = EntityProperty.CreateEntityPropertyFromObject(o);
+            entity1["json"] = EntityProperty.CreateEntityPropertyFromObject(o.ToJson());
 
             TableOperation operation = TableOperation.InsertOrReplace(entity1);
             _table.Execute(operation);
@@ -85,12 +94,30 @@ namespace ServerShot.Framework.Core.Implementation.Persistance
 
         protected override async Task<IEnumerable<T>> OnRetrieveEnumerableAsync<T>(string table)
         {
+            
+
             this.TableName = table;
             if (!this._isInitialised) await Initialize();
 
+            await ReCheckTable(table);
+
             var prop = _table.CreateQuery<DynamicTableEntity>();
             var result = _table.ExecuteQuery(prop).ToList();
-            return result.Select(x=>x["item"].PropertyAsObject).Cast<T>();
+            var jsonStrings = result.Select(x=>x["json"].PropertyAsObject.ToString()).ToList();
+            return jsonStrings.Select(JsonConvert.DeserializeObject<T>);
+        }
+
+        private async Task ReCheckTable(string table)
+        {
+            if (table != _table.Name)
+            {
+                _table = _tableClient.GetTableReference(this.TableName);
+
+                if (!await _table.ExistsAsync())
+                {
+                    await _table.CreateAsync();
+                }
+            }
         }
 
         private async Task Initialize(string tableName = "")

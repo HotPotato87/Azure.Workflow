@@ -14,7 +14,7 @@ namespace FarFetched.AzureWorkflow.Tests.Helpers
         public static string _accountName = "serviceshot";
         public static string _accountKey = "57Kn2DQl1nX/TjZQyNyNZzDuyfOup0fCfPoT/gZqdYJc8lpygJUq9S6lln3f5O7+s6PzBbArIn2Z+cqMcdqqDg==";
 
-        public static PersistanceManagerBase CreatePersistanceClient()
+        public static IPersistanceManager CreatePersistanceClient()
         {
             return new AzureTablePersistance(_accountName, _accountKey);
         }

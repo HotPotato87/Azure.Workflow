@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
+using Microsoft.ServiceBus.Notifications;
 using ServerShot.Framework.Core.Implementation;
 using ServerShot.Framework.Core.Interfaces;
 
-namespace ServerShot.Framework.Core.ServiceBus
+namespace ServerShot.Framework.Core.Queue
 {
     public class AzureServiceBusQueue : ICloudQueue
     {
@@ -60,7 +61,20 @@ namespace ServerShot.Framework.Core.ServiceBus
 
         public async Task AddToAsync<T>(IEnumerable<T> items)
         {
-            await _queueClient.SendBatchAsync(items.Select(x => new BrokeredMessage(x)));
+            var brokeredMessages = items.Select(x => new BrokeredMessage(x));
+            if (ObjectWrapperCreated != null) brokeredMessages.ToList().ForEach(x => ObjectWrapperCreated(x));
+            await _queueClient.SendBatchAsync(brokeredMessages);
         }
+
+        public int Count
+        {
+            get
+            {
+                var subscriptionDesc = _namespaceManager.GetQueue(_queueName);
+                return (int)subscriptionDesc.MessageCount;
+            }
+        }
+
+        public event Action<object> ObjectWrapperCreated;
     }
 }

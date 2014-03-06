@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,11 +8,11 @@ using Microsoft.ServiceBus.Messaging;
 using ServerShot.Framework.Core.Implementation;
 using ServerShot.Framework.Core.Interfaces;
 
-namespace ServerShot.Framework.Core.ServiceBus
+namespace ServerShot.Framework.Core.Queue
 {
     public class InMemoryQueue : ICloudQueue
     {
-        internal  Queue<object> _inMemoryCollection = new Queue<object>();
+        internal ConcurrentQueue<object> _inMemoryCollection = new ConcurrentQueue<object>();
         private readonly ServiceBusQueueSettings _settings;
 
         public InMemoryQueue(ServiceBusQueueSettings settings = null)
@@ -26,7 +27,11 @@ namespace ServerShot.Framework.Core.ServiceBus
             {
                 if (_inMemoryCollection.Any())
                 {
-                    result.Add((T)_inMemoryCollection.Dequeue());    
+                    object obj;
+                    if (_inMemoryCollection.TryDequeue(out obj))
+                    {
+                        result.Add((T) obj);
+                    }
                 }
                 else
                 {
@@ -40,5 +45,12 @@ namespace ServerShot.Framework.Core.ServiceBus
         {
             items.ToList().ForEach(x=>_inMemoryCollection.Enqueue(x));
         }
+
+        public int Count
+        {
+            get { return _inMemoryCollection.Count; }
+        }
+
+        public event Action<object> ObjectWrapperCreated;
     }
 }

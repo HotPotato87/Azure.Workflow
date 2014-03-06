@@ -14,22 +14,24 @@ namespace ServerShot.Framework.Core.Entities.Scheduler
     /// </summary>
     public class WorkflowScheduler
     {
-        public List<ServerShotSession> Session { get; internal set; }
+        public List<ServerShotSessionBase> Session { get; internal set; }
         public IDeploymentStrategy DeploymentStrategy { get; internal set; }
 
-        public static WorkflowSchedulerBuilder Build()
+        public static ServerShotSchedulerBuilder Build()
         {
-            return new WorkflowSchedulerBuilder(new WorkflowScheduler());
+            return new ServerShotSchedulerBuilder(new WorkflowScheduler());
         }
 
         internal WorkflowScheduler()
         {
-            Session = new List<ServerShotSession>();
+            Session = new List<ServerShotSessionBase>();
         }
 
         internal async Task RunAsync()
         {
             ValidateScheduler();
+
+
         }
 
         private void ValidateScheduler()

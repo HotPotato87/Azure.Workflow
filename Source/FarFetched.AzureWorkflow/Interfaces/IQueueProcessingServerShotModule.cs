@@ -13,6 +13,6 @@ namespace ServerShot.Framework.Core.Architecture
 
     public interface IQueueProcessingServerShotModule<T> : IQueueProcessingServerShotModule
     {
-        Task ProcessAsync(IEnumerable<T> queueCollection);
+        Task ProcessAsync(IEnumerable<T> incomingOrders);
     }
 }

@@ -17,7 +17,7 @@ namespace ServerShot.Framework.Core.Implementation.StopStrategy
     /// </summary>
     public class ContinousProcessingStategy : IProcessingStopStrategy
     {
-        public bool ShouldStop(ServerShotSession session)
+        public bool ShouldStop(ServerShotSessionBase session)
         {
             return session.RunningModules.All(x => x.State == ModuleState.Finished);
         }

@@ -7,27 +7,26 @@ using ServerShot.Framework.Core.Architecture;
 
 namespace ServerShot.Framework.Core.Plugins.Persistance
 {
-    public interface IPersistanceManager
+    public interface IPersistanceManager : IServerShotSessionBasePlugin
     {
-        string TableName { get; set; }
         Task StoreAsync(string key, object o);
         Task<T> RetrieveAsync<T>(string key);
         Task StoreEnumerableAsync(string table, object o);
         Task<IEnumerable<T>> RetrieveEnumerableAsync<T>(string table);
     }
 
-    public abstract class PersistanceManagerBase : ServerShotSessionPluginBase, IPersistanceManager
+    public abstract class PersistanceManagerBase : ServerShotSessionBasePluginBase, IPersistanceManager
     {
-        public string TableName { get; set; }
-
-        internal override void OnModuleStarted(IServerShotModule module)
+        public override void OnModuleStarted(IServerShotModule module)
         {
-            this.TableName = module.Session.SessionName;
+            this.Module = module;
             module.OnStoreAsync += StoreAsync;
             module.OnRetrieveAsync += RetrieveAsync<object>;
             module.OnStoreEnumerableAsync += StoreEnumerableAsync;
             module.OnRetrieveEnumerableAsync += RetrieveEnumerableAsync<object>;
         }
+
+        protected IServerShotModule Module { get; set; }
 
         protected abstract Task OnStoreAsync(string key, object o);
 

@@ -13,11 +13,13 @@ namespace ServerShot.Framework.Core.Implementation
         public TimeSpan QueuePollTime { get; set; }
         public int ThrowFailureAfterCapturedErrors { get; set; }
         public bool SendAlertOnCapturedError { get; set; }
+        public TimeSpan DelayIfNoQueueItems { get; set; }
 
         public ServerShotModuleSettings()
         {
             this.ReceiveTimeout = new TimeSpan(0, 0, 1, 0);
-            QueuePollTime = new TimeSpan(hours: 0, minutes: 0, seconds: 5);
+            QueuePollTime = new TimeSpan(0, 0, 0, 0, 0);
+            DelayIfNoQueueItems = new TimeSpan(hours: 0, minutes: 0, seconds: 5);
             QueueSettings = new ServiceBusQueueSettings();
             SendAlertOnCapturedError = true;
             ThrowFailureAfterCapturedErrors = 2;

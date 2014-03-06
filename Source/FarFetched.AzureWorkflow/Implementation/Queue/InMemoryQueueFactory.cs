@@ -1,7 +1,7 @@
 ﻿using ServerShot.Framework.Core.Architecture;
 using ServerShot.Framework.Core.Interfaces;
 
-namespace ServerShot.Framework.Core.ServiceBus
+namespace ServerShot.Framework.Core.Queue
 {
     public class InMemoryQueueFactory : ICloudQueueFactory
     {
