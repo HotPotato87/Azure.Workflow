@@ -48,6 +48,7 @@
     <Compile Include="ExampleScenarios\Scenario3.cs" />
     <Compile Include="ExampleScenarios\Scenario4.cs" />
     <Compile Include="ExampleScenarios\Scenario5.cs" />
+    <Compile Include="ExampleScenarios\Scenario6.cs" />
     <Compile Include="Modules\StockManagementModule.cs" />
     <Compile Include="Modules\WarehousingModule.cs" />
     <Compile Include="Modules\WebsiteUIModule.cs" />

@@ -67,7 +67,8 @@ namespace Servershot.WebsiteOrderSample
                 new Scenario2(),
                 new Scenario3(), 
                 new Scenario4(),
-                new Scenario5()
+                new Scenario5(),
+                new Scenario6()
             });
         }
     }

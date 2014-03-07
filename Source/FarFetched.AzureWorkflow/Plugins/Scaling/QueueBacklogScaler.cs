@@ -83,8 +83,11 @@ namespace Servershot.Framework.Plugins.Scaling
                 //check if recently changed
                 if (DateTime.Now.Subtract(_lastChangedInstance) >= this.InstanceTimeLayoffTime)
                 {
-                    await _module.Session.ChangeInstancesAsync(_module, add: 1);
-                    _lastChangedInstance = DateTime.Now;
+                    if (_module.Session.RunningModules.Count(x => x.GetType() == _module.GetType()) < this.MaxInstances)
+                    {
+                        await _module.Session.ChangeInstancesAsync(_module, add: 1);
+                        _lastChangedInstance = DateTime.Now; 
+                    }
                 }
             }
 
