@@ -114,6 +114,27 @@ namespace ServerShot.Framework.Core
             LogMessage("Module now stopped", LoggingType.Infrastructure);
         }
 
+        /// <summary>
+        /// This will get checked before a server shot session is run. Ensures that all modules are good to go, override to modify default return of validated.
+        /// </summary>
+        /// <returns></returns>
+        public virtual Task<WorkflowModuleValidationResult> Validate()
+        {
+            return Task.FromResult(new WorkflowModuleValidationResult()
+            {
+                DidValidate = true
+            });
+        }
+
+        /// <summary>
+        /// Run after validation and before the module is started
+        /// </summary>
+        /// <returns></returns>
+        public virtual Task InitAsync()
+        {
+            return Task.FromResult<object>(null);
+        }
+
         #region Abstract
 
         public async virtual Task OnStart()

@@ -28,6 +28,8 @@ namespace ServerShot.Framework.Core.Architecture
         int ProcessedCount { get; }
         Dictionary<Type, int> SentToAudit { get; }
         ServerShotModuleSettings Settings { get; set; }
+        Task<WorkflowModuleValidationResult> Validate();
+        Task InitAsync();
 
         event Action<string, string> OnLogMessage;
         event Action OnStarted;
@@ -40,5 +42,12 @@ namespace ServerShot.Framework.Core.Architecture
         event Func<string, Task<IEnumerable<object>>> OnRetrieveEnumerableAsync; 
         event Action OnFinished;
         event Action<OnRaisedProcessedArgs> OnRaiseProcessed;
+        
+    }
+
+    public class WorkflowModuleValidationResult
+    {
+        public bool DidValidate { get; set; }
+        public string Message { get; set; }
     }
 }

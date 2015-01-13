@@ -30,3 +30,5 @@ C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkf
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\obj\Debug\ServerShot.Framework.Tests.pdb
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkflow.Tests\bin\Debug\Newtonsoft.Json.xml
+C:\Users\patri_000\Documents\GitHub\Servershot.Framework\Source\FarFetched.AzureWorkflow.Tests\obj\Debug\ServerShot.Framework.Tests.csprojResolveAssemblyReference.cache
+C:\Users\patri_000\Documents\GitHub\Servershot.Framework\Source\FarFetched.AzureWorkflow.Tests\obj\Debug\ServerShot.Framework.Tests.dll

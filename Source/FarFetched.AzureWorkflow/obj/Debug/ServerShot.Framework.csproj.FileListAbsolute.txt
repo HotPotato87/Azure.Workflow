@@ -67,3 +67,10 @@ C:\Users\Patrick-Laptop\Source\Repos\Azure.Workflow\Source\FarFetched.AzureWorkf
 C:\Users\Patrick-Laptop\Source\Workspaces\WhatsonGlobal.Importing\Source\WhatsonGlobal.Importing\External\ServerShot\Servershot.Framework.dll.config
 C:\Users\Patrick-Laptop\Source\Workspaces\WhatsonGlobal.Importing\Source\WhatsonGlobal.Importing\External\ServerShot\Servershot.Framework.dll
 C:\Users\Patrick-Laptop\Source\Workspaces\WhatsonGlobal.Importing\Source\WhatsonGlobal.Importing\External\ServerShot\Servershot.Framework.pdb
+C:\Users\patri_000\Documents\Workspaces\WhatsonGlobal.Importing\Source\WhatsonGlobal.Importing\External\ServerShot\Servershot.Framework.dll.config
+C:\Users\patri_000\Documents\Workspaces\WhatsonGlobal.Importing\Source\WhatsonGlobal.Importing\External\ServerShot\Servershot.Framework.dll
+C:\Users\patri_000\Documents\Workspaces\WhatsonGlobal.Importing\Source\WhatsonGlobal.Importing\External\ServerShot\Servershot.Framework.pdb
+C:\Users\patri_000\Documents\GitHub\Servershot.Framework\Source\FarFetched.AzureWorkflow\obj\Debug\ServerShot.Framework.csproj.App.config
+C:\Users\patri_000\Documents\GitHub\Servershot.Framework\Source\FarFetched.AzureWorkflow\obj\Debug\ServerShot.Framework.csprojResolveAssemblyReference.cache
+C:\Users\patri_000\Documents\GitHub\Servershot.Framework\Source\FarFetched.AzureWorkflow\obj\Debug\Servershot.Framework.dll
+C:\Users\patri_000\Documents\GitHub\Servershot.Framework\Source\FarFetched.AzureWorkflow\obj\Debug\Servershot.Framework.pdb

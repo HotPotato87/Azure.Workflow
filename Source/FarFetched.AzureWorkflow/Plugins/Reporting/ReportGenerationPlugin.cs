@@ -30,6 +30,7 @@ namespace ServerShot.Framework.Core.Plugins
 
             if (session is ServerShotLinearSession)
             {
+                session.OnFailure += (module, s) => this.SendFailureReport(module, s);
                 session.OnSessionFinished += ServerShotSessionBase => this.SendSessionReportAsync(ServerShotSessionBase, ModuleProcessingSummaries);
             }
             else if (session is ServerShotContinuousSession)
@@ -70,5 +71,6 @@ namespace ServerShot.Framework.Core.Plugins
         }
 
         public abstract Task SendSessionReportAsync(ServerShotSessionBase session, IEnumerable<ModuleProcessingSummary> moduleSummaries);
+        public virtual void SendFailureReport(IServerShotModule module, string failureMessage) { }
     }
 }

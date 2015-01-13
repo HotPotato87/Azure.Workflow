@@ -1,0 +1,1 @@
+C:\Users\patri_000\Documents\GitHub\Servershot.Framework\Source\FarFetched.AzureWorkflow.Tests\obj\Release\ServerShot.Framework.Tests.csprojResolveAssemblyReference.cache

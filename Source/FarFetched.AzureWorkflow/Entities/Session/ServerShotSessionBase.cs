@@ -117,6 +117,23 @@ namespace ServerShot.Framework.Core.Implementation
                 throw new WorkflowConfigurationException(e.Message, e);
             }
 
+            //validate the modules
+            foreach (var serverShotModule in RunningModules)
+            {
+                var validateResult = await serverShotModule.Validate();
+
+                if (!validateResult.DidValidate)
+                {
+                    throw new WorkflowConfigurationException(serverShotModule.QueueName + " would not validate = " + validateResult.Message);
+                }
+            }
+
+            //Init the modules
+            foreach (var serverShotModule in RunningModules)
+            {
+                await serverShotModule.InitAsync();
+            }
+
             //start the stop monitoring
             Task.Run(async () => await ProcessingStopMonitoring());
 
