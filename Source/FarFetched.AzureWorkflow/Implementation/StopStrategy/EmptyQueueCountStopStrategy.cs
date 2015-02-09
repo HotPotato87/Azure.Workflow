@@ -8,7 +8,7 @@ namespace ServerShot.Framework.Core.Implementation.StopStrategy
     {
         public bool ShouldStop(ServerShotSessionBase session)
         {
-            return session.RunningModules.OfType<IQueueProcessingServerShotModule>().All(t => t.IsRecievedItems = t.Queue.Count == 0);
+            return session.RunningModules.OfType<IQueueProcessingServerShotModule>().All(t => t.Queue.Count == 0);
         }
 
         public bool ShouldSpecificModuleStop(IServerShotModule module)

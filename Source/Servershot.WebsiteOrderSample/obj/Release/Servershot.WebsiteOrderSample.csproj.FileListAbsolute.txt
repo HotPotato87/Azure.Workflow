@@ -55,3 +55,6 @@ C:\Users\patri_000\Documents\GitHub\Servershot.Framework\Source\Servershot.Websi
 C:\Users\patri_000\Documents\GitHub\Servershot.Framework\Source\Servershot.WebsiteOrderSample\obj\Release\Servershot.WebsiteOrderSample.csprojResolveAssemblyReference.cache
 C:\Users\patri_000\Documents\GitHub\Servershot.Framework\Source\Servershot.WebsiteOrderSample\obj\Release\Servershot.WebsiteOrderSample.exe
 C:\Users\patri_000\Documents\GitHub\Servershot.Framework\Source\Servershot.WebsiteOrderSample\obj\Release\Servershot.WebsiteOrderSample.pdb
+C:\Users\Patrick\Documents\GitHub\Servershot.Framework\Source\Servershot.WebsiteOrderSample\bin\Release\Servershot.WebsiteOrderSample.exe.config
+C:\Users\Patrick\Documents\GitHub\Servershot.Framework\Source\Servershot.WebsiteOrderSample\obj\Release\Servershot.WebsiteOrderSample.exe
+C:\Users\Patrick\Documents\GitHub\Servershot.Framework\Source\Servershot.WebsiteOrderSample\obj\Release\Servershot.WebsiteOrderSample.pdb
