@@ -37,7 +37,7 @@ namespace ServerShot.Framework.Tests.IntegrationTests
                 .RunAsync();
 
             //assert
-            logManager.Verify(x=>x.OnLogMessage(It.IsAny<IServerShotModule>(), It.IsAny<LogMessage>()), Times.AtLeastOnce);
+            logManager.Verify(x => x.OnLogMessage(It.IsAny<LogMessage>(), It.IsAny<IServerShotModule>()), Times.AtLeastOnce);
         }
     }
 }

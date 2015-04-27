@@ -35,8 +35,8 @@ namespace ServerShot.Framework.Tests.IntegrationTests.Builders
             .AttachSessionQueueMechanism(new InMemoryQueueFactory())
             .RunAsync();
 
-            sessionLevelLogger.Verify(x => x.OnLogMessage(It.IsAny<IServerShotModule>(), It.Is<LogMessage>(lm=>lm.Message.Contains("Test Message"))), Times.Never);
-            moduleLevelLogger.Verify(x => x.OnLogMessage(It.IsAny<IServerShotModule>(), It.Is<LogMessage>(lm => lm.Message.Contains("Test Message"))), Times.Once);
+            sessionLevelLogger.Verify(x => x.OnLogMessage(It.Is<LogMessage>(lm => lm.Message.Contains("Test Message")), It.IsAny<IServerShotModule>()), Times.Never);
+            moduleLevelLogger.Verify(x => x.OnLogMessage(It.Is<LogMessage>(lm => lm.Message.Contains("Test Message")), It.IsAny<IServerShotModule>()), Times.Once);
         }
 
         [Test]

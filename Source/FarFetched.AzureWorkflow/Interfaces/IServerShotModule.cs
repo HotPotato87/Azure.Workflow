@@ -15,7 +15,18 @@ using Servershot.Framework.EventHandlers;
 
 namespace ServerShot.Framework.Core.Architecture
 {
-    public interface IServerShotModule : INotifyPropertyChanged
+    public interface IAlertable
+    {
+        event Action<string, string> OnLogMessage;
+        event Action OnStarted;
+        event Action<Alert> OnAlert;
+        event Action<Exception> OnError;
+        event Action<string, IEnumerable<Exception>> OnFailure;
+        event Action OnFinished;
+        event Action<OnRaisedProcessedArgs> OnRaiseProcessed;
+    }
+
+    public interface IServerShotModule : INotifyPropertyChanged, IAlertable
     {
         Task StartAsync();
         Task Stop();
@@ -31,17 +42,10 @@ namespace ServerShot.Framework.Core.Architecture
         Task<WorkflowModuleValidationResult> Validate();
         Task InitAsync();
 
-        event Action<string, string> OnLogMessage;
-        event Action OnStarted;
-        event Action<Alert> OnAlert;
-        event Action<Exception> OnError;
-        event Action<string, IEnumerable<Exception>> OnFailure;
         event Func<string, object, Task> OnStoreAsync;
         event Func<string, Task<object>> OnRetrieveAsync;
         event Func<string, object, Task> OnStoreEnumerableAsync;
         event Func<string, Task<IEnumerable<object>>> OnRetrieveEnumerableAsync; 
-        event Action OnFinished;
-        event Action<OnRaisedProcessedArgs> OnRaiseProcessed;
         
     }
 

@@ -149,6 +149,9 @@
     <Compile Include="Entities\Module\ServiceBusQueueProcessingModule.cs" />
     <Compile Include="Entities\Session\ServerShotContinuousSession.cs" />
     <Compile Include="Entities\Session\ServerShotLinearSession.cs" />
+    <Compile Include="Entities\WebJob\IWebJobBase.cs" />
+    <Compile Include="Entities\WebJob\WebJobBase.cs" />
+    <Compile Include="Entities\WebJob\WebJobSession.cs" />
     <Compile Include="Enums\LoggingType.cs" />
     <Compile Include="EventHandlers\OnRaisedProcessedArgs.cs" />
     <Compile Include="Extentions\AsyncHelpers.cs" />
@@ -193,6 +196,8 @@
     <Compile Include="Plugins\Alerts\Alert.cs" />
     <Compile Include="Plugins\Alerts\AlertLevel.cs" />
     <Compile Include="Plugins\Alerts\AlertManagerBase.cs" />
+    <Compile Include="Plugins\WebJobs\DailySummaryReporterPlugin.cs" />
+    <Compile Include="Plugins\WebJobs\IWebjobSessionPlugin.cs" />
     <Compile Include="Plugins\Logging\ILoggingManager.cs" />
     <Compile Include="Plugins\Logging\LogManagerBase.cs" />
     <Compile Include="Plugins\Logging\LogMessage.cs" />
@@ -203,6 +208,8 @@
     <Compile Include="Plugins\Scaling\IInstanceScaler.cs" />
     <Compile Include="Plugins\Scaling\QueueBacklogScaler.cs" />
     <Compile Include="Plugins\ServerShotSessionPluginBase.cs" />
+    <Compile Include="Plugins\WebJobs\NewActivityAlertPlugin.cs" />
+    <Compile Include="Plugins\WebJobs\ProwlAlertManager.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementation\Queue\InMemoryQueue.cs" />

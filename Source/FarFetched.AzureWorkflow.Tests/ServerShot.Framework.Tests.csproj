@@ -103,6 +103,8 @@
     <Compile Include="UnitTests\Session\When_Configuring_A_Servershot_Session.cs" />
     <Compile Include="UnitTests\Components\InMemoryQueueTests.cs" />
     <Compile Include="UnitTests\Session\When_Running_A_ServerShot_Session.cs" />
+    <Compile Include="UnitTests\Webjob\WebJobPluginsTests.cs" />
+    <Compile Include="UnitTests\Webjob\WebjobSessionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
