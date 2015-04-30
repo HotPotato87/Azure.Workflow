@@ -14,7 +14,7 @@ namespace ServerShot.Framework.Core.Plugins
             _threshold = threshold;
         }
 
-        public override void RegisterWebjob(IWebJobBase module)
+        public override void RegisterWebjob(IJibJobModule module)
         {
             base.RegisterWebjob(module);
 

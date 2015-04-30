@@ -8,29 +8,29 @@ namespace Servershot.Framework.Entities.WebJob
     public class WebJobSession
     {
         private readonly ServerShotEnvironment _environment;
-        public List<WebJobBase> RunningJobs { get; set; }
-        public List<IWebjobSessionPlugin> RunningPlugins { get; set; }
+        public List<JibJobModule> RunningJobs { get; set; }
+        public List<IJibJobSessionPlugin> RunningPlugins { get; set; }
 
         public WebJobSession(ServerShotEnvironment environment)
         {
             _environment = environment;
-            RunningJobs= new List<WebJobBase>();
-            RunningPlugins = new List<IWebjobSessionPlugin>();
+            RunningJobs= new List<JibJobModule>();
+            RunningPlugins = new List<IJibJobSessionPlugin>();
         }
 
-        public void AddWebJob<T>() where T : WebJobBase
+        public void AddWebJob<T>() where T : JibJobModule
         {
             this.RunningJobs.Add(_environment.IOCContainer.Get<T>());
         }
 
-        public void AddWebJob(WebJobBase webJob)
+        public void AddWebJob(JibJobModule jibJob)
         {
-            this.RunningJobs.Add(webJob);
+            this.RunningJobs.Add(jibJob);
 
-            RunningPlugins.ForEach(x=>x.RegisterWebjob(webJob));
+            RunningPlugins.ForEach(x=>x.RegisterWebjob(jibJob));
         }
 
-        public void AttachPlugin(IWebjobSessionPlugin plugin)
+        public void AttachPlugin(IJibJobSessionPlugin plugin)
         {
             RunningPlugins.Add(plugin);
         }

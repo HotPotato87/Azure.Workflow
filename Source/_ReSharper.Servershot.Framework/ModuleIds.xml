@@ -1,0 +1,5 @@
+<Modules>
+  <Module PersistentId="8C213706-F6AE-4DD2-87C2-4D1BA828BD47" ModuleId="ServerShot.Framework" />
+  <Module PersistentId="FA63FA15-5172-4A15-9550-2AE0CFF75D98" ModuleId="ServerShot.Framework.Tests" />
+  <Module PersistentId="D5F1A8DE-DDCA-4CF0-A989-6D7792DC0528" ModuleId="Servershot.WebsiteOrderSample" />
+</Modules>

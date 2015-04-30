@@ -1,5 +1,3 @@
-
-using System;
 using System.Timers;
 using ServerShot.Framework.Core.Annotations;
 using Servershot.Framework.Entities.WebJob;
@@ -9,7 +7,7 @@ namespace ServerShot.Framework.Core.Plugins
 {
     public abstract class DailySummaryReporterPlugin : WebJobSessionPluginBase
     {
-        public override void RegisterWebjob(IWebJobBase module)
+        public override void RegisterWebjob(IJibJobModule module)
         {
             base.RegisterWebjob(module);
 

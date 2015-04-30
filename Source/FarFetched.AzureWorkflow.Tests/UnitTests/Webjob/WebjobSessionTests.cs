@@ -20,7 +20,7 @@ namespace ServerShot.Framework.Tests.UnitTests.Webjob
         {
             var session = CreateSession();
 
-            session.AddWebJob<WebjobSessionFakes.SimpleWebJob>();
+            session.AddWebJob<WebjobSessionFakes.SimpleJibJob>();
 
             Assert.IsTrue(session.RunningJobs.First().GetType().Name == "SimpleWebJob");
         }
@@ -30,9 +30,9 @@ namespace ServerShot.Framework.Tests.UnitTests.Webjob
         {
             var session = CreateSession();
 
-            session.AddWebJob<WebjobSessionFakes.SimpleWebJob>();
+            session.AddWebJob<WebjobSessionFakes.SimpleJibJob>();
 
-            var job = session.RunningJobs.First() as WebjobSessionFakes.SimpleWebJob;
+            var job = session.RunningJobs.First() as WebjobSessionFakes.SimpleJibJob;
 
             await job.ProcessItem(new object());
 
@@ -103,7 +103,7 @@ namespace ServerShot.Framework.Tests.UnitTests.Webjob
         {
             var session = CreateSession();
 
-            var simple = new WebjobSessionFakes.SimpleWebJob();
+            var simple = new WebjobSessionFakes.SimpleJibJob();
             session.AttachPlugin(new ProwlAlertManager());
             session.AttachPlugin(new SendgridReport());
             session.AttachPlugin(new ProwlNewActivityPlugin(TimeSpan.FromHours(1)));
@@ -123,9 +123,9 @@ namespace ServerShot.Framework.Tests.UnitTests.Webjob
 
     public class WebjobSessionFakes
     {
-        public class SimpleWebJob : WebJobBase
+        public class SimpleJibJob : JibJobModule
         {
-            public SimpleWebJob()
+            public SimpleJibJob()
             {
                 base.ThrowOnError = false;
             }
@@ -136,7 +136,7 @@ namespace ServerShot.Framework.Tests.UnitTests.Webjob
             }
         }
 
-        public class WebjobDelegate : WebJobBase
+        public class WebjobDelegate : JibJobModule
         {
             private Action _e;
 

@@ -5,7 +5,7 @@ namespace ServerShot.Framework.Core.Plugins
 {
     public class ProwlAlertManager : WebJobSessionPluginBase
     {
-        public override void RegisterWebjob(IWebJobBase module)
+        public override void RegisterWebjob(IJibJobModule module)
         {
             base.RegisterWebjob(module);
 
