@@ -4,9 +4,10 @@ namespace Servershot.Framework.Entities.WebJob
 {
     public abstract class TransientJibJob : JibJobModule, ITransientJibJob
     {
-        public Task Triggered()
+        public async Task Triggered()
         {
-            return OnTriggered();
+            await OnTriggered();
+            Processed();
         }
 
         protected abstract Task OnTriggered();

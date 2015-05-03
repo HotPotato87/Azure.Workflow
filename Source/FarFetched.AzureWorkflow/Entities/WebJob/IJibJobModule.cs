@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ServerShot.Framework.Core.Enums;
+using ServerShot.Framework.Core.Plugins;
 using ServerShot.Framework.Core.Plugins.Alerts;
 
 namespace Servershot.Framework.Entities.WebJob
@@ -17,6 +19,7 @@ namespace Servershot.Framework.Entities.WebJob
         ModuleState State { get; set; }
         DateTime Started { get; set; }
         void Reset();
+        void AttachPlugins(List<IJibJobSessionPlugin> plugins);
     }
 
     public interface ITransientJibJob : IJibJobModule

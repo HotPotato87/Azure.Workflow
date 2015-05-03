@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Timers;
 using ServerShot.Framework.Core.Annotations;
 using Servershot.Framework.Entities.WebJob;

@@ -18,7 +18,7 @@ namespace ServerShot.Framework.Core.Plugins
         {
             base.RegisterWebjob(module);
 
-            module.Processed += o =>
+            module.OnProcessed += o =>
             {
                 if (!_lastActivity.HasValue || NewActivity())
                 {

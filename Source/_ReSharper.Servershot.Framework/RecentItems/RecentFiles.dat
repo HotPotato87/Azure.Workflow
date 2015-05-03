@@ -1,0 +1,43 @@
+﻿<RecentFiles>
+  <RecentFiles>
+    <File id="FA63FA15-5172-4A15-9550-2AE0CFF75D98/d:UnitTests/d:Webjob/f:WebjobSessionTests.cs" caret="3648" fromTop="104" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:WebJobSession.cs" caret="0" fromTop="0" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Plugins/d:WebJobs/f:IJibJobSessionPlugin.cs" caret="0" fromTop="0" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Plugins/d:WebJobs/f:NewActivityAlertPlugin.cs" caret="481" fromTop="16" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Plugins/d:WebJobs/f:ProwlAlertManager.cs" caret="0" fromTop="0" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:IJibJobModule.cs" caret="595" fromTop="18" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:TransientJibJob.cs" caret="0" fromTop="0" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:PerpetualJibJob.cs" caret="0" fromTop="0" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobModule.cs" caret="1915" fromTop="5" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Implementation/d:Logging/f:ConsoleLogger.cs" caret="1357" fromTop="12" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Plugins/d:WebJobs/f:DailySummaryReporterPlugin.cs" caret="197" fromTop="6" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Plugins/d:Logging/f:LogManagerBase.cs" caret="263" fromTop="9" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Plugins/d:WebJobs/f:JibJobLogger.cs" caret="265" fromTop="10" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobQueueBase.cs" caret="909" fromTop="20" />
+  </RecentFiles>
+  <RecentEdits>
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobModule.cs" caret="241" fromTop="7" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:IJibJobModule.cs" caret="572" fromTop="17" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:IJibJobModule.cs" caret="802" fromTop="28" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:IJibJobModule.cs" caret="221" fromTop="7" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:IJibJobModule.cs" caret="727" fromTop="26" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobModule.cs" caret="1847" fromTop="8" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobModule.cs" caret="1913" fromTop="6" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobModule.cs" caret="1913" fromTop="7" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobModule.cs" caret="1915" fromTop="48" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobModule.cs" caret="1847" fromTop="13" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobModule.cs" caret="1918" fromTop="6" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Implementation/d:Logging/f:ConsoleLogger.cs" caret="1594" fromTop="14" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Implementation/d:Logging/f:ConsoleLogger.cs" caret="1594" fromTop="12" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Plugins/d:WebJobs/f:DailySummaryReporterPlugin.cs" caret="197" fromTop="23" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Plugins/d:WebJobs/f:DailySummaryReporterPlugin.cs" caret="197" fromTop="10" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Plugins/d:WebJobs/f:DailySummaryReporterPlugin.cs" caret="197" fromTop="14" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Plugins/d:WebJobs/f:DailySummaryReporterPlugin.cs" caret="363" fromTop="10" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobQueueBase.cs" caret="401" fromTop="5" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobQueueBase.cs" caret="405" fromTop="6" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobQueueBase.cs" caret="715" fromTop="15" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobQueueBase.cs" caret="877" fromTop="20" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobQueueBase.cs" caret="1107" fromTop="26" />
+    <File id="8C213706-F6AE-4DD2-87C2-4D1BA828BD47/d:Entities/d:WebJob/f:JibJobQueueBase.cs" caret="1234" fromTop="30" />
+  </RecentEdits>
+</RecentFiles>

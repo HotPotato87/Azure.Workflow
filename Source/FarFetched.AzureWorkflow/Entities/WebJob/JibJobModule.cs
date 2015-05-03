@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Data.Edm;
+using ServerShot.Framework.Core;
 using ServerShot.Framework.Core.Enums;
+using ServerShot.Framework.Core.Plugins;
 using ServerShot.Framework.Core.Plugins.Alerts;
 
 namespace Servershot.Framework.Entities.WebJob
@@ -65,10 +70,52 @@ namespace Servershot.Framework.Entities.WebJob
             if (handler != null) handler(obj);
         }
 
-        protected virtual void Processed(object obj)
+        protected virtual void Processed(object obj = null)
         {
             Action<object> handler = OnProcessed;
             if (handler != null) handler(obj);
+        }
+
+        public void AttachPlugins(List<IJibJobSessionPlugin> plugins)
+        {
+            var jibJobManager = new JibJobPluginManager();
+
+            OnAttachPlugins(jibJobManager);
+
+            plugins.AddRange(jibJobManager.Plugins.Select(plugin =>
+            {
+                //create plugin
+                var activated = IOC.Kernel.Get<IJibJobSessionPlugin>(plugin);
+
+                //allow calling component to configure
+                jibJobManager._onCreateDictionary[plugin](activated);
+
+                //return
+                return activated;
+            }));
+        }
+
+        protected virtual void OnAttachPlugins(JibJobPluginManager pluginManager)
+        {
+            
+        }
+    }
+
+    public class JibJobPluginManager
+    {
+        internal List<Type> Plugins { get; set; }
+        internal Dictionary<Type, Action<dynamic>> _onCreateDictionary = new Dictionary<Type, Action<dynamic>>(); 
+
+        public JibJobPluginManager()
+        {
+            Plugins = new List<Type>();
+        }
+
+        public void Add<T>(Action<T> onCreate) where T : IJibJobSessionPlugin
+        {
+            Plugins.Add(typeof(T));
+
+            _onCreateDictionary.Add(typeof(T), dynamicType => onCreate(dynamicType));
         }
     }
 }

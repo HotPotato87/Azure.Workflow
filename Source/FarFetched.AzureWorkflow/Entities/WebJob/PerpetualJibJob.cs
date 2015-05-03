@@ -14,18 +14,18 @@ namespace Servershot.Framework.Entities.WebJob
             {
                 Log("Processing : " + item);
                 await OnProcessItem(item);
-                OnProcessed(item);
+                Processed(item);
                 Log("Finished Processing : " + item);
                 _errorCount = 0;
                 ProcessedCount++;
             }
             catch (Exception eX)
             {
-                OnException(eX);
+                Exception(eX);
                 Log("EXCEPTION OCCURED in " + this.GetType().Name);
                 Log("Exception details : " + eX.Message);
                 Log("Exception Stacktrace : " + eX.StackTrace);
-                OnAlert(new Alert()
+                Alert(new Alert()
                 {
                     AlertLevel = AlertLevel.High,
                     Message = "Exception occured on webjob:" + this.GetType().Name + " : " + eX.Message
@@ -36,7 +36,7 @@ namespace Servershot.Framework.Entities.WebJob
                 if (_errorCount >= 3)
                 {
                     Log("Module failed : " + this.GetType().Name);
-                    OnFail();
+                    Fail();
                 }
 
                 if (ThrowOnError)
@@ -45,5 +45,7 @@ namespace Servershot.Framework.Entities.WebJob
                 }
             }
         }
+
+        public abstract Task OnProcessItem<T>(T item);
     }
 }
