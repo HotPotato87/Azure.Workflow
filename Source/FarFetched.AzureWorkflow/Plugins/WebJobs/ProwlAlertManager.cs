@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Prowl;
 using ServerShot.Framework.Core.Plugins.Alerts;
 using Servershot.Framework.Entities.WebJob;
 
@@ -8,24 +9,24 @@ namespace ServerShot.Framework.Core.Plugins
 {
     public class ProwlAlertManager : WebJobSessionPluginBase
     {
-        public string ProwlUsername { get; set; }
+        public INotifier Notifier { get; set; }
 
         public override void RegisterWebjob(IJibJobModule module)
         {
             base.RegisterWebjob(module);
 
-            module.OnFail += ModuleOnFail;
+            module.OnFail += () => ModuleOnFail(module);
             module.OnAlert += ModuleOnAlert;
         }
 
         private void ModuleOnAlert(Alert obj)
         {
-            //todo : send alert
+            Notifier.Alert(null, obj.Message, level: obj.AlertLevel);
         }
 
-        private void ModuleOnFail()
+        private void ModuleOnFail(IJibJobModule module)
         {
-            //todo : send prowl message
+            Notifier.Alert(null, "Module Failed : " + module.Name, level: AlertLevel.High);
         }
     }
 
@@ -50,7 +51,8 @@ namespace ServerShot.Framework.Core.Plugins
             foreach (var notifierType in NotifierTypes)
             {
                 var notifier = IOC.Kernel.Get<INotifier>(notifierType);
-                notifier.Alert(string.Format("{0} Processed new item successfully", transientJibJob.Name));
+                _onCreate[notifierType](notifier);
+                notifier.Alert(transientJibJob.Name, string.Format("{0} Processed new item successfully", transientJibJob.Name));
             }
         }
 
@@ -64,7 +66,7 @@ namespace ServerShot.Framework.Core.Plugins
 
     public interface INotifier
     {
-        void Alert(string message);
+        void Alert(string title, string message, AlertLevel level = AlertLevel.High);
     }
 
     public class SendGridEmailProvider : INotifier
@@ -72,7 +74,7 @@ namespace ServerShot.Framework.Core.Plugins
         public string Username { get; set; }
         public string Password { get; set; }
 
-        public void Alert(string message)
+        public void Alert(string title, string message, AlertLevel level = AlertLevel.High)
         {
             
         }
@@ -80,11 +82,33 @@ namespace ServerShot.Framework.Core.Plugins
 
     public class ProwlNotifier : INotifier
     {
-        public void Alert(string message)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ApiKey { get; set; }
 
-        public string Username { get; set; }
+        /// <summary>
+        /// Only required if you have been whitelisted
+        /// </summary>
+        public string ProviderKey { get; set; }
+
+        public string ApplicationName { get; set; }
+
+        public void Alert(string title, string message, AlertLevel level = AlertLevel.Medium)
+        {
+            var client = new ProwlClient(new ProwlClientConfiguration()
+            {
+                ApiKeychain = ApiKey,
+                ProviderKey = ProviderKey,
+                ApplicationName = ApplicationName
+            });
+
+            client.PostNotification(new ProwlNotification()
+            {
+                Event = title,
+                Description = message,
+                Priority = level == AlertLevel.Low ? ProwlNotificationPriority.VeryLow : ProwlNotificationPriority.Normal
+            });
+        }
     }
 }
