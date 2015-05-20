@@ -42,10 +42,18 @@ namespace Servershot.Framework.Entities.WebJob
 
     public class CustomTypeLocator : ITypeLocator
     {
+        private Type _original;
+
+        public CustomTypeLocator(Type type)
+        {
+            _original = type;
+        }
+
         public IReadOnlyList<Type> GetTypes()
         {
             return new[]
             {
+                _original,
                 typeof (JibJobQueueBase)
             };
         }

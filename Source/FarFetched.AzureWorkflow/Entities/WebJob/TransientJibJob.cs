@@ -1,4 +1,6 @@
+using System;
 using System.Threading.Tasks;
+using ServerShot.Framework.Core.Plugins.Alerts;
 
 namespace Servershot.Framework.Entities.WebJob
 {
@@ -6,7 +8,21 @@ namespace Servershot.Framework.Entities.WebJob
     {
         public async Task Triggered()
         {
-            await OnTriggered();
+            try
+            {
+                await OnTriggered();
+            }
+            catch (Exception eX)
+            {
+                base.Fail();
+                base.Alert(new Alert()
+                {
+                    AlertLevel = AlertLevel.High,
+                    Message = eX.StackTrace
+                });
+                return;
+            }
+            
             Processed();
         }
 
